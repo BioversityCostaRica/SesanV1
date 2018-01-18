@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMLSchemaStructure version="1.0">
+ <lkptables>
+  <table name="lkpseo_muni_5" desc="Lookup table (Respetuosamente, me dirijo a usted para presentare el informe correspondiente al proceso de monitoreo de indicadores, correspondiente al pilar de Consumo, del municipio de)">
+   <field type="int" name="seo_muni_5_cod" decsize="0" key="true" desc="Code" size="3"/>
+   <field type="varchar" name="seo_muni_5_des" decsize="0" desc="Description" size="27"/>
+   <field type="varchar" name="rowuuid" decsize="0" desc="Unique Row Identifier (UUID)" size="80"/>
+  </table>
+ </lkptables>
+ <tables>
+  <table name="maintable" desc="Main table - Set a description">
+   <field type="varchar" name="surveyid" decsize="0" desc="Survey ID (UUID)" size="80"/>
+   <field type="varchar" name="originid" decsize="0" desc="Origin ID: formhub or aggregate" size="15"/>
+   <field type="datetime" name="start_time_survey_1" decsize="0" desc="" size="60"/>
+   <field type="datetime" name="day_of_survey" decsize="0" desc="" size="60"/>
+   <field type="varchar" name="device_id_3" decsize="0" desc="" size="60"/>
+   <field type="varchar" name="uuid" decsize="0" key="true" desc="uuid" size="60"/>
+   <field type="text" name="txt_rep_muni_comusan_4" decsize="0" desc="Nombre del representante municipal de la COMUSAN" size="60"/>
+   <field type="int" rfield="seo_muni_5_cod" name="seo_muni_5" decsize="0" rtable="lkpseo_muni_5" desc="Respetuosamente, me dirijo a usted para presentare el informe correspondiente al proceso de monitoreo de indicadores, correspondiente al pilar de Consumo, del municipio de" size="3" rlookup="true"/>
+   <field type="date" name="date_fecha_informe_6" decsize="0" desc="Fecha a la que corresponde el informe" size="60"/>
+   <field type="text" name="txt_tecnico_reporta_7" decsize="0" desc="Nombre del técnico que reporta" size="60"/>
+   <field type="decimal" name="dev_muj_alf" decsize="3" desc="Porcentaje de mujeres de 15 a 49 años en proceso de alfabetización" size="10"/>
+   <field type="decimal" name="dec_hom_alf" decsize="3" desc="Porcentaje de hombres de 15 a 49 años en proceso de alfabetización" size="10"/>
+   <field type="varchar" name="img_sig_rep" decsize="0" desc="Firma representante municipal COMUSAN" size="60"/>
+   <field type="varchar" name="img_sig_tec" decsize="0" desc="Firma técnico de CONALFA" size="60"/>
+   <field type="datetime" name="end_time_survey_26" decsize="0" desc="" size="60"/>
+   <field type="varchar" name="rowuuid" decsize="0" desc="Unique Row Identifier (UUID)" size="80"/>
+   <table name="repeat_com_afec_pilar" desc="Comunidades mas afectadas por el pilar:">
+    <field type="varchar" rfield="uuid" name="uuid" decsize="0" rtable="maintable" key="true" desc="uuid" size="60"/>
+    <field type="int" name="repeat_com_afec_pilar_rowid" decsize="0" key="true" desc="Unique Row ID" size="3"/>
+    <field type="text" name="txt_af_comunidad_24" decsize="0" desc="Nombre DE la comunidad" size="60"/>
+    <field type="varchar" name="rowuuid" decsize="0" desc="Unique Row Identifier (UUID)" size="80"/>
+   </table>
+   <table name="repeat_prop_acciones" desc="Acciones propuestas a implementar">
+    <field type="varchar" rfield="uuid" name="uuid" decsize="0" rtable="maintable" key="true" desc="uuid" size="60"/>
+    <field type="int" name="repeat_prop_acciones_rowid" decsize="0" key="true" desc="Unique Row ID" size="3"/>
+    <field type="text" name="txt_prop_acciones_25" decsize="0" desc="Nombre de la acción" size="60"/>
+    <field type="varchar" name="rowuuid" decsize="0" desc="Unique Row Identifier (UUID)" size="80"/>
+   </table>
+  </table>
+ </tables>
+</XMLSchemaStructure>

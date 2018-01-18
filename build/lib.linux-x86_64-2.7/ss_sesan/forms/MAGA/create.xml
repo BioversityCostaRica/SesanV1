@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMLSchemaStructure version="1.0">
+ <lkptables/>
+ <tables>
+  <table desc="Main table - Set a description" name="maintable">
+   <field size="80" type="varchar" decsize="0" desc="Survey ID (UUID)" name="surveyid"/>
+   <field size="15" type="varchar" decsize="0" desc="Origin ID: formhub or aggregate" name="originid"/>
+   <field size="60" type="datetime" decsize="0" desc="" name="start_time_survey_1"/>
+   <field size="60" type="datetime" decsize="0" desc="" name="day_of_survey_2"/>
+   <field size="60" type="varchar" decsize="0" desc="" name="device_id_3"/>
+   <field size="60" type="varchar" decsize="0" desc="uuid" key="true" name="uuid"/>
+   <field size="60" type="text" decsize="0" desc="Nombre del representante municipal de la COMUSAN" name="txt_rep_muni_comusan_4"/>
+   <field size="60" type="varchar" decsize="0" desc="Respetuosamente, me dirijo a usted para presentare el informe correspondiente al proceso de monitoreo de indicadores, correspondiente al pilar de Disponibilidad y Acceso, del municipio de" name="seo_muni_5"/>
+   <field size="60" type="date" decsize="0" desc="Fecha a la que corresponde el informe" name="date_fecha_informe_6"/>
+   <field size="60" type="text" decsize="0" desc="Nombre del técnico que reporta" name="txt_tecnico_reporta_7"/>
+   <field size="60" type="varchar" decsize="0" desc="Numero de días sin lluvia significativa para cultivos principales" name="int_dia_sin_lluvia"/>
+   <field size="10" type="decimal" decsize="3" desc="Quintales de reserva promedio de Alimento Principal 1" name="dec_qq_reserv_prom_prin1"/>
+   <field size="10" type="decimal" decsize="3" desc="Quintales de reserva promedio de Alimento Principal 2" name="dec_qq_reserv_prom_prin2"/>
+   <field size="10" type="decimal" decsize="3" desc="Quintales de reserva promedio de Alimento Principal 3" name="dec_qq_reserv_prom_prin3"/>
+   <field size="60" type="varchar" decsize="0" desc="Meses de reserva del Alimento Principal 1" name="int_mes_reserv_prin1"/>
+   <field size="60" type="varchar" decsize="0" desc="Meses de reserva del Alimento Principal 1" name="int_mes_reserv_prin2"/>
+   <field size="60" type="varchar" decsize="0" desc="Meses de reserva del Alimento Principal 1" name="int_mes_reserv_prin3"/>
+   <field size="10" type="decimal" decsize="3" desc="Quintales promedio producidos por manzana de Alimento Principal 1" name="dec_qq_prod_prom_prin1"/>
+   <field size="10" type="decimal" decsize="3" desc="Quintales promedio producidos por manzana de Alimento Principal 1" name="dec_qq_prod_prom_prin2"/>
+   <field size="10" type="decimal" decsize="3" desc="Quintales promedio producidos por manzana de Alimento Principal 1" name="dec_qq_prod_prom_prin3"/>
+   <field size="10" type="decimal" decsize="3" desc="Porcentaje promedio de manzanas afectadas de Cultivo Principal 1" name="dec_prom_mz_afec_prin1"/>
+   <field size="10" type="decimal" decsize="3" desc="Porcentaje promedio de manzanas afectadas de Cultivo Principal 2" name="dec_prom_mz_afec_prin2"/>
+   <field size="10" type="decimal" decsize="3" desc="Porcentaje promedio de manzanas afectadas de Cultivo Principal 3" name="dec_prom_mz_afec_prin3"/>
+   <field size="10" type="decimal" decsize="3" desc="Porcentaje de comunidades con afectación de enfermedades en Especie Animal Principal 1" name="dec_prom_comum_afec_esp1"/>
+   <field size="10" type="decimal" decsize="3" desc="Porcentaje de comunidades con afectación de enfermedades en Especie Animal Principal 2" name="dec_prom_comum_afec_esp2"/>
+   <field size="10" type="decimal" decsize="3" desc="Porcentaje de comunidades con afectación de enfermedades en Especie Animal Principal 3" name="dec_prom_comum_afec_esp3"/>
+   <field size="10" type="decimal" decsize="3" desc="Porcentaje de alimentos por acciones" name="dec_alim_x_accion"/>
+   <field size="10" type="decimal" decsize="3" desc="Porcentaje de asistencia alimentaria" name="dec_asist_alim"/>
+   <field size="10" type="decimal" decsize="3" desc="Precio por jornal diario" name="dec_prec_jorn_diario"/>
+   <field size="60" type="varchar" decsize="0" desc="Numero de días trabajados durante el mes" name="int_num_dias_trab"/>
+   <field size="10" type="decimal" decsize="3" desc="Precio promedio de compra de un quintal del Alimento Principal 1" name="dec_prec_comp_prin1"/>
+   <field size="10" type="decimal" decsize="3" desc="Precio promedio de compra de un quintal del Alimento Principal 2" name="dec_prec_comp_prin2"/>
+   <field size="10" type="decimal" decsize="3" desc="Precio promedio de compra de un quintal del Alimento Principal 3" name="dec_prec_comp_prin3"/>
+   <field size="10" type="decimal" decsize="3" desc="Precio promedio de venta de un quintal de Producto Agrícola Principal 1" name="dec_prec_vent_produc_prin1"/>
+   <field size="10" type="decimal" decsize="3" desc="Precio promedio de venta de un quintal de Producto Agrícola Principal 2" name="dec_prec_vent_produc_prin2"/>
+   <field size="10" type="decimal" decsize="3" desc="Precio promedio de venta de un quintal de Producto Agrícola Principal 3" name="dec_prec_vent_produc_prin3"/>
+   <field size="60" type="varchar" decsize="0" desc="Firma representante municipal COMUSAN" name="img_sig_rep"/>
+   <field size="60" type="varchar" decsize="0" desc="Firma técnico de MSPAS" name="img_sig_tec"/>
+   <field size="60" type="datetime" decsize="0" desc="" name="end_time_survey_26"/>
+   <field size="80" type="varchar" decsize="0" desc="Unique Row Identifier (UUID)" name="rowuuid"/>
+   <table desc="Comunidades mas afectadas por el pilar: Disponibilidad y Acceso" name="repeat_com_afec">
+    <field size="60" type="varchar" decsize="0" rtable="maintable" desc="uuid" key="true" rfield="uuid" name="uuid"/>
+    <field size="3" type="int" decsize="0" desc="Unique Row ID" key="true" name="repeat_com_afec_rowid"/>
+    <field size="60" type="text" decsize="0" desc="Nombre de la comunidad afectada por Disponibilidad" name="txt_af_comunidad_disp"/>
+    <field size="60" type="text" decsize="0" desc="Nombre de la comunidad afectada por Acceso" name="txt_af_comunidad_acces"/>
+    <field size="80" type="varchar" decsize="0" desc="Unique Row Identifier (UUID)" name="rowuuid"/>
+   </table>
+   <table desc="Acciones propuestas a implementar" name="repeat_prop_acciones">
+    <field size="60" type="varchar" decsize="0" rtable="maintable" desc="uuid" key="true" rfield="uuid" name="uuid"/>
+    <field size="3" type="int" decsize="0" desc="Unique Row ID" key="true" name="repeat_prop_acciones_rowid"/>
+    <field size="60" type="text" decsize="0" desc="Nombre de la acción" name="txt_prop_acciones_25"/>
+    <field size="80" type="varchar" decsize="0" desc="Unique Row Identifier (UUID)" name="rowuuid"/>
+   </table>
+  </table>
+ </tables>
+</XMLSchemaStructure>

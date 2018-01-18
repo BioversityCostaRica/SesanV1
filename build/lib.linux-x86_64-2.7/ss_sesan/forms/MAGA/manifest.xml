@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ODKImportXML version="1.0">
+ <table mysqlcode="maintable" xmlcode="main" parent="NULL">
+  <field reference="false" mysqlcode="surveyid" xmlcode="NONE" key="false"/>
+  <field reference="false" mysqlcode="originid" xmlcode="NONE" key="false"/>
+  <field reference="false" mysqlcode="start_time_survey_1" xmlcode="start_time_survey_1" key="false"/>
+  <field reference="false" mysqlcode="day_of_survey_2" xmlcode="day_of_survey_2" key="false"/>
+  <field reference="false" mysqlcode="device_id_3" xmlcode="device_id_3" key="false"/>
+  <field reference="false" mysqlcode="uuid" xmlcode="uuid" key="true"/>
+  <field reference="false" mysqlcode="txt_rep_muni_comusan_4" xmlcode="grp_1/txt_rep_muni_comusan_4" key="false"/>
+  <field reference="false" mysqlcode="seo_muni_5" xmlcode="grp_1/seo_muni_5" key="false"/>
+  <field reference="false" mysqlcode="date_fecha_informe_6" xmlcode="grp_1/date_fecha_informe_6" key="false"/>
+  <field reference="false" mysqlcode="txt_tecnico_reporta_7" xmlcode="grp_1/txt_tecnico_reporta_7" key="false"/>
+  <field reference="false" mysqlcode="int_dia_sin_lluvia" xmlcode="grp_2/int_dia_sin_lluvia" key="false"/>
+  <field reference="false" mysqlcode="dec_qq_reserv_prom_prin1" xmlcode="Grp_3/dec_qq_reserv_prom_prin1" key="false"/>
+  <field reference="false" mysqlcode="dec_qq_reserv_prom_prin2" xmlcode="Grp_3/dec_qq_reserv_prom_prin2" key="false"/>
+  <field reference="false" mysqlcode="dec_qq_reserv_prom_prin3" xmlcode="Grp_3/dec_qq_reserv_prom_prin3" key="false"/>
+  <field reference="false" mysqlcode="int_mes_reserv_prin1" xmlcode="Grp_3/int_mes_reserv_prin1" key="false"/>
+  <field reference="false" mysqlcode="int_mes_reserv_prin2" xmlcode="Grp_3/int_mes_reserv_prin2" key="false"/>
+  <field reference="false" mysqlcode="int_mes_reserv_prin3" xmlcode="Grp_3/int_mes_reserv_prin3" key="false"/>
+  <field reference="false" mysqlcode="dec_qq_prod_prom_prin1" xmlcode="Grp_4/dec_qq_prod_prom_prin1" key="false"/>
+  <field reference="false" mysqlcode="dec_qq_prod_prom_prin2" xmlcode="Grp_4/dec_qq_prod_prom_prin2" key="false"/>
+  <field reference="false" mysqlcode="dec_qq_prod_prom_prin3" xmlcode="Grp_4/dec_qq_prod_prom_prin3" key="false"/>
+  <field reference="false" mysqlcode="dec_prom_mz_afec_prin1" xmlcode="Grp_5/dec_prom_mz_afec_prin1" key="false"/>
+  <field reference="false" mysqlcode="dec_prom_mz_afec_prin2" xmlcode="Grp_5/dec_prom_mz_afec_prin2" key="false"/>
+  <field reference="false" mysqlcode="dec_prom_mz_afec_prin3" xmlcode="Grp_5/dec_prom_mz_afec_prin3" key="false"/>
+  <field reference="false" mysqlcode="dec_prom_comum_afec_esp1" xmlcode="Grp_7/dec_prom_comum_afec_esp1" key="false"/>
+  <field reference="false" mysqlcode="dec_prom_comum_afec_esp2" xmlcode="Grp_7/dec_prom_comum_afec_esp2" key="false"/>
+  <field reference="false" mysqlcode="dec_prom_comum_afec_esp3" xmlcode="Grp_7/dec_prom_comum_afec_esp3" key="false"/>
+  <field reference="false" mysqlcode="dec_alim_x_accion" xmlcode="Grp_80/dec_alim_x_accion" key="false"/>
+  <field reference="false" mysqlcode="dec_asist_alim" xmlcode="Grp_80/dec_asist_alim" key="false"/>
+  <field reference="false" mysqlcode="dec_prec_jorn_diario" xmlcode="Grp_8/dec_prec_jorn_diario" key="false"/>
+  <field reference="false" mysqlcode="int_num_dias_trab" xmlcode="Grp_8/int_num_dias_trab" key="false"/>
+  <field reference="false" mysqlcode="dec_prec_comp_prin1" xmlcode="Grp_9/dec_prec_comp_prin1" key="false"/>
+  <field reference="false" mysqlcode="dec_prec_comp_prin2" xmlcode="Grp_9/dec_prec_comp_prin2" key="false"/>
+  <field reference="false" mysqlcode="dec_prec_comp_prin3" xmlcode="Grp_9/dec_prec_comp_prin3" key="false"/>
+  <field reference="false" mysqlcode="dec_prec_vent_produc_prin1" xmlcode="Grp_10/dec_prec_vent_produc_prin1" key="false"/>
+  <field reference="false" mysqlcode="dec_prec_vent_produc_prin2" xmlcode="Grp_10/dec_prec_vent_produc_prin2" key="false"/>
+  <field reference="false" mysqlcode="dec_prec_vent_produc_prin3" xmlcode="Grp_10/dec_prec_vent_produc_prin3" key="false"/>
+  <field reference="false" mysqlcode="img_sig_rep" xmlcode="grp_signature/img_sig_rep" key="false"/>
+  <field reference="false" mysqlcode="img_sig_tec" xmlcode="grp_signature/img_sig_tec" key="false"/>
+  <field reference="false" mysqlcode="end_time_survey_26" xmlcode="end_time_survey_26" key="false"/>
+  <field reference="false" mysqlcode="rowuuid" xmlcode="NONE" key="false"/>
+  <table mysqlcode="repeat_com_afec" xmlcode="repeat_com_afec" parent="maintable">
+   <field reference="true" mysqlcode="uuid" xmlcode="NONE" key="true"/>
+   <field reference="false" mysqlcode="repeat_com_afec_rowid" xmlcode="NONE" key="true"/>
+   <field reference="false" mysqlcode="txt_af_comunidad_disp" xmlcode="repeat_com_afec/Grp_r/txt_af_comunidad_disp" key="false"/>
+   <field reference="false" mysqlcode="txt_af_comunidad_acces" xmlcode="repeat_com_afec/Grp_r/txt_af_comunidad_acces" key="false"/>
+   <field reference="false" mysqlcode="rowuuid" xmlcode="NONE" key="false"/>
+  </table>
+  <table mysqlcode="repeat_prop_acciones" xmlcode="repeat_prop_acciones" parent="maintable">
+   <field reference="true" mysqlcode="uuid" xmlcode="NONE" key="true"/>
+   <field reference="false" mysqlcode="repeat_prop_acciones_rowid" xmlcode="NONE" key="true"/>
+   <field reference="false" mysqlcode="txt_prop_acciones_25" xmlcode="repeat_prop_acciones/txt_prop_acciones_25" key="false"/>
+   <field reference="false" mysqlcode="rowuuid" xmlcode="NONE" key="false"/>
+  </table>
+ </table>
+</ODKImportXML>
