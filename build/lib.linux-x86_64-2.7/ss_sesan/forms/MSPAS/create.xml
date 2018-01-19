@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<XMLSchemaStructure version="1.0">
+ <lkptables>
+  <table name="lkpseo_muni_5" desc="Lookup table (Respetuosamente, me dirijo a usted para presentare el informe correspondiente al proceso de monitoreo de indicadores, correspondiente al pilar de Utilización Biológica, del municipio de)">
+   <field name="seo_muni_5_cod" decsize="0" key="true" type="int" size="3" desc="Code"/>
+   <field name="seo_muni_5_des" decsize="0" type="varchar" size="27" desc="Description"/>
+   <field name="rowuuid" decsize="0" type="varchar" size="80" desc="Unique Row Identifier (UUID)"/>
+  </table>
+ </lkptables>
+ <tables>
+  <table name="maintable" desc="Main table - Set a description">
+   <field name="surveyid" decsize="0" type="varchar" size="80" desc="Survey ID (UUID)"/>
+   <field name="originid" decsize="0" type="varchar" size="15" desc="Origin ID: formhub or aggregate"/>
+   <field name="start_time_survey_1" decsize="0" type="datetime" size="60" desc=""/>
+   <field name="day_of_survey_2" decsize="0" type="datetime" size="60" desc=""/>
+   <field name="device_id_3" decsize="0" type="varchar" size="60" desc=""/>
+   <field name="uuid" decsize="0" key="true" type="varchar" size="60" desc="uuid"/>
+   <field name="txt_rep_muni_comusan_4" decsize="0" type="text" size="60" desc="Indicador: Nombre del representante municipal de la COMUSAN"/>
+   <field rtable="lkpseo_muni_5" name="seo_muni_5" decsize="0" rlookup="true" rfield="seo_muni_5_cod" type="int" size="3" desc="Respetuosamente, me dirijo a usted para presentare el informe correspondiente al proceso de monitoreo de indicadores, correspondiente al pilar de Utilización Biológica, del municipio de"/>
+   <field name="date_fecha_informe_6" decsize="0" type="date" size="60" desc="Fecha a la que corresponde el informe"/>
+   <field name="txt_tecnico_reporta_7" decsize="0" type="text" size="60" desc="Nombre del técnico que reporta"/>
+   <field name="dec_mi_nutri_edas_8" decsize="3" type="decimal" size="10" desc="Porcentaje de niños(as) menores de 5 años con EDAS"/>
+   <field name="dec_mi_nutri_iras_9" decsize="3" type="decimal" size="10" desc="Porcentaje de niños(as) menores de 5 años con IRAS"/>
+   <field name="dec_mi_desnutricion_10" decsize="3" type="decimal" size="10" desc="Porcentaje de mortalidad de niños(as) menores de 5 años asociado a desnutrición"/>
+   <field name="dec_ss_monit_creci1_11" decsize="3" type="decimal" size="10" desc="Porcentaje de niños(as) menores de 2 años en monitoreo de crecimiento"/>
+   <field name="dec_ss_monit_creci2_11" decsize="3" type="decimal" size="10" desc="Porcentaje de niños(as) de 1 a menores de 2 años en monitoreo de crecimiento"/>
+   <field name="dec_ss_retar_creci2_12" decsize="3" type="decimal" size="10" desc="Porcentaje de niños(as) menores de 2 años con retardo de crecimiento"/>
+   <field name="dec_ss_supl_micro_nutri_13" decsize="3" type="decimal" size="10" desc="Porcentaje de niños(as) menores de 2 años con suplementación de micro-nutrientes"/>
+   <field name="dec_ss_esq_vacunas_14" decsize="3" type="decimal" size="10" desc="Porcentaje de niños(as) menores de 5 años con esquema completo de vacunación"/>
+   <field name="dec_ss_ctrl_prenatal_15" decsize="3" type="decimal" size="10" desc="Porcentaje de mujeres embarazadas en control prenatal antes de las 12 semanas"/>
+   <field name="dec_ss_sup_hierro_acif_16" decsize="3" type="decimal" size="10" desc="Porcentaje de mujeres embarazadas suplementadas con hierro y ácido fólico"/>
+   <field name="dec_ss_muj_edad_fertil_hierro_acif_17" decsize="3" type="decimal" size="10" desc="Porcentaje de mujeres en edad fértil suplementadas con hierro y ácido fólico"/>
+   <field name="dec_da_18" decsize="3" type="decimal" size="10" desc="Porcentaje de niños(as) menores de 5 años con desnutrición aguda"/>
+   <field name="dec_da_recup_19" decsize="3" type="decimal" size="10" desc="Porcentaje de niños(as) menores de 5 años recuperados de la desnutrición aguda"/>
+   <field name="dec_as_comu_sist_agua_20" decsize="3" type="decimal" size="10" desc="Porcentaje de comunidades con sistema de agua apta para consumo humano"/>
+   <field name="dec_as_hog_acc_agua_21" decsize="3" type="decimal" size="10" desc="Porcentaje de hogares con acceso de agua apta para consumo humano"/>
+   <field name="dec_as_hog_disp_excr_22" decsize="3" type="decimal" size="10" desc="Porcentaje de hogares con servicio de disposición de excretas de cualquier tipo"/>
+   <field name="dec_as_sis_agua_clor_23" decsize="3" type="decimal" size="10" desc="Porcentaje de sistemas de agua con tratamiento de cloración"/>
+   <field name="img_sig_rep" decsize="0" type="varchar" size="60" desc="Firma representante municipal COMUSAN"/>
+   <field name="img_sig_tec" decsize="0" type="varchar" size="60" desc="Firma técnico de MSPAS"/>
+   <field name="end_time_survey_26" decsize="0" type="datetime" size="60" desc=""/>
+   <field name="rowuuid" decsize="0" type="varchar" size="80" desc="Unique Row Identifier (UUID)"/>
+   <table name="repeat_com_afec_pilar" desc="Comunidades mas afectadas por el pilar:">
+    <field rtable="maintable" name="uuid" decsize="0" key="true" rfield="uuid" type="varchar" size="60" desc="uuid"/>
+    <field name="repeat_com_afec_pilar_rowid" decsize="0" key="true" type="int" size="3" desc="Unique Row ID"/>
+    <field name="txt_af_comunidad_24" decsize="0" type="text" size="60" desc="Nombre de la comunidad"/>
+    <field name="rowuuid" decsize="0" type="varchar" size="80" desc="Unique Row Identifier (UUID)"/>
+   </table>
+   <table name="repeat_prop_acciones" desc="Acciones propuestas a implementar">
+    <field rtable="maintable" name="uuid" decsize="0" key="true" rfield="uuid" type="varchar" size="60" desc="uuid"/>
+    <field name="repeat_prop_acciones_rowid" decsize="0" key="true" type="int" size="3" desc="Unique Row ID"/>
+    <field name="txt_prop_acciones_25" decsize="0" type="text" size="60" desc="Nombre de la acción"/>
+    <field name="rowuuid" decsize="0" type="varchar" size="80" desc="Unique Row Identifier (UUID)"/>
+   </table>
+  </table>
+ </tables>
+</XMLSchemaStructure>

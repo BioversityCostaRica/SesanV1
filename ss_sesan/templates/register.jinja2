@@ -1,0 +1,158 @@
+{% extends 'dashboard.jinja2' %}
+{% block title %}
+    <title>SESAN | Registro</title>
+{% endblock title %}
+
+
+{% block pageheading %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-8 text-center">
+            <h2>Registro de usuarios </h2>
+        </div>
+    </div>
+{% endblock pageheading %}
+
+{% block dashmenu %}
+    {% if activeUser.user_role!=1 %}
+    <li>
+        <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-th-large"></i> <span
+                class="nav-label">Inicio</span> </a>
+    </li>
+    <li>
+        <a href="{{ request.route_url('profile') }}"><i class="fa fa-user-circle-o"></i> <span
+                class="nav-label">Perfil</span></a>
+    </li>
+    <li>
+        <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-ellipsis-h"></i> <span
+                class="nav-label">Acerca de</span></a>
+
+    </li>
+    {% endif %}
+    {% if activeUser.user_role==1 %}
+        <li class="active">
+            <a href="{{ request.route_url('register') }}"><i class="fa fa-vcard-o"></i> <span
+                    class="nav-label">Agregar usuario</span></a>
+
+        </li>
+        <li>
+                                    <a href="{{ request.route_url('baseline') }}"><i class="fa fa-newspaper-o"></i> <span
+                                            class="nav-label">Lineas Base</span></a>
+
+
+                                </li>
+    {% endif %}
+
+{% endblock dashmenu %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% block pagecontent %}
+
+        <div class="col-lg-10">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Complete el siguiente formulario para agregar usuarios nuevos</h5>
+
+                </div>
+
+
+
+                <input type="hidden" value="{{ msj }}" id="msj">
+
+
+
+                <div class="ibox-content">
+                    <form method="POST" role="form" class="form-horizontal m-t" action="{{ request.path }}" id="submit">
+
+                        <div class="form-group"><label class="col-sm-2 control-label">Nombre completo</label>
+                            <div class="col-sm-10"><input required="" type="text" class="form-control" name="fullname">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Nombre de usuario</label>
+                            <div class="col-sm-10"><input required="" type="text" class="form-control" name="user_name">
+                                <span class="help-block m-b-none">Este es el nombre de usuario que se usara para ingresar al sistema</span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Contraseña</label>
+
+                            <div class="col-sm-10"><input required="" type="password" class="form-control" name="password"
+                                                          id="password"></div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Verificar</label>
+                            <div class="col-sm-10"><input required type="password" class="form-control" name="password2"
+                                                          id="password2"><span id='message'></span></div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-sm-2 control-label">Correo electronico</label>
+                            <div class="col-sm-10"><input required type="email" class="form-control" name="email"></div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group"><label class="col-sm-2 control-label">Institucion</label>
+
+                            <div class="col-sm-10">
+                                <select id="inst_list" name="inst" data-placeholder="Seleccione una institucion..."
+                                        class="chosen-select form-control m-b" tabindex="2">
+                                    <option value=""></option>
+                                    {% for row in fill_reg["insti"] %}
+                                        <option value="{{ row[0] }}" id="i_{{ row[0] }}"> {{ row[1] }}</option>
+                                    {% endfor %}
+                                </select>
+                                <span id='m_inst'></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Municipio</label>
+
+                            <div class="col-sm-10">
+                                <select id="munic_list" name="munic" data-placeholder="Seleccione un municipio..."
+                                        class="chosen-select form-control m-b" tabindex="2">
+                                    <option value=""></option>
+                                    {% for row in fill_reg["munic"] %}
+
+                                        <option value="{{ row[0] }}"
+                                                id="i_{{ row[0] }}"> {{ row[1].decode("utf").title() }}</option>
+                                    {% endfor %}
+                                </select>
+                                <span id='m_munic'></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4 col-sm-offset-2">
+                                <button class="btn btn-white" type="button"
+                                        onclick="window.location.href='{{ request.route_url('dashboard') }}'">Cancelar
+                                </button>
+                                <button class="btn btn-primary" type="submit" name="reg" id="reg">Registrar</button>
+
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    {% endblock pagecontent %}
+
+
+</div>
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $('.chosen-select').chosen({width: "100%"});
+
+
+        });
+    </script>
+{% endblock javascript %}s

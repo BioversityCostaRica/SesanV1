@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<insertValuesXML version="1.0">
+ <table clmdesc="seo_muni_5_des" name="lkpseo_muni_5" clmcode="seo_muni_5_cod">
+  <value code="1" description="ACATENANGO"/>
+  <value code="2" description="ADELANTO"/>
+  <value code="3" description="AGUA BLANCA"/>
+  <value code="4" description="AGUACATAN"/>
+  <value code="5" description="ALMOLONGA"/>
+  <value code="6" description="ALOTENANGO"/>
+  <value code="7" description="AMATITLAN"/>
+  <value code="8" description="ANTIGUA GUATEMALA"/>
+  <value code="9" description="ASUNCION MITA"/>
+  <value code="10" description="ATESCATEMPA"/>
+  <value code="11" description="AYUTLA"/>
+  <value code="12" description="BARBERENA"/>
+  <value code="13" description="BARILLAS"/>
+  <value code="14" description="CABAÑAS"/>
+  <value code="15" description="CABRICAN"/>
+  <value code="16" description="CAHABON"/>
+  <value code="17" description="CAJOLA"/>
+  <value code="18" description="CAMOTAN"/>
+  <value code="19" description="CANILLA"/>
+  <value code="20" description="CANTEL"/>
+  <value code="21" description="CASILLAS"/>
+  <value code="22" description="CATARINA"/>
+  <value code="23" description="CHAHAL"/>
+  <value code="24" description="CHAJUL"/>
+  <value code="25" description="CHAMPERICO"/>
+  <value code="26" description="CHIANTLA"/>
+  <value code="27" description="CHICACAO"/>
+  <value code="28" description="CHICAMAN"/>
+  <value code="29" description="CHICHE"/>
+  <value code="30" description="CHICHICASTENANGO"/>
+  <value code="31" description="CHIMALTENANGO"/>
+  <value code="32" description="CHINAUTLA"/>
+  <value code="33" description="CHINIQUE"/>
+  <value code="34" description="CHIQUIMULA"/>
+  <value code="35" description="CHIQUIMULILLA"/>
+  <value code="36" description="CHISEC"/>
+  <value code="37" description="CHUARRANCHO"/>
+  <value code="38" description="CIUDAD VIEJA"/>
+  <value code="39" description="COATEPEQUE"/>
+  <value code="40" description="COBAN"/>
+  <value code="41" description="COLOMBA"/>
+  <value code="42" description="COLOTENANGO"/>
+  <value code="43" description="COMALAPA"/>
+  <value code="44" description="COMAPA"/>
+  <value code="45" description="COMITANCILLO"/>
+  <value code="46" description="CONCEPCION"/>
+  <value code="47" description="CONCEPCION CHIQUIRICHAPA"/>
+  <value code="48" description="CONCEPCION HUISTA"/>
+  <value code="49" description="CONCEPCION LAS MINAS"/>
+  <value code="50" description="CONCEPCION TUTUAPA"/>
+  <value code="51" description="CONGUACO"/>
+  <value code="52" description="CUBULCO"/>
+  <value code="53" description="CUILAPA"/>
+  <value code="54" description="CUILCO"/>
+  <value code="55" description="CUNEN"/>
+  <value code="56" description="CUYOTENANGO"/>
+  <value code="57" description="DOLORES"/>
+  <value code="58" description="EL ASINTAL"/>
+  <value code="59" description="EL CHOL"/>
+  <value code="60" description="EL ESTOR"/>
+  <value code="61" description="EL JICARO"/>
+  <value code="62" description="EL PALMAR"/>
+  <value code="63" description="EL PROGRESO"/>
+  <value code="64" description="EL QUETZAL"/>
+  <value code="65" description="EL RODEO"/>
+  <value code="66" description="EL TEJAR"/>
+  <value code="67" description="ESCUINTLA"/>
+  <value code="68" description="ESQUIPULAS"/>
+  <value code="69" description="ESQUIPULAS PALO GORDO"/>
+  <value code="70" description="ESTANZUELA"/>
+  <value code="71" description="FLORES"/>
+  <value code="72" description="FLORES COSTA CUCA"/>
+  <value code="73" description="FRAIJANES"/>
+  <value code="74" description="GENOVA"/>
+  <value code="75" description="GRANADOS"/>
+  <value code="76" description="GUALAN"/>
+  <value code="77" description="GUANAGAZAPA"/>
+  <value code="78" description="GUASTATOYA"/>
+  <value code="79" description="GUATEMALA"/>
+  <value code="80" description="GUAZACAPAN"/>
+  <value code="81" description="HUEHUETENANGO"/>
+  <value code="82" description="HUITAN"/>
+  <value code="83" description="HUITE"/>
+  <value code="84" description="IPALA"/>
+  <value code="85" description="IXCAN"/>
+  <value code="86" description="IXCHIGUAN"/>
+  <value code="87" description="IXTAHUACAN"/>
+  <value code="88" description="IZTAPA"/>
+  <value code="89" description="JACALTENANGO"/>
+  <value code="90" description="JALAPA"/>
+  <value code="91" description="JALPATAGUA"/>
+  <value code="92" description="JEREZ"/>
+  <value code="93" description="JOCOTAN"/>
+  <value code="94" description="JOCOTENANGO"/>
+  <value code="95" description="JOYABAJ"/>
+  <value code="96" description="JUTIAPA"/>
+  <value code="97" description="LA DEMOCRACIA"/>
+  <value code="98" description="LA ESPERANZA"/>
+  <value code="99" description="LA GOMERA"/>
+  <value code="100" description="LA LIBERTAD"/>
+  <value code="101" description="LA REFORMA"/>
+  <value code="102" description="LA UNION"/>
+  <value code="103" description="LANQUIN"/>
+  <value code="104" description="LIVINGSTON"/>
+  <value code="105" description="LOS AMATES"/>
+  <value code="106" description="MAGDALENA MILPAS ALTAS"/>
+  <value code="107" description="MALACATAN"/>
+  <value code="108" description="MALACATANCITO"/>
+  <value code="109" description="MASAGUA"/>
+  <value code="110" description="MATAQUESCUINTLA"/>
+  <value code="111" description="MAZATENANGO"/>
+  <value code="112" description="MELCHOR DE MENCOS"/>
+  <value code="113" description="MIXCO"/>
+  <value code="114" description="MOMOSTENANGO"/>
+  <value code="115" description="MONJAS"/>
+  <value code="116" description="MORALES"/>
+  <value code="117" description="MORAZAN"/>
+  <value code="118" description="MOYUTA"/>
+  <value code="119" description="NAHUALA"/>
+  <value code="120" description="NEBAJ"/>
+  <value code="121" description="NENTON"/>
+  <value code="122" description="NUEVA CONCEPCION"/>
+  <value code="123" description="NUEVA SANTA ROSA"/>
+  <value code="124" description="NUEVO PROGRESO"/>
+  <value code="125" description="NUEVO SAN CARLOS"/>
+  <value code="126" description="OCOS"/>
+  <value code="127" description="OLINTEPEQUE"/>
+  <value code="128" description="OLOPA"/>
+  <value code="129" description="ORATORIO"/>
+  <value code="130" description="OSTUNCALCO"/>
+  <value code="131" description="PACHALUM"/>
+  <value code="132" description="PAJAPITA"/>
+  <value code="133" description="PALENCIA"/>
+  <value code="134" description="PALESTINA DE LOS ALTOS"/>
+  <value code="135" description="PALIN"/>
+  <value code="136" description="PANAJACHEL"/>
+  <value code="137" description="PANZOS"/>
+  <value code="138" description="PARRAMOS"/>
+  <value code="139" description="PASACO"/>
+  <value code="140" description="PASTORES"/>
+  <value code="141" description="PATULUL"/>
+  <value code="142" description="PATZICIA"/>
+  <value code="143" description="PATZITE"/>
+  <value code="144" description="PATZUN"/>
+  <value code="145" description="PETAPA"/>
+  <value code="146" description="POCHUTA"/>
+  <value code="147" description="POPTUN"/>
+  <value code="148" description="PUEBLO NUEVO"/>
+  <value code="149" description="PUEBLO NUEVO VIÑAS"/>
+  <value code="150" description="PUERTO BARRIOS"/>
+  <value code="151" description="PURULHA"/>
+  <value code="152" description="QUESADA"/>
+  <value code="153" description="QUETZALTENANGO"/>
+  <value code="154" description="QUEZALTEPEQUE"/>
+  <value code="155" description="RABINAL"/>
+  <value code="156" description="RETALHULEU"/>
+  <value code="157" description="RIO BLANCO"/>
+  <value code="158" description="RIO BRAVO"/>
+  <value code="159" description="RIO HONDO"/>
+  <value code="160" description="SACAPULAS"/>
+  <value code="161" description="SALAMA"/>
+  <value code="162" description="SALCAJA"/>
+  <value code="163" description="SAMAYAC"/>
+  <value code="164" description="SAN AGUSTIN ACASAGUASTLAN"/>
+  <value code="165" description="SAN ANDRES"/>
+  <value code="166" description="SAN ANDRES ITZAPA"/>
+  <value code="167" description="SAN ANDRES SAJCABAJA"/>
+  <value code="168" description="SAN ANDRES SEMATABAJ"/>
+  <value code="169" description="SAN ANDRES VILLA SECA"/>
+  <value code="170" description="SAN ANDRES XECUL"/>
+  <value code="171" description="SAN ANTONIO AGUAS CALIENTES"/>
+  <value code="172" description="SAN ANTONIO HUISTA"/>
+  <value code="173" description="SAN ANTONIO ILOTENANGO"/>
+  <value code="174" description="SAN ANTONIO LA PAZ"/>
+  <value code="175" description="SAN ANTONIO PALOPO"/>
+  <value code="176" description="SAN ANTONIO SACATEPEQUEZ"/>
+  <value code="177" description="SAN ANTONIO SUCHITEPEQUEZ"/>
+  <value code="178" description="SAN BARTOLO"/>
+  <value code="179" description="SAN BARTOLOME DE LAS CASAS"/>
+  <value code="180" description="SAN BARTOLOME JOCOTENANGO"/>
+  <value code="181" description="SAN BARTOLOME MILPAS ALTAS"/>
+  <value code="182" description="SAN BENARDINO"/>
+  <value code="183" description="SAN BENITO"/>
+  <value code="184" description="SAN CARLOS ALZATATE"/>
+  <value code="185" description="SAN CARLOS SIJA"/>
+  <value code="186" description="SAN CRISTOBAL ACASAGUASTLAN"/>
+  <value code="187" description="SAN CRISTOBAL ALTA VERAPAZ"/>
+  <value code="188" description="SAN CRISTOBAL CUCHO"/>
+  <value code="189" description="SAN CRISTOBAL TOTONICAPAN"/>
+  <value code="190" description="SAN DIEGO"/>
+  <value code="191" description="SAN FELIPE"/>
+  <value code="192" description="SAN FRANCISCO"/>
+  <value code="193" description="SAN FRANCISCO EL ALTO"/>
+  <value code="194" description="SAN FRANCISCO LA UNION"/>
+  <value code="195" description="SAN FRANCISCO ZAPOTITLAN"/>
+  <value code="196" description="SAN GABRIEL"/>
+  <value code="197" description="SAN GASPAR IXCHIL"/>
+  <value code="198" description="SAN JACINTO"/>
+  <value code="199" description="SAN JERONIMO"/>
+  <value code="200" description="SAN JOSE"/>
+  <value code="201" description="SAN JOSE CHACAYA"/>
+  <value code="202" description="SAN JOSE DEL GOLFO"/>
+  <value code="203" description="SAN JOSE EL IDOLO"/>
+  <value code="204" description="SAN JOSE LA ARADA"/>
+  <value code="205" description="SAN JOSE OJETENAN"/>
+  <value code="206" description="SAN JOSE PINULA"/>
+  <value code="207" description="SAN JOSE POAQUIL"/>
+  <value code="208" description="SAN JUAN ATITLAN"/>
+  <value code="209" description="SAN JUAN BAUTISTA"/>
+  <value code="210" description="SAN JUAN CHAMELCO"/>
+  <value code="211" description="SAN JUAN COTZAL"/>
+  <value code="212" description="SAN JUAN ERMITA"/>
+  <value code="213" description="SAN JUAN IXCOY"/>
+  <value code="214" description="SAN JUAN LA LAGUNA"/>
+  <value code="215" description="SAN JUAN SACATEPEQUEZ"/>
+  <value code="216" description="SAN JUAN TECUACO"/>
+  <value code="217" description="SAN LORENZO"/>
+  <value code="218" description="SAN LUCAR TOLIMAN"/>
+  <value code="219" description="SAN LUCAS SACATEPEQUEZ"/>
+  <value code="220" description="SAN LUIS"/>
+  <value code="221" description="SAN LUIS JILOTEPEQUE"/>
+  <value code="222" description="SAN MANUEL CHAPARRON"/>
+  <value code="223" description="SAN MARCOS"/>
+  <value code="224" description="SAN MARCOS LA LAGUNA"/>
+  <value code="225" description="SAN MARTIN JILOTEPEQUE"/>
+  <value code="226" description="SAN MARTIN SACATEPEQUEZ"/>
+  <value code="227" description="SAN MARTIN ZAPOTITLAN"/>
+  <value code="228" description="SAN MATEO"/>
+  <value code="229" description="SAN MATEO IXTATAN"/>
+  <value code="230" description="SAN MIGUEL ACATAN"/>
+  <value code="231" description="SAN MIGUEL CHICAJ"/>
+  <value code="232" description="SAN MIGUEL DUEÑAS"/>
+  <value code="233" description="SAN MIGUEL IXTAHUACAN"/>
+  <value code="234" description="SAN MIGUEL PANAN"/>
+  <value code="235" description="SAN MIGUEL SIGUILA"/>
+  <value code="236" description="SAN PABLO"/>
+  <value code="237" description="SAN PABLO JOCOPILAS"/>
+  <value code="238" description="SAN PABLO LA LAGUNA"/>
+  <value code="239" description="SAN PEDRO AYAMPUC"/>
+  <value code="240" description="SAN PEDRO CARCHA"/>
+  <value code="241" description="SAN PEDRO LA LAGUNA"/>
+  <value code="242" description="SAN PEDRO NECTA"/>
+  <value code="243" description="SAN PEDRO PINULA"/>
+  <value code="244" description="SAN PEDRO SACATEPEQUEZ"/>
+  <value code="245" description="SAN PERO JOCOPILAS"/>
+  <value code="246" description="SAN RAFAEL LA INDEPENDENCIA"/>
+  <value code="247" description="SAN RAFAEL LAS FLORES"/>
+  <value code="248" description="SAN RAFAEL PETZAL"/>
+  <value code="249" description="SAN RAFAEL PIE DE LA CUESTA"/>
+  <value code="250" description="SAN RAYMUNDO"/>
+  <value code="251" description="SAN SEBASTIAN"/>
+  <value code="252" description="SAN SEBASTIAN COATAN"/>
+  <value code="253" description="SAN SEBASTIAN HUEHUETENANGO"/>
+  <value code="254" description="SAN VICENTE PACAYA"/>
+  <value code="255" description="SANARATE"/>
+  <value code="256" description="SANSARE"/>
+  <value code="257" description="SANTA ANA"/>
+  <value code="258" description="SANTA ANA HUISTA"/>
+  <value code="259" description="SANTA APOLONIA"/>
+  <value code="260" description="SANTA BARBARA"/>
+  <value code="261" description="SANTA CATALINA BARAHONA"/>
+  <value code="262" description="SANTA CATARINA IXTAHUACAN"/>
+  <value code="263" description="SANTA CATARINA MITA"/>
+  <value code="264" description="SANTA CATARINA PALOPO"/>
+  <value code="265" description="SANTA CATARINA PINULA"/>
+  <value code="266" description="SANTA CLARA LA LAGUNA"/>
+  <value code="267" description="SANTA CRUZ BALANYA"/>
+  <value code="268" description="SANTA CRUZ DEL QUICHE"/>
+  <value code="269" description="SANTA CRUZ LA LAGUNA"/>
+  <value code="270" description="SANTA CRUZ MULUA"/>
+  <value code="271" description="SANTA CRUZ NARANJO"/>
+  <value code="272" description="SANTA CRUZ VERAPAZ"/>
+  <value code="273" description="SANTA EULALIA"/>
+  <value code="274" description="SANTA LUCIA COTZUMALGUAPA"/>
+  <value code="275" description="SANTA LUCIA LA REFORMA"/>
+  <value code="276" description="SANTA LUCIA MILPAS ALTAS"/>
+  <value code="277" description="SANTA LUCIA UTATLAN"/>
+  <value code="278" description="SANTA MARIA CHIQUIMULA"/>
+  <value code="279" description="SANTA MARIA DE JESUS"/>
+  <value code="280" description="SANTA MARIA IXHUATAN"/>
+  <value code="281" description="SANTA MARIA VISITACION"/>
+  <value code="282" description="SANTA ROSA DE LIMA"/>
+  <value code="283" description="SANTIAGO ATITLAN"/>
+  <value code="284" description="SANTIAGO CHIMALTENANGO"/>
+  <value code="285" description="SANTIAGO SACATEPEQUEZ"/>
+  <value code="286" description="SANTO DOMINGO SUCHITEPEQUEZ"/>
+  <value code="287" description="SANTO DOMINGO XENACOJ"/>
+  <value code="288" description="SANTO TOMAS LA UNION"/>
+  <value code="289" description="SAYAXCHE"/>
+  <value code="290" description="SENAHU"/>
+  <value code="291" description="SIBILIA"/>
+  <value code="292" description="SIBINAL"/>
+  <value code="293" description="SIPACAPA"/>
+  <value code="294" description="SIQUINALA"/>
+  <value code="295" description="SOLOLA"/>
+  <value code="296" description="SOLOMA"/>
+  <value code="297" description="SUMPANGO"/>
+  <value code="298" description="TACANA"/>
+  <value code="299" description="TACTIC"/>
+  <value code="300" description="TAJUMULCO"/>
+  <value code="301" description="TAMAHU"/>
+  <value code="302" description="TAXISCO"/>
+  <value code="303" description="TECPAN GUATEMALA"/>
+  <value code="304" description="TECTITLAN"/>
+  <value code="305" description="TECULUTAN"/>
+  <value code="306" description="TEJUTLA"/>
+  <value code="307" description="TIQUISATE"/>
+  <value code="308" description="TODOS SANTOS CUCHUMATAN"/>
+  <value code="309" description="TOTONICAPAN"/>
+  <value code="310" description="TUCURU"/>
+  <value code="311" description="TUMBADOR"/>
+  <value code="312" description="USPANTAN"/>
+  <value code="313" description="USUMATLAN"/>
+  <value code="314" description="VILLA CANALES"/>
+  <value code="315" description="VILLA NUEVA"/>
+  <value code="316" description="YEPOCAPA"/>
+  <value code="317" description="YUPILTEPEQUE"/>
+  <value code="318" description="ZACAPA"/>
+  <value code="319" description="ZACUALPA"/>
+  <value code="320" description="ZAPOTITLAN"/>
+  <value code="321" description="ZARAGOZA"/>
+  <value code="322" description="ZUNIL"/>
+  <value code="323" description="ZUNILITO"/>
+ </table>
+</insertValuesXML>
