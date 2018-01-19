@@ -10,9 +10,9 @@ from pprint import pprint
 from hashlib import md5
 from calendar import monthrange
 from zope.sqlalchemy import mark_changed
-
+from glob import glob
 import socket
-
+from pyramid.response import FileResponse
 from qrtools import QR  # apt-get install libzbar-dev, pip install zbar, pip install qrtools
 from ..encdecdata import decodeData
 
@@ -360,6 +360,7 @@ def getComp(lb, act):
 def getVarValue(org, code, month, year, uname):
     mySession = DBSession()
     ret = ""
+
     try:
         result = mySession.execute(
             "SELECT %s FROM DATA_%s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
@@ -456,6 +457,7 @@ def getLB(id_var, munic):
     return lb_valor
 
 
+
 def getDashReportData(self, month, year):
     # month = "08"
     # year = "2017"
@@ -530,6 +532,10 @@ def getDashReportData(self, month, year):
                               getSignature(self.user.login, self.user.organization, month, year, "tec", self.request)]
         ruuid = getVarValue(self.user.organization, "device_id_3", month, year, self.user.login)
         data["comunidades"] = getRepInfo(ruuid, self.user.organization, "com")
+        com=getVarValue(self.user.organization, "sem_af_comunidad", month, year, self.user.login).split(" ")
+        data["comunidades2"]=[]
+        for id_cu in com:
+            data["comunidades2"].append(getPob4Map(id_cu, alertP[0]))
         data["acciones"] = getRepInfo(ruuid, self.user.organization, "acc")
         data["coverage"]=calcDataCoverage(self.user.organization, ruuid, getMunicId(self.user.munic))
     else:
@@ -544,9 +550,9 @@ def getDashReportData(self, month, year):
     # with open("/home/acoto/pr_pptx/sort_db/data.json", 'wb') as f:
     #    json.dump(r,f, ensure_ascii=False, encoding='utf8')
     mySession.close()
-    # print "*-*-*-*-*"
-    # pprint(data)
-    # print "*-*-*-*-*"
+    print "*-*-*-*-*"
+    pprint(data)
+    print "*-*-*-*-*"
 
     return data
 
@@ -661,3 +667,15 @@ def calcDataCoverage( org, device_id_3, mun_id):
         return int(result)
     else:
         return False
+
+def getKML(municName,request):
+    path = os.path.join(request.registry.settings['user.repository'], "KML",municName+"_"+str(getMunicId(municName))+".kml" )
+
+    response = FileResponse(
+        path,
+        request=request,
+        content_type="KML"
+    )
+    response.content_disposition = 'attachment; filename="' + request.url.split("/")[-1] + '"'
+
+    return response

@@ -1,7 +1,7 @@
 #Authorization framework
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
-from .views import formList_view,manifest_view,mediaFile_view, XMLForm_view, push_view, submission_view
+from .views import formList_view,manifest_view,mediaFile_view, XMLForm_view, push_view, submission_view,munic_kml
 from pyramid.config import Configurator
 from sqlalchemy import create_engine
 from .models import (
@@ -60,6 +60,8 @@ def main(global_config, **settings):
     config.add_view(push_view, route_name="odkpush", renderer=None)
     config.add_view(submission_view, route_name="odksubmission", renderer=None)
 
+    config.add_route('kml', '/kml/{name}_{id}.kml')
+    config.add_view(munic_kml, route_name="kml", renderer=None)
 
     config.scan()
 

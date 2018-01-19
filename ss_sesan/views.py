@@ -5,7 +5,7 @@ from pyramid.response import Response
 from .classes import publicView, privateView, odkView
 from .auth import getUserData
 from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR
-from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, valReport, dataReport,getBaselines,getMunicName,getBaselinesName
+from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, valReport, dataReport,getBaselines,getMunicName,getBaselinesName,getKML
 from processes.utilform import isUserActive, getUserPassword, getFormList, isUserinOrg, getManifest, getMediaFile, \
     getXMLForm, getOrganization, getOrganizationID, storeSubmission
 from datetime import datetime
@@ -267,3 +267,7 @@ class submission_view(odkView):
         else:
             response = Response(status=404)
             return response
+
+class munic_kml(privateView):
+    def processView(self):
+        return getKML(self.user.munic,self.request)

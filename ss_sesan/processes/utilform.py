@@ -111,9 +111,6 @@ def getMediaFile(organization, uname, request,fileid):
     #path = os.path.join(request.registry.settings['user.repository'],*[organization,uname, organization.lower()+".png"])
     path = os.path.join(request.registry.settings['user.repository'],
                         *[organization, uname, fileid])
-    print "-*-*-*"
-    print fileid
-    print "*-*-*-"
     if os.path.isfile(path):
         content_type, content_enc = mimetypes.guess_type(path)
         fileName = os.path.basename(path)

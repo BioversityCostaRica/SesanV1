@@ -36,7 +36,10 @@ ss_sesan/resources/bootstrap/fonts/glyphicons-halflings-regular.woff2
 ss_sesan/resources/bootstrap/js/bootstrap.js
 ss_sesan/resources/bootstrap/js/bootstrap.min.js
 ss_sesan/resources/bootstrap/js/npm.js
+ss_sesan/resources/dashboard/baseline.js
 ss_sesan/resources/dashboard/dashboard.js
+ss_sesan/resources/dashboard/register.js
+ss_sesan/resources/dashboard/report.js
 ss_sesan/resources/dashboard/dist/jspdf.debug.js
 ss_sesan/resources/dashboard/dist/jspdf.min.js
 ss_sesan/resources/inspinia/css/animate.css
@@ -1395,6 +1398,7 @@ ss_sesan/resources/profile/editprofile.js
 ss_sesan/static/pyramid-16x16.png
 ss_sesan/static/pyramid.png
 ss_sesan/static/theme.css
+ss_sesan/templates/baseline.jinja2
 ss_sesan/templates/dashboard.jinja2
 ss_sesan/templates/login.jinja2
 ss_sesan/templates/profile.jinja2
