@@ -550,9 +550,9 @@ def getDashReportData(self, month, year):
     # with open("/home/acoto/pr_pptx/sort_db/data.json", 'wb') as f:
     #    json.dump(r,f, ensure_ascii=False, encoding='utf8')
     mySession.close()
-    print "*-*-*-*-*"
-    pprint(data)
-    print "*-*-*-*-*"
+    #print "*-*-*-*-*"
+    #pprint(data)
+    #print "*-*-*-*-*"
 
     return data
 
@@ -668,14 +668,3 @@ def calcDataCoverage( org, device_id_3, mun_id):
     else:
         return False
 
-def getKML(municName,request):
-    path = os.path.join(request.registry.settings['user.repository'], "KML",municName+"_"+str(getMunicId(municName))+".kml" )
-
-    response = FileResponse(
-        path,
-        request=request,
-        content_type="KML"
-    )
-    response.content_disposition = 'attachment; filename="' + request.url.split("/")[-1] + '"'
-
-    return response

@@ -25,7 +25,7 @@ def generateFormList(projectArray):
 def generateManifest(mediaFileArray):
     root = etree.Element("manifest",xmlns="http://openrosa.org/xforms/xformsManifest")
     for file in mediaFileArray:
-        print file
+        #print file
         xformTag = etree.Element("mediaFile")
         for key,value in file.iteritems():
             atag = etree.Element(key)
@@ -228,8 +228,8 @@ def makeJSONToMySQL(uname,iniqueID,request):
         args.append("-J " +os.path.join(request.registry.settings['user.repository'], *["forms", "custom2.js"]) )
         try:
             check_call(args)
-            print args
-            print "insert"
+            #print args
+            #print "insert"
         except CalledProcessError as e:
             msg = "Error exporting files to database \n"
             msg = msg + "Commang: " + " ".join(args) + "\n"

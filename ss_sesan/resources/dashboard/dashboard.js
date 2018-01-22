@@ -280,6 +280,15 @@ function genMap() {
     map_points2 = JSON.parse("[" + map_points.replace(/'/g, '"') + "]");
 
 
+
+    var kmlLayer = new google.maps.KmlLayer({
+        url: "www.spc.noaa.gov/products/outlook/SPC_outlooks.kml",
+        map: map1,
+        preserveViewport: true
+    });
+    kmlLayer.setMap(map1);
+
+
     var lat = [];
     var lon = [];
 

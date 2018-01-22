@@ -5,12 +5,12 @@ from pyramid.response import Response
 from .classes import publicView, privateView, odkView
 from .auth import getUserData
 from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR
-from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, valReport, dataReport,getBaselines,getMunicName,getBaselinesName,getKML
+from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, valReport, dataReport,getBaselines,getMunicName,getBaselinesName
 from processes.utilform import isUserActive, getUserPassword, getFormList, isUserinOrg, getManifest, getMediaFile, \
     getXMLForm, getOrganization, getOrganizationID, storeSubmission
 from datetime import datetime
-
-
+from pyramid.response import FileResponse
+import os
 @view_config(route_name='profile', renderer='templates/profile.jinja2')
 class profile_view(privateView):
     def processView(self):
@@ -268,6 +268,21 @@ class submission_view(odkView):
             response = Response(status=404)
             return response
 
-class munic_kml(privateView):
+class munic_kml(publicView):
     def processView(self):
-        return getKML(self.user.munic,self.request)
+        #print self.request.url.split("/")[-1]
+        try:
+            path = os.path.join(self.request.registry.settings['user.repository'], "KML",self.request.url.split("/")[-1])
+            #print path
+            #print "*-*-*-*-*\n\n"
+            response = FileResponse(
+               path,
+                request=self.request,
+                content_type="KML"
+            )
+            #response.content_disposition = 'attachment; filename="' + self.request.url.split("/")[-1] + '"'
+            response.content_disposition = 'attachment; filename="' + self.request.url.split("/")[-1] + '"'
+
+            return response
+        except:
+            return Response(status=404)
