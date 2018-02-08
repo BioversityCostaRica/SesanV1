@@ -719,3 +719,10 @@ def genXLS(self,data):
         row += 1
 
     workbook.close()
+
+    response = FileResponse(path, request=self.request)
+    headers = response.headers
+    headers['Content-Type'] = 'application/download'
+    headers['Accept-Ranges'] = 'bite'
+    headers['Content-Disposition'] = 'attachment;filename=' + "datos_reporte.xlsx"
+    return response

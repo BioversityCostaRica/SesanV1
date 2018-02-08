@@ -103,6 +103,7 @@ class dashboard_view(privateView):
         DashJS.need()
         DashCSS.need()
         date=""
+
         if 'dateP' in self.request.POST:
             date = self.request.POST.get('dateP', '').split(" ")
             dashData = getDashReportData(self, str(meses.index(date[0]) + 1), date[1])
@@ -112,15 +113,18 @@ class dashboard_view(privateView):
             dashData = getDashReportData(self, date[0], date[1])
             rep = valReport(self, date[0], date[1])
 
+        return {'activeUser': self.user, "dashData": dashData, "report": rep}
+
+class download_xls(privateView):
+    def processView(self):
+        meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+                 "Noviembre", "Diciembre"]
         if "genXLS" in self.request.POST:
             date = self.request.POST.get('genXLS', '').split(" ")
             date[0]=str(meses.index(date[0]) + 1)
-            genXLS(self,getDashReportData(self, date[0], date[1]))
-            dashData = getDashReportData(self, date[0], date[1])
-            rep = valReport(self, date[0], date[1])
+            response= genXLS(self,getDashReportData(self, date[0], date[1]))
 
-
-        return {'activeUser': self.user, "dashData": dashData, "report": rep}
+        return response
 
 
 @view_config(route_name='home', renderer='templates/login.jinja2')
