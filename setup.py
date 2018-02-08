@@ -25,7 +25,8 @@ requires = {
     'webhelpers',
     'pillow',
     'lxml',
-'MySQL-python'
+'MySQL-python',
+'xlsxwriter'
 }
 
 tests_require = [

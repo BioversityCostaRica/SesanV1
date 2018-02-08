@@ -237,8 +237,20 @@
                                                         <li><a href="javascript:expandFoo()" id="collapse">Mostrar
                                                             todo</a>
                                                         </li>
-                                                        <li><a href="javascript:showPDF()">Descargar en PDF</a>
+                                                        <li><a href="javascript:showPDF()">Descargar datos</a>
                                                         </li>
+
+
+                                                        <!--->
+                                                        <form role="form" method="POST" action="{{ request.path }}"
+                                                              id="formXLS"
+                                                              enctype='multipart/form-data'>
+
+
+                                                            <input type="hidden" id="genXLS" value="{{ dashData.date[0] }} {{ dashData.date[1] }}" name="genXLS">
+                                                        </form>
+
+                                                        <!--->
                                                     </ul>
 
                                                 </div>
@@ -439,13 +451,13 @@
 
                                     <!-------->
                                     <script type="text/javascript"
-                                            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDo13AUO2xL-UgyHvklmo6yVVvPT90mtyU&v=3.exp&libraries=geometry,places,drawing"></script>
+                                            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDo13AUO2xL-UgyHvklmo6yVVvPT90mtyU&v=3.exp"></script>
 
-                                        <div class="ibox" id="map_d">
+                                    <div class="ibox" id="map_d">
 
 
-                                                <div class="google-map" id="map1"></div>
-                                                <div id="legend" style="font-family: Arial, sans-serif;
+                                        <div class="google-map" id="map1"></div>
+                                        <div id="legend" style="font-family: Arial, sans-serif;
 
                                                             background: #fff;
                                                             padding: 10px;
@@ -454,23 +466,28 @@
                                                             ">
 
 
-                                                    <h3 style="margin-top: 0;font-size: x-small;"><i class="fa fa-circle"
-                                                                                                   style="color: #11c300"> </i>&nbsp;Sin
-                                                        Afectación</h3>
-                                                    <h3 style="margin-top: 0;font-size: x-small;"><i class="fa fa-circle"
-                                                                                                   style="color: #ffe132"> </i>&nbsp;Afectación
-                                                        Moderada</h3>
-                                                    <h3 style="margin-top: 0;font-size: x-small;"><i class="fa fa-circle"
-                                                                                                   style="color: #ff9936"> </i>&nbsp;Afectación
-                                                        Alta</h3>
-                                                    <h3 style="margin-top: 0;font-size: x-small;"><i class="fa fa-circle"
-                                                                                                   style="color: #ff1313"> </i>&nbsp;Afectación
-                                                        Muy Alta</h3>
-                                                </div>
-
-                                                <input type="text" id="map_points" value="{{ dashData.comunidades2}}">
+                                            <h3 style="margin-top: 0;font-size: x-small;"><i class="fa fa-circle"
+                                                                                             style="color: #11c300"> </i>&nbsp;Sin
+                                                Afectación</h3>
+                                            <h3 style="margin-top: 0;font-size: x-small;"><i class="fa fa-circle"
+                                                                                             style="color: #ffe132"> </i>&nbsp;Afectación
+                                                Moderada</h3>
+                                            <h3 style="margin-top: 0;font-size: x-small;"><i class="fa fa-circle"
+                                                                                             style="color: #ff9936"> </i>&nbsp;Afectación
+                                                Alta</h3>
+                                            <h3 style="margin-top: 0;font-size: x-small;"><i class="fa fa-circle"
+                                                                                             style="color: #ff1313"> </i>&nbsp;Afectación
+                                                Muy Alta</h3>
+                                            <h3 style="margin-top: 0;font-size: x-small;"><i class="fa fa-minus"
+                                                                                             style="color: #86D3C3"> </i>&nbsp;Limite
+                                                municipal</h3>
 
                                         </div>
+
+                                        <input type="hidden" id="map_points" value="{{ dashData.comunidades2 }}">
+                                        <input type="hidden" id="map_name" value="{{ activeUser.munic }}">
+
+                                    </div>
 
                                     <!-------->
 

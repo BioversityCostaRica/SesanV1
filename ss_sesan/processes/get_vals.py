@@ -15,6 +15,7 @@ import socket
 from pyramid.response import FileResponse
 from qrtools import QR  # apt-get install libzbar-dev, pip install zbar, pip install qrtools
 from ..encdecdata import decodeData
+import xlsxwriter
 
 from sqlalchemy import or_
 
@@ -668,3 +669,53 @@ def calcDataCoverage( org, device_id_3, mun_id):
     else:
         return False
 
+def genXLS(self,data):
+    data.pop('signatures', None)
+    path = os.path.join(self.request.registry.settings['user.repository'], "TMP","datos_reporte.xlsx")
+
+    workbook = xlsxwriter.Workbook(path)
+    worksheet = workbook.add_worksheet()
+
+    #worksheet.write(y, x, str)
+    worksheet.write(0, 0, "Sala Situacional para el mes de %s, %s"%(data["date"][0],data["date"][1]))
+    worksheet.write(1, 0, "Municipio: "+str(self.user.munic).title())
+    worksheet.write(2, 0, "Institucion que reporta: " + str(self.user.organization))
+    worksheet.write(3, 0, "Covertura en comunidades: " + str(data["coverage"])+ "%")
+
+    pilares=[]
+    row=7
+    for p in data.keys():
+        if "_alert" not in p and "date" not in p and "signatures" not in p and p not in ["comunidades", "acciones","coverage", "comunidades2"]:
+            format = workbook.add_format({'bg_color':data[p+"_alert"][2] })
+            worksheet.write(row, 0, "Pilar: " + str(p) )
+            worksheet.write(row, 1, "Indice de afectacion: " + str(data[p+"_alert"][0]))
+            worksheet.write(row, 2, "Nivel de alerta: " + str(data[p+"_alert"][1]).decode("latin-1"), format)
+            row+=2
+            for d in data[p]:
+                worksheet.write(row, 0, "Indicador: "+str(d).decode("latin-1"))
+                worksheet.write(row, 1, "Indice de la variable: "+str(data[p][d]["val"][0]))
+                row += 1
+                for c in data[p][d]["var"]:
+                    worksheet.write(row, 0, "Variable: "+str(c[0]).decode("latin-1"))
+                    worksheet.write(row, 1, "Unidad de Medida: "+str(c[1]).decode("latin-1"))
+                    worksheet.write(row, 2, "Linea Base: "+str(c[2]).decode("latin-1"))
+                    worksheet.write(row, 3, "Sitacion actual: "+str(c[3]))
+                    worksheet.write(row, 4, "Comparativo mensual: "+str(c[4]))
+                    format = workbook.add_format({'bg_color': c[5][0]})
+                    worksheet.write(row, 5, "Nivel de afectacion: "+str(c[5][1]).decode("latin-1"),format )
+                    row += 1
+                row+=2
+
+
+    o_vals=[["comunidades","Comunidades mas afectadas" ],["acciones", "Acciones propuestas a implementar"]]
+
+    for o in o_vals:
+        worksheet.write(row, 0, o[1])
+        row += 1
+        for k in data[o[0]]:
+            worksheet.write(row, 0, k[0])
+            worksheet.write(row, 1, k[1])
+            row += 1
+        row += 1
+
+    workbook.close()

@@ -1,8 +1,11 @@
 $(document).ready(function () {
 
     //-------------------------
-
-    genMap();
+    try {
+        genMap();
+    }
+    catch (err) {
+    }
 
 
     //-------------------------
@@ -177,7 +180,10 @@ function expandFoo() {
 }
 
 function showPDF() {
-    expand();
+
+    $("#formXLS").submit();
+
+    /*expand();
 
     var doc = new jsPDF();
     doc.setProperties({
@@ -197,7 +203,7 @@ function showPDF() {
         doc.save('report.pdf');
     });
 
-    collapse();
+    collapse();*/
 }
 
 
@@ -273,20 +279,20 @@ function genMap() {
     var map1 = new google.maps.Map(mapElement1, mapOptions1);
 
     var legend = document.getElementById('legend');
-    map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend)
+    //map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
     var map_points = $('#map_points').val();
 
     map_points2 = JSON.parse("[" + map_points.replace(/'/g, '"') + "]");
 
-
+    var map_name = $('#map_name').val().replace(" ", "_");
 
     var kmlLayer = new google.maps.KmlLayer({
-        url: "www.spc.noaa.gov/products/outlook/SPC_outlooks.kml",
+        url: "http://192.155.81.175/kml/" + map_name + ".kml",
         map: map1,
         preserveViewport: true
     });
-    kmlLayer.setMap(map1);
+    //kmlLayer.setMap(map1);
 
 
     var lat = [];

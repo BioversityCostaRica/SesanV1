@@ -5,7 +5,7 @@ from pyramid.response import Response
 from .classes import publicView, privateView, odkView
 from .auth import getUserData
 from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR
-from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, valReport, dataReport,getBaselines,getMunicName,getBaselinesName
+from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, valReport, dataReport,getBaselines,getMunicName,getBaselinesName,genXLS
 from processes.utilform import isUserActive, getUserPassword, getFormList, isUserinOrg, getManifest, getMediaFile, \
     getXMLForm, getOrganization, getOrganizationID, storeSubmission
 from datetime import datetime
@@ -78,9 +78,6 @@ class report_view(privateView):
         DashCSS.need()
         reportJS.need()
         date = self.request.matchdict["date"]
-        print "*-*-*-*-*-*"
-        print self.request.POST
-        print "*-*-*-*-*-*"
 
         date = date.split("_")
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
@@ -100,18 +97,28 @@ def logout_view(request):
 class dashboard_view(privateView):
     def processView(self):
         # self.needJS('dashboard')
+
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
         DashJS.need()
         DashCSS.need()
+        date=""
         if 'dateP' in self.request.POST:
-            new_date = self.request.POST.get('dateP', '').split(" ")
-            dashData = getDashReportData(self, str(meses.index(new_date[0]) + 1), new_date[1])
-            rep = valReport(self, str(meses.index(new_date[0]) + 1), new_date[1])
+            date = self.request.POST.get('dateP', '').split(" ")
+            dashData = getDashReportData(self, str(meses.index(date[0]) + 1), date[1])
+            rep = valReport(self, str(meses.index(date[0]) + 1), date[1])
         else:
             date = datetime.now().strftime("%m %Y").split(" ")
             dashData = getDashReportData(self, date[0], date[1])
             rep = valReport(self, date[0], date[1])
+
+        if "genXLS" in self.request.POST:
+            date = self.request.POST.get('genXLS', '').split(" ")
+            date[0]=str(meses.index(date[0]) + 1)
+            genXLS(self,getDashReportData(self, date[0], date[1]))
+            dashData = getDashReportData(self, date[0], date[1])
+            rep = valReport(self, date[0], date[1])
+
 
         return {'activeUser': self.user, "dashData": dashData, "report": rep}
 
@@ -273,14 +280,12 @@ class munic_kml(publicView):
         #print self.request.url.split("/")[-1]
         try:
             path = os.path.join(self.request.registry.settings['user.repository'], "KML",self.request.url.split("/")[-1])
-            #print path
-            #print "*-*-*-*-*\n\n"
+
             response = FileResponse(
                path,
                 request=self.request,
                 content_type="KML"
             )
-            #response.content_disposition = 'attachment; filename="' + self.request.url.split("/")[-1] + '"'
             response.content_disposition = 'attachment; filename="' + self.request.url.split("/")[-1] + '"'
 
             return response

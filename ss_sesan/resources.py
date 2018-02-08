@@ -62,7 +62,8 @@ regJS_CSS = Group([Resource(library, 'inspinia/js/plugins/sweetalert/sweetalert.
 
 
 reportJS = Group([Resource(library, 'inspinia/js/plugins/typehead/bootstrap3-typeahead.min.js', depends=[JQuery], bottom=True),
-                  #Resource(library, 'inspinia/js/plugins/d3/d3.min.js', depends=[JQuery], bottom=True),
+                  Resource(library, 'dashboard/pptxGenJS/jszip.min.js', depends=[JQuery], bottom=True),
+                  Resource(library, 'dashboard/pptxGenJS/pptxgen.js', depends=[JQuery], bottom=True),
                   #Resource(library, 'inspinia/js/plugins/topojson/topojson.js', depends=[JQuery], bottom=True),
 
                   #Resource(library, 'inspinia/js/plugins/datamaps/datamaps.all.min.js', depends=[JQuery], bottom=True),

@@ -67,7 +67,10 @@
                             {% endif %}
                             <li class="active">
                                 <a href="{{ request.base_url }}"><i class="fa fa-ellipsis-h"></i> <span
-                                        class="nav-label">Reporte</span></a>
+                                        class="nav-label">Reporte</span>
+
+                                </a>
+
 
                             </li>
                         {% endblock dashmenu %}
@@ -165,19 +168,16 @@
                     </div>
                     <div class="col-sm-2 text-right">
 
-                        <form role="form" method="POST" action="{{ request.path }}" id="formRep"
-                              enctype='multipart/form-data'>
+
+                        <button class="btn btn-default btn-sm " class="fa fa-check" type="button"
+                                onclick="javascript:printReport();"
+                                name="linkRep"
+                                id="linkRep"><i
+                                class="fa fa-print"></i>
+                        </button>
+                        <input type="text" id="pptx_img" value="">
 
 
-                            <button class="btn btn-default btn-sm " class="fa fa-check" type="submit"
-                                    name="linkRep"
-                                    id="linkRep" ><i
-                                    class="fa fa-print"></i>
-                            </button>
-
-
-                            <input type="text" id="rep_vals" value="" name="rep_vals">
-                        </form>
                     </div>
 
 
@@ -197,7 +197,7 @@
                             <strong>Comisión Municipal de Seguridad Alimentaria y Nutricional
                                 de {{ dataReport.date[2].title() }}</strong>
                             <div class="widget yellow-bg p-lg text-center"
-                                 style="background-color:{{ dataReport.san[1] }} !important; ">
+                                 style="background-color:{{ dataReport.san[1] }} !important; " id="alert_img">
                                 <div class="m-b-md">
                                     <i class="fa fa-warning fa-4x"></i>
                                     <h1 class="m-xs">{{ dataReport.san[0] }}</h1>
@@ -606,47 +606,186 @@
 
                         </form>
                         <!--*-*-*-*-*-->
-                        <div class="row">
-                            <script type="text/javascript"
-                                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDQTpXj82d8UpCi97wzo_nKXL7nYrd4G70"></script>
-                            <div class="col-md-6">
-                                <div class="ibox" id="map_d">
-                                    <div class="ibox-title">
-                                        <h5>Nivel de alerta por comunidad</h5>
-                                    </div>
-                                    <div class="ibox-content">
 
-                                        <div class="google-map" id="map1"></div>
-                                        <div id="legend" style="font-family: Arial, sans-serif;
+
+                        <div class="col-md-3">
+
+
+                            <div class="input-group">
+                                <input type="text" placeholder="Add new task. " class="input input-sm form-control">
+                                <span class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-white"> <i class="fa fa-plus"></i> Add task</button>
+                                </span>
+                            </div>
+
+                            <ul class="sortable-list connectList agile-list" id="todo">
+                                <li class="warning-element" id="task1">
+                                    Simply dummy text of the printing and typesetting industry.
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Tag</a>
+                                        <i class="fa fa-clock-o"></i> 12.10.2015
+                                    </div>
+                                </li>
+                                <li class="success-element" id="task2">
+                                    Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+                                    default.
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Mark</a>
+                                        <i class="fa fa-clock-o"></i> 05.04.2015
+                                    </div>
+                                </li>
+                                <li class="info-element" id="task3">
+                                    Sometimes by accident, sometimes on purpose (injected humour and the like).
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Mark</a>
+                                        <i class="fa fa-clock-o"></i> 16.11.2015
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <textarea name="Text1" style="width: 100%" rows="5"></textarea>
+
+                            <ul class="sortable-list connectList agile-list" id="todo">
+                                <li class="warning-element" id="task1">
+                                    Simply dummy text of the printing and typesetting industry.
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Tag</a>
+                                        <i class="fa fa-clock-o"></i> 12.10.2015
+                                    </div>
+                                </li>
+                                <li class="success-element" id="task2">
+                                    Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+                                    default.
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Mark</a>
+                                        <i class="fa fa-clock-o"></i> 05.04.2015
+                                    </div>
+                                </li>
+                                <li class="info-element" id="task3">
+                                    Sometimes by accident, sometimes on purpose (injected humour and the like).
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Mark</a>
+                                        <i class="fa fa-clock-o"></i> 16.11.2015
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <textarea name="Text1" style="width: 100%" rows="5"></textarea>
+
+                            <ul class="sortable-list connectList agile-list" id="todo">
+                                <li class="warning-element" id="task1">
+                                    Simply dummy text of the printing and typesetting industry.
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Tag</a>
+                                        <i class="fa fa-clock-o"></i> 12.10.2015
+                                    </div>
+                                </li>
+                                <li class="success-element" id="task2">
+                                    Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+                                    default.
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Mark</a>
+                                        <i class="fa fa-clock-o"></i> 05.04.2015
+                                    </div>
+                                </li>
+                                <li class="info-element" id="task3">
+                                    Sometimes by accident, sometimes on purpose (injected humour and the like).
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Mark</a>
+                                        <i class="fa fa-clock-o"></i> 16.11.2015
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div class="col-md-3">
+
+                            <textarea name="Text1" style="width: 100%" rows="5"></textarea>
+
+                            <ul class="sortable-list connectList agile-list" id="todo">
+                                <li class="warning-element" id="task1">
+                                    Simply dummy text of the printing and typesetting industry.
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Tag</a>
+                                        <i class="fa fa-clock-o"></i> 12.10.2015
+                                    </div>
+                                </li>
+                                <li class="success-element" id="task2">
+                                    Many desktop publishing packages and web page editors now use Lorem Ipsum as their
+                                    default.
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Mark</a>
+                                        <i class="fa fa-clock-o"></i> 05.04.2015
+                                    </div>
+                                </li>
+                                <li class="info-element" id="task3">
+                                    Sometimes by accident, sometimes on purpose (injected humour and the like).
+                                    <div class="agile-detail">
+                                        <a href="#" class="pull-right btn btn-xs btn-white">Mark</a>
+                                        <i class="fa fa-clock-o"></i> 16.11.2015
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+
+
+                        <!------------>
+                    </div>
+                    <div class="row">
+                        <script type="text/javascript"
+                                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDo13AUO2xL-UgyHvklmo6yVVvPT90mtyU&v=3.exp"></script>
+                        <div class="col-md-6">
+                            <div class="ibox" id="map_d">
+                                <div class="ibox-title">
+                                    <h5>Nivel de alerta por comunidad</h5>
+                                </div>
+                                <div class="ibox-content">
+
+                                    <div class="google-map" id="map1"></div>
+                                    <div id="legend" style="font-family: Arial, sans-serif;
 
                                                             background: #fff;
                                                             padding: 10px;
                                                             margin: 10px;
                                                             border: 1px solid #afb2b4;
                                                             ">
-                                            <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
-                                                                                           style="color: #11c300"> </i>&nbsp;Sin
-                                                Afectación</h3>
-                                            <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
-                                                                                           style="color: #ffe132"> </i>&nbsp;Afectación
-                                                Moderada</h3>
-                                            <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
-                                                                                           style="color: #ff9936"> </i>&nbsp;Afectación
-                                                Alta</h3>
-                                            <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
-                                                                                           style="color: #ff1313"> </i>&nbsp;Afectación
-                                                Muy Alta</h3>
-                                        </div>
-
-                                        <input type="hidden" id="map_points" value="{{ dataReport.points }}">
+                                        <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
+                                                                                       style="color: #11c300"> </i>&nbsp;Sin
+                                            Afectación</h3>
+                                        <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
+                                                                                       style="color: #ffe132"> </i>&nbsp;Afectación
+                                            Moderada</h3>
+                                        <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
+                                                                                       style="color: #ff9936"> </i>&nbsp;Afectación
+                                            Alta</h3>
+                                        <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
+                                                                                       style="color: #ff1313"> </i>&nbsp;Afectación
+                                            Muy Alta</h3>
+                                        <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-minus"
+                                                                                       style="color: #86D3C3"> </i>&nbsp;Limite
+                                            municipal</h3>
                                     </div>
+
+                                    <input type="hidden" id="map_points" value="{{ dataReport.points }}">
+                                    <input type="hidden" id="map_name" value="{{ dataReport.date[2] }}">
                                 </div>
                             </div>
                         </div>
-
-                        <!--*-*-*-*-*-->
-
                     </div>
+
+                    <!--*-*-*-*-*-->
+
+
 
 
 
