@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ODKImportXML version="1.0">
+ <table xmlcode="main" mysqlcode="maintable" parent="NULL">
+  <field xmlcode="NONE" mysqlcode="surveyid" key="false" reference="false"/>
+  <field xmlcode="NONE" mysqlcode="originid" key="false" reference="false"/>
+  <field xmlcode="start_time_survey_1" mysqlcode="start_time_survey_1" key="false" reference="false"/>
+  <field xmlcode="day_of_survey" mysqlcode="day_of_survey" key="false" reference="false"/>
+  <field xmlcode="device_id_3" mysqlcode="device_id_3" key="false" reference="false"/>
+  <field xmlcode="uuid" mysqlcode="uuid" key="true" reference="false"/>
+  <field xmlcode="grp_1/txt_rep_muni_comusan_4" mysqlcode="txt_rep_muni_comusan_4" key="false" reference="false"/>
+  <field xmlcode="grp_1/seo_muni_5" mysqlcode="seo_muni_5" key="false" reference="false"/>
+  <field xmlcode="grp_1/date_fecha_informe_6" mysqlcode="date_fecha_informe_6" key="false" reference="false"/>
+  <field xmlcode="grp_1/txt_tecnico_reporta_7" mysqlcode="txt_tecnico_reporta_7" key="false" reference="false"/>
+  <field xmlcode="grp_2/dev_muj_alf" mysqlcode="dev_muj_alf" key="false" reference="false"/>
+  <field xmlcode="grp_2/dec_hom_alf" mysqlcode="dec_hom_alf" key="false" reference="false"/>
+  <field xmlcode="grp_signature/img_sig_rep" mysqlcode="img_sig_rep" key="false" reference="false"/>
+  <field xmlcode="grp_signature/img_sig_tec" mysqlcode="img_sig_tec" key="false" reference="false"/>
+  <field xmlcode="end_time_survey_26" mysqlcode="end_time_survey_26" key="false" reference="false"/>
+  <field xmlcode="NONE" mysqlcode="rowuuid" key="false" reference="false"/>
+  <table xmlcode="repeat_com_afec_pilar" mysqlcode="repeat_com_afec_pilar" parent="maintable">
+   <field xmlcode="NONE" mysqlcode="uuid" key="true" reference="true"/>
+   <field xmlcode="NONE" mysqlcode="repeat_com_afec_pilar_rowid" key="true" reference="false"/>
+   <field xmlcode="repeat_com_afec_pilar/txt_af_comunidad_24" mysqlcode="txt_af_comunidad_24" key="false" reference="false"/>
+   <field xmlcode="NONE" mysqlcode="rowuuid" key="false" reference="false"/>
+  </table>
+  <table xmlcode="repeat_prop_acciones" mysqlcode="repeat_prop_acciones" parent="maintable">
+   <field xmlcode="NONE" mysqlcode="uuid" key="true" reference="true"/>
+   <field xmlcode="NONE" mysqlcode="repeat_prop_acciones_rowid" key="true" reference="false"/>
+   <field xmlcode="repeat_prop_acciones/txt_prop_acciones_25" mysqlcode="txt_prop_acciones_25" key="false" reference="false"/>
+   <field xmlcode="NONE" mysqlcode="rowuuid" key="false" reference="false"/>
+  </table>
+ </table>
+</ODKImportXML>

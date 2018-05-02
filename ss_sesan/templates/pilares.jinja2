@@ -1,0 +1,616 @@
+{% extends 'dashboard.jinja2' %}
+{% block title %}
+    <title>SESAN | Lineas base</title>
+{% endblock title %}
+
+
+{% block pageheading %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-8 text-center">
+            <h2>Mantenimiento de pilares</h2>
+        </div>
+    </div>
+{% endblock pageheading %}
+
+{% block dashmenu %}
+    {% if activeUser.user_role!=1 %}
+        <li>
+            <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-th-large"></i> <span
+                    class="nav-label">Inicio</span> </a>
+        </li>
+        <li>
+            <a href="{{ request.route_url('profile') }}"><i class="fa fa-user-circle-o"></i> <span
+                    class="nav-label">Perfil</span></a>
+        </li>
+        <li>
+            <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-ellipsis-h"></i> <span
+                    class="nav-label">Acerca de</span></a>
+
+        </li>
+    {% endif %}
+    {% if activeUser.user_role==1 %}
+        <li>
+            <a href="{{ request.route_url('register') }}"><i class="fa fa-vcard-o"></i> <span
+                    class="nav-label">Agregar usuario</span></a>
+
+        </li>
+        <li>
+            <a href="{{ request.route_url('baseline') }}"><i class="fa fa-newspaper-o"></i> <span
+                    class="nav-label">Lineas Base</span></a>
+
+
+        </li>
+
+        <li class="active">
+            <a href="{{ request.route_url('pilares') }}"><i class="fa fa-location-arrow"></i>
+                <span
+                        class="nav-label">Pilares</span></a>
+        </li>
+
+    {% endif %}
+
+{% endblock dashmenu %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% block pagecontent %}
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Pilares</h5>
+                        <div class="ibox-tools">
+                            <div class="row">
+                                <div class="col-md-9">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-10">
+
+                                <button class="btn btn-primary " type="button" style="text-align: center; width: 80%"
+                                        data-toggle="modal" data-target="#modalPilar"><i
+                                        class="fa fa-plus"></i>&nbsp;Nuevo Pilar
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <p style="margin-top: 8px; text-align: center"><span
+                                        class="label label-default">Total: 2</span></p>
+                            </div>
+
+                            <!--->
+
+                            <!--->
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+        <!------------------->
+        <div id="summary" style="font-size: 125% ">
+
+            <div class="ibox float-e-margins">
+
+                <div class="ibox-title" style="font-size: 125% ">
+                    <h5>Pilar : Acceso, indice de afectacion </h5>
+                    <h5 style="color: #ff9936">&nbsp;
+                        70.00
+                        (AfectacióN Alta)</h5>
+
+
+
+                </div>
+
+                <div class="ibox-content">
+                    <table class="footable table toggle-arrow-tiny default breakpoint no-paging footable-loaded" id="mant_pilar">
+                        <thead>
+                        <tr>
+                            <th data-toggle="true" data-sortable="false"
+                                class="footable-visible footable-first-column footable-sortable">Indicador<span
+                                    class="footable-sort-indicator"></span></th>
+                            <th data-toggle="true" data-sortable="false"
+                                class="text-center footable-visible footable-last-column footable-sortable">
+                                Indice de variable
+                                <span class="footable-sort-indicator"></span></th>
+
+                            <th data-hide="all" style="display: none;" class="footable-sortable"><span
+                                    class="footable-sort-indicator"></span></th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr style="" class="footable-even">
+                            <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Precios
+                                de venta de principales productos agricolas
+                            </td>
+
+
+                            <td class="text-center footable-visible footable-last-column"><strong
+                                    style="">100.00</strong>
+                            </td>
+
+                            <td style="display: none;">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Variable</th>
+                                        <th>Unidad de medida</th>
+                                        <th>Linea Base</th>
+                                        <th>Situacion actual</th>
+                                        <th>Comparativo mensual</th>
+                                        <th>Nivel de afectacion</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>Precio de venta promedio qq de Producto Agrícola Principal 1</td>
+                                        <td class="text-center">Quetzales/qq</td>
+                                        <td class="text-center">ND</td>
+                                        <td class="text-center">8.000</td>
+
+                                        <td class="text-center" style="color: red"><i class="fa fa-times"></i>
+                                        </td>
+
+                                        <td class="text-center" style="color: #ff1313">Afectación Muy Alta</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Precio de venta promedio qq de Producto Agrícola Principal 2</td>
+                                        <td class="text-center">Quetzales/qq</td>
+                                        <td class="text-center">ND</td>
+                                        <td class="text-center">2.000</td>
+
+                                        <td class="text-center" style="color: red"><i class="fa fa-times"></i>
+                                        </td>
+
+                                        <td class="text-center" style="color: #ff1313">Afectación Muy Alta</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Precio de venta promedio qq de Producto Agrícola Principal 3</td>
+                                        <td class="text-center">Quetzales/qq</td>
+                                        <td class="text-center">ND</td>
+                                        <td class="text-center">4.000</td>
+
+                                        <td class="text-center" style="color: red"><i class="fa fa-times"></i>
+                                        </td>
+
+                                        <td class="text-center" style="color: #ff1313">Afectación Muy Alta</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </td>
+
+
+                        </tr>
+
+                        <tr style="" class="footable-odd">
+                            <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Precios
+                                de Compra de Alimentos Principales
+                            </td>
+
+
+                            <td class="text-center footable-visible footable-last-column"><strong style="">0.00</strong>
+                            </td>
+
+                            <td style="display: none;">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Variable</th>
+                                        <th>Unidad de medida</th>
+                                        <th>Linea Base</th>
+                                        <th>Situacion actual</th>
+                                        <th>Comparativo mensual</th>
+                                        <th>Nivel de afectacion</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>Precio de compra promedio qq de Alimento Principal 1</td>
+                                        <td class="text-center">Quetzales/qq</td>
+                                        <td class="text-center">ND</td>
+                                        <td class="text-center">8.000</td>
+
+                                        <td class="text-center" style="color: red"><i class="fa fa-times"></i>
+                                        </td>
+
+                                        <td class="text-center" style="color: #11c300">Sin Afectación</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Precio de compra promedio qq de Alimento Principal 2</td>
+                                        <td class="text-center">Quetzales/qq</td>
+                                        <td class="text-center">ND</td>
+                                        <td class="text-center">2.000</td>
+
+                                        <td class="text-center" style="color: red"><i class="fa fa-times"></i>
+                                        </td>
+
+                                        <td class="text-center" style="color: #11c300">Sin Afectación</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Precio de compra promedio qq de Alimento Principal 3</td>
+                                        <td class="text-center">Quetzales/qq</td>
+                                        <td class="text-center">ND</td>
+                                        <td class="text-center">96.000</td>
+
+                                        <td class="text-center" style="color: red"><i class="fa fa-times"></i>
+                                        </td>
+
+                                        <td class="text-center" style="color: #11c300">Sin Afectación</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </td>
+
+
+                        </tr>
+
+                        <tr style="" class="footable-even">
+                            <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Fuentes
+                                de ingreso
+                            </td>
+
+
+                            <td class="text-center footable-visible footable-last-column"><strong
+                                    style="">100.00</strong>
+                            </td>
+
+                            <td style="display: none;">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Variable</th>
+                                        <th>Unidad de medida</th>
+                                        <th>Linea Base</th>
+                                        <th>Situacion actual</th>
+                                        <th>Comparativo mensual</th>
+                                        <th>Nivel de afectacion</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>Precio por jornal diario</td>
+                                        <td class="text-center">Quetzales/jornal</td>
+                                        <td class="text-center">ND</td>
+                                        <td class="text-center">5.000</td>
+
+                                        <td class="text-center" style="color: red"><i class="fa fa-times"></i>
+                                        </td>
+
+                                        <td class="text-center" style="color: #ff1313">Afectación Muy Alta</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>No. De días trabajados durante el mes</td>
+                                        <td class="text-center">No. Días</td>
+                                        <td class="text-center">ND</td>
+                                        <td class="text-center">4</td>
+
+                                        <td class="text-center" style="color: red"><i class="fa fa-times"></i>
+                                        </td>
+
+                                        <td class="text-center" style="color: #ff1313">Afectación Muy Alta</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </td>
+
+
+                        </tr>
+
+                        <tr style="" class="footable-odd">
+                            <td class="footable-visible footable-first-column"><span class="footable-toggle"></span>Programas
+                                sociales
+                            </td>
+
+
+                            <td class="text-center footable-visible footable-last-column"><strong
+                                    style="">100.00</strong>
+                            </td>
+
+                            <td style="display: none;">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th>Variable</th>
+                                        <th>Unidad de medida</th>
+                                        <th>Linea Base</th>
+                                        <th>Situacion actual</th>
+                                        <th>Comparativo mensual</th>
+                                        <th>Nivel de afectacion</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    <tr>
+                                        <td>Alimentos por acciones</td>
+                                        <td class="text-center">% familias atendidas</td>
+                                        <td class="text-center">ND</td>
+                                        <td class="text-center">9.000</td>
+
+                                        <td class="text-center" style="color: red"><i class="fa fa-times"></i>
+                                        </td>
+
+                                        <td class="text-center" style="color: #ff1313">Afectación Muy Alta</td>
+                                    </tr>
+
+                                    <tr>
+                                        <td>Asistencia alimentaria</td>
+                                        <td class="text-center">% familias atendidas</td>
+                                        <td class="text-center">ND</td>
+                                        <td class="text-center">8.000</td>
+
+                                        <td class="text-center" style="color: red"><i class="fa fa-times"></i>
+                                        </td>
+
+                                        <td class="text-center" style="color: #ff1313">Afectación Muy Alta</td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </td>
+
+
+                        </tr>
+
+
+
+
+                        </tbody>
+                        <tfoot>
+                        <tr>
+
+                        </tr>
+                        </tfoot>
+
+                    </table>
+
+                </div>
+            </div>
+
+
+        </div>
+        <!---------------->
+        {#        <div class="col-lg-4">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h3>To-do</h3>
+                    <p class="small"><i class="fa fa-hand-o-up"></i> Drag task between list</p>
+
+                    <div class="input-group">
+                        <input type="text" placeholder="Add new task. " class="input input-sm form-control" id="newT">
+                        <span class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-white"> <i class="fa fa-plus"></i> Add task</button>
+                                </span>
+                    </div>
+
+                    <ul class="sortable-list connectList agile-list" id="todo">
+
+                        <li class="info-element" id="task3">
+                            Sometimes by accident, sometimes on purpose (injected humour and the like).
+                            <div class="agile-detail">
+                                <div class="col-sm-3"><input type="text" placeholder="Unidad de medida"
+                                                             title="Unidad de medida"
+                                                             class="input input-sm form-control"></div>
+                                <div class="col-sm-3"><input type="text" placeholder="Add new task. "
+                                                             class="input input-sm form-control"></div>
+                                <div class="col-sm-3"><input type="text" placeholder="Add new task. "
+                                                             class="input input-sm form-control"></div>
+
+                                <div class="col-sm-3"><input type="text" placeholder="Add new task. "
+                                                             class="input input-sm form-control"></div>
+                                <br><br><br>
+                                <div class="col-sm-8 form-control input-sm" id="slider0"></div>
+                                <br><br><br>
+                                <a href="#" class="pull-right btn btn-xs btn-white">Mark</a>
+                                <i class="fa fa-clock-o"></i> 16.11.2015
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>#}
+
+
+
+
+
+        <!--Modal-->
+        <div class="modal inmodal " id="modalPilar" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                                class="sr-only">Close</span></button>
+                        <i class="fa fa-location-arrow modal-icon"></i>
+                        <h4 class="modal-title">Pilar nuevo</h4>
+
+                    </div>
+                    <div class="modal-body" style="overflow-y: auto; padding: 1px 0px 0px 0px ">
+
+                        <div class="col-lg-12" style="width: 100%;">
+                            <div class="ibox">
+                                <div class="ibox-title">
+                                    <h5>Informacion del pilar nuevo</h5>
+
+                                </div>
+                                <div class="ibox-content">
+
+                                    <p>
+                                        Este asistente lo guiara en lo pasos necesarios para crear un pilar nuevo
+                                    </p>
+
+                                    <form method="POST" role="form" class="wizard-big"
+                                          action="{{ request.path }}" id="form">
+                                        <h1>Pilar</h1>
+                                        <fieldset>
+                                            <h2>Detalles del pilar</h2>
+                                            <div class="row">
+                                                <div class="col-lg-8">
+                                                    <div class="form-group">
+                                                        <label>Nombre *</label>
+                                                        <input id="pilarName" name="pilarName" type="text"
+                                                               class="form-control required" value="">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Coeficiente de ponderacion *</label>
+                                                        <button class="btn btn-warning btn-circle btn-outline btn-lg"
+                                                                type="button" style="border: none;"
+                                                                data-toggle="popover"
+                                                                data-placement="auto right"
+                                                                data-content="<div style='font-size: small;width: 250px;'><label>Coeficiente de ponderación.Proporciona orden de importancia a cada variable</label><table class='table table-bordered'><tbody><tr><td>Muy Alto Impacto</td><td>10</td><td>9</td></tr><tr><td>Alto impacto</td><td>8</td><td>7</td></tr><tr><td>Medio impacto</td><td>6</td><td>5</td></tr><tr><td>Bajo impacto</td><td>4</td><td>3</td></tr><tr><td>Muy bajo impacto</td><td>2</td><td>1</td></tr></tbody></table><div>"
+                                                                data-html="true"><i
+                                                                class="fa fa-info-circle"></i></button>
+                                                        <input id="coef_pond" name="coef_pond" type="number" min="1"
+                                                               max="10"
+                                                               class="form-control required" value="">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Descripcion</label>
+                                                        <input id="desc" name="desc" type="text"
+                                                               class="form-control required" value="">
+
+
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="text-center">
+                                                        <div>
+
+                                                            <div class="ibox float-e-margins">
+                                                                <i class="fa fa-tasks"
+                                                                   style="font-size: 180px;color: #e5e5e5 "></i>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+                                        <h1>Indicadores</h1>
+                                        <fieldset>
+                                            <h2>Ingrese los indicadores necesarios para completar el pilar</h2>
+                                            <div class="row">
+                                                <div class="col-lg-8">
+                                                    <div class="form-group">
+                                                        <label>Nombre de los indicadores *</label>
+                                                        <div id="tags" style="border: 0px solid #ffffff !important;">
+                                                            <input class="tagsinput form-control" id="ind_tags"
+                                                                   name="ind_tags"
+                                                                   type="text"
+                                                                   value=""/>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="text-center">
+                                                        <div>
+
+                                                            <div class="ibox float-e-margins">
+                                                                <i class="fa fa-tags"
+                                                                   style="font-size: 180px;color: #e5e5e5 "></i>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+
+
+                                        <h1>Variables</h1>
+                                        <fieldset>
+                                            <!---->
+
+
+                                            <div class="col-lg-12">
+                                                <div class="tabs-container">
+                                                    <div class="tabs-left">
+                                                        <ul class="nav nav-tabs vertical" id="tab_list">
+
+                                                        </ul>
+                                                        <div class="tab-content" id="tab_cont">
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <!---->
+
+
+                                        </fieldset>
+
+                                        <h1>Finalizar</h1>
+                                        <fieldset>
+                                            <h2>Agregar este pilar</h2>
+                                            <input id="acceptTerms" name="acceptTerms" type="checkbox" class="required">
+                                            <label for="acceptTerms">Esta seguro que desea agregar este pilar.</label>
+                                        </fieldset>
+                                        <input name="jsondata" id="jsondata" type="hidden" value="">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal-->
+
+
+
+    {% endblock pagecontent %}
+
+
+</div>
+
+
+
+
+

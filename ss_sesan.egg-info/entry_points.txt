@@ -1,0 +1,6 @@
+[fanstatic.libraries]
+ss_sesan = ss_sesan.resources:library
+
+[paste.app_factory]
+main = ss_sesan:main
+
