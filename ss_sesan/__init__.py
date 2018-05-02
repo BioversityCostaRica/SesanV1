@@ -31,6 +31,7 @@ def main(global_config, **settings):
 
     config = Configurator(settings=settings,authentication_policy=authn_policy,
                           authorization_policy=authz_policy)
+
     config.include('pyramid_jinja2')
     config.include('pyramid_fanstatic')
 
@@ -44,6 +45,7 @@ def main(global_config, **settings):
     config.add_route('profile', '/profile')
     config.add_route('report', '/report/{date}')
     config.add_route('baseline', '/baseline')
+    config.add_route('pilares', '/pilares')
     # odk routes
     config.add_route('odkformlist', '{organization}/{user}/formList')
     config.add_route('odksubmission', '/{organization}/{user}/submission')

@@ -4,13 +4,16 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.response import Response
 from .classes import publicView, privateView, odkView
 from .auth import getUserData
-from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR
-from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, valReport, dataReport,getBaselines,getMunicName,getBaselinesName,genXLS
+from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS
+from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
+    valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS
 from processes.utilform import isUserActive, getUserPassword, getFormList, isUserinOrg, getManifest, getMediaFile, \
     getXMLForm, getOrganization, getOrganizationID, storeSubmission
 from datetime import datetime
 from pyramid.response import FileResponse
 import os
+
+
 @view_config(route_name='profile', renderer='templates/profile.jinja2')
 class profile_view(privateView):
     def processView(self):
@@ -28,14 +31,14 @@ class baseline_view(privateView):
         baselineR.need()
         regJS_CSS.need()
         fill_regN = fill_reg()
-        msg= []
+        msg = []
         if "submit" in self.request.POST:
-            #if "update_data" in self.request.POST:
+            # if "update_data" in self.request.POST:
 
-            fill_regN["sel"] =int(self.request.POST.get("munic", ""))
-            fill_regN["sel_name"] =getMunicName( int(self.request.POST.get("munic", ""))).title()
-            fill_regN["lb_m"]=getBaselinesName()
-            lb_data=getBaselines(int(self.request.POST.get("munic", "")))
+            fill_regN["sel"] = int(self.request.POST.get("munic", ""))
+            fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
+            fill_regN["lb_m"] = getBaselinesName()
+            lb_data = getBaselines(int(self.request.POST.get("munic", "")))
         else:
             if "id_mun_sel" in self.request.POST and not "update_data" in self.request.POST and not "submit_lb" in self.request.POST:
                 msg = delete_lb(self.request.POST.get("id_mun_sel", ""))
@@ -61,12 +64,28 @@ class baseline_view(privateView):
                         lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")))
                     else:
                         fill_regN["sel"] = 0
-                        fill_regN["sel_name"]=""
-                        fill_regN["lb_m"]=[]
+                        fill_regN["sel_name"] = ""
+                        fill_regN["lb_m"] = []
                         lb_data = getBaselines(0)
 
+        return {'activeUser': self.user, "lb_data": lb_data, "fill_reg": fill_regN, "msg": msg}
 
-        return {'activeUser': self.user, "lb_data": lb_data,  "fill_reg": fill_regN, "msg":msg }
+
+@view_config(route_name='pilares', renderer='templates/pilares.jinja2')
+class pilares_view(privateView):
+    def processView(self):
+        DashJS.need()
+        DashCSS.need()
+        pilarCSS_JS.need()
+        print self.request.POST
+        if "jsondata" in self.request.POST:
+            print "*-*-*-*"
+            print self.request.POST.get("jsondata", "")
+            print "*-*-**-"
+
+        # baselineR.need()
+        # regJS_CSS.need()
+        return {'activeUser': self.user}
 
 
 @view_config(route_name='report', renderer='templates/report.jinja2')
@@ -82,7 +101,8 @@ class report_view(privateView):
         date = date.split("_")
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
-        return {'activeUser': self.user, "date": int(meses.index(date[0]))+1, "dataReport": dataReport(self, str(int(meses.index(date[0]))+1), str(date[1]))}
+        return {'activeUser': self.user, "date": int(meses.index(date[0])) + 1,
+                "dataReport": dataReport(self, str(int(meses.index(date[0])) + 1), str(date[1]))}
 
 
 @view_config(route_name='logout', renderer=None)
@@ -90,7 +110,6 @@ def logout_view(request):
     headers = forget(request)
     loc = request.route_url('home')
     return HTTPFound(location=loc, headers=headers)
-
 
 
 @view_config(route_name='dashboard', renderer='templates/dashboard.jinja2')
@@ -102,7 +121,7 @@ class dashboard_view(privateView):
                  "Noviembre", "Diciembre"]
         DashJS.need()
         DashCSS.need()
-        date=""
+        date = ""
 
         if 'dateP' in self.request.POST:
             date = self.request.POST.get('dateP', '').split(" ")
@@ -112,8 +131,8 @@ class dashboard_view(privateView):
             date = datetime.now().strftime("%m %Y").split(" ")
             dashData = getDashReportData(self, date[0], date[1])
             rep = valReport(self, date[0], date[1])
-
         return {'activeUser': self.user, "dashData": dashData, "report": rep}
+
 
 class download_xls(privateView):
     def processView(self):
@@ -121,8 +140,8 @@ class download_xls(privateView):
                  "Noviembre", "Diciembre"]
         if "genXLS" in self.request.POST:
             date = self.request.POST.get('genXLS', '').split(" ")
-            date[0]=str(meses.index(date[0]) + 1)
-            response= genXLS(self,getDashReportData(self, date[0], date[1]))
+            date[0] = str(meses.index(date[0]) + 1)
+            response = genXLS(self, getDashReportData(self, date[0], date[1]))
 
         return response
 
@@ -144,7 +163,6 @@ class login_view(publicView):
             passwd = self.request.POST.get('passwd', '')
             user = getUserData(login)
 
-
             if not user == None and user.check_password(passwd):
                 headers = remember(self.request, login)
                 if user.user_role == 1:
@@ -165,10 +183,10 @@ class register_view(privateView):
         DashJS.need()
         DashCSS.need()
         regJS_CSS.need()
-        result=[]
+        result = []
         if "reg" in self.request.POST:
             user_val = addNewUser(self.request.POST, self.request)
-            #user_val = 2
+            # user_val = 2
             if user_val == 0:
                 result.append("Error")
                 result.append("Ya existe un usuario para esa institucion en el municipio seleccionado")
@@ -186,7 +204,7 @@ class register_view(privateView):
                 result.append("Error al registrar este usuario")
                 result.append("Error")
 
-        return {'activeUser': self.user, "fill_reg": fill_reg(), "msj":result}
+        return {'activeUser': self.user, "fill_reg": fill_reg(), "msj": result}
 
 
 class formList_view(odkView):
@@ -223,7 +241,7 @@ class mediaFile_view(odkView):
         fileid = self.request.matchdict['fileid']
         if isUserActive(self.user):
             if self.authorize(getUserPassword(self.user, self.request)):
-                return getMediaFile(org, self.user, self.request,fileid)
+                return getMediaFile(org, self.user, self.request, fileid)
             else:
                 return self.askForCredentials()
         else:
@@ -279,14 +297,16 @@ class submission_view(odkView):
             response = Response(status=404)
             return response
 
+
 class munic_kml(publicView):
     def processView(self):
-        #print self.request.url.split("/")[-1]
+        # print self.request.url.split("/")[-1]
         try:
-            path = os.path.join(self.request.registry.settings['user.repository'], "KML",self.request.url.split("/")[-1])
+            path = os.path.join(self.request.registry.settings['user.repository'], "KML",
+                                self.request.url.split("/")[-1])
 
             response = FileResponse(
-               path,
+                path,
                 request=self.request,
                 content_type="KML"
             )
