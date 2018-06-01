@@ -54,7 +54,7 @@
                         {% block dashmenu %}
 
 
-                            {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="dashboard", rpt=report %}
+                            {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="dashboard", rpt=report,dates=dashData.date[0] +"_"+ dashData.date[1] %}
 
                         {% endblock dashmenu %}
 

@@ -40,45 +40,46 @@ $(document).ready(function () {
     });
 
 
-    var fd = $("#forms_id").val().split(",");
-    if (fd[0] != "") {
+    //$("#submitF").one('submit', function (e) {
+    var x;
+    $(".sub_f").submit(function (e) {
 
-        for (var f = 0; f < fd.length; f++) {
-            console.log("#submit_" + fd[f]);
-            var ff = fd[f]
-            $("#submit_" + fd[f]).submit(function (e) {
+        x=$(this).attr("id");
 
-                e.preventDefault();
+        e.preventDefault();
 
 
+        swal({
+                title: "Se eliminara este formulario!",
+                text: "Seguro que desea eliminar este formulario?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Si, deseo eliminarlos!",
+                cancelButtonText: "No, deseo cancelar!",
+                closeOnConfirm: false,
+                closeOnCancel: false,
+                html:false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
 
-                swal({
-                        title: "Se eliminara este formulario!",
-                        text: "Seguro que desea eliminar este formulario?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#DD6B55",
-                        confirmButtonText: "Si, deseo eliminarlos!",
-                        cancelButtonText: "No, deseo cancelar!",
-                        closeOnConfirm: false,
-                        closeOnCancel: false
-                    },
-                    function (isConfirm) {
-                        if (isConfirm) {
-                            //"#jqEditTable").off('submit').submit();
-                            $("#submit_" + ff).off('submit').submit();
-                        } else {
-                            swal({
-                                title: "Cancelado",
-                                text: "No se eliminara este formulario",
-                                type: "success"
-                            });
-                        }
+                    //$("#submitF").off('submit').submit();
+                    console.log(x);
+                    $(this).closest(x).submit();
+
+                    //$(x).off('submit').submit();
+
+                } else {
+
+                    swal({
+                        title: "Cancelado",
+                        text: "No se eliminara este formulario",
+                        type: "success"
                     });
+                }
             });
-        }
-
-    }
+    });
 
 
     $('#f_name').bind('input', function () {
@@ -91,7 +92,6 @@ $(document).ready(function () {
         }
     });
     $('#dl1').on('change', function () {
-        console.log("chas");
         if ($("#dl1").val().length > 0) {
             $("#alertF2").css({"opacity": "0"});
         }

@@ -45,93 +45,115 @@ def dataReport(self, month, year):
     coefPon = []
     unames = []
 
-    inst_idS = mySession.query(Institucione).filter(Institucione.insti_id != 2).filter(Institucione.insti_id != 5).all()
+
+    ###
+
+
+
+    mySession = DBSession()
     data = {}
-    for inst_id in inst_idS:
-        res = inst_id.insti_id
-        if int(res) == 4:
-            variables = mySession.query(VariablesInd).filter(
-                or_(VariablesInd.insti_id == res, VariablesInd.insti_id == 5)).all()
 
-        else:
-            variables = mySession.query(VariablesInd).filter_by(insti_id=res).all()
-        indicadores = []
-        pilares = []
+    my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
+    res = []
+    myDB = []
+    if not my_forms is None:
+        for row in my_forms:
+            my_Pilars = mySession.query(Form).filter(Form.form_id == row.idforms).all()
+            if not my_Pilars is None:
+                for mp in my_Pilars:
+                    myDB.append(mp.form_db)
+                    mp = mp.pilar_id.split(",")
+                    for m in mp:
+                        res.append(m)
 
-        result = mySession.query(Munic.munic_id).filter(Munic.munic_nombre == self.user.munic).first()
-        municId = result.munic_id
-        result = mySession.query(User.user_name).filter(User.user_organization == res).filter(
-            User.user_munic == municId).first()
-        tmp_uname = result.user_name
-        if inst_id.insti_id == 4:
-            prec_uname = tmp_uname
-            result = mySession.query(User.user_name).filter(User.user_organization == 5).filter(
-                User.user_munic == municId).first()
-            mides_uname = result.user_name
-        if inst_id.insti_id == 1:
-            des_uname = tmp_uname
+    res = list(set(res))
+    myDB = list(set(myDB))
 
-        for var in variables:
-            if int(var.id_indicadores) not in indicadores:
-                indicadores.append(int(var.id_indicadores))
+    resI = []
+    for idP in res:
+        my_Ind = mySession.query(Indicadore).filter(Indicadore.Id_pilares == int(idP)).all()
+        if not my_Ind is None:
+            for mI in my_Ind:
+                resI.append(mI.id_indicadores)
 
-        for i in indicadores:
-            i_pi = mySession.query(Indicadore.Id_pilares).filter_by(id_indicadores=i).first()
-            if int(i_pi[0]) not in pilares:
-                p_name = mySession.query(Pilare.name_pilares, Pilare.id_pilares).filter_by(
-                    id_pilares=int(i_pi[0])).first()
-                tot_alert = []
-                i_name = mySession.query(Indicadore.name_indicadores, Indicadore.id_indicadores).filter_by(
-                    Id_pilares=int(i_pi[0])).all()
+    variables = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores.in_(resI)).all()
+    indicadores = []
+    pilares = []
 
-                for i_n in i_name:
-                    variables = mySession.query(VariablesInd).filter_by(id_indicadores=int(i_n[1])).all()
-                    valCP = 0
-                    acum = []
-                    for v in variables:
-                        sa = getVarValue(inst_id.insti_nombre, v.code_variable_ind, month, year, tmp_uname)
 
-                        # add variables data
 
-                        if sa != "ND":
+
+
+
+
+    ###
+
+
+
+
+
+
+    for var in variables:
+        if int(var.id_indicadores) not in indicadores:
+            indicadores.append(int(var.id_indicadores))
+
+    for db in myDB:
+        print db
+
+        result = mySession.execute(
+            "SELECT COUNT(*) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' ;" % (
+                db, month, year, "%" + self.user.login + "%")).scalar()
+
+        if int(result) != 0:
+
+            for i in indicadores:
+                i_pi = mySession.query(Indicadore.Id_pilares).filter_by(id_indicadores=i).first()
+                if int(i_pi[0]) not in pilares:
+                    p_name = mySession.query(Pilare.name_pilares, Pilare.id_pilares).filter_by(
+                        id_pilares=int(i_pi[0])).first()
+                    tot_alert = []
+                    i_name = mySession.query(Indicadore.name_indicadores, Indicadore.id_indicadores).filter_by(
+                        Id_pilares=int(i_pi[0])).all()
+
+                    for i_n in i_name:
+                        variables = mySession.query(VariablesInd).filter_by(id_indicadores=int(i_n[1])).all()
+                        valCP = 0
+                        acum = []
+                        for v in variables:
+                            sa = getVarValue(db, v.code_variable_ind, month, year, self.user.login)
+                            # add variables data
+
                             valCP = valCP + calcValue(sa, v.id_variables_ind, 1,self.user.munic)
 
                             acum.append(calcValue(sa, v.id_variables_ind, 1,self.user.munic) * calcValue(sa, v.id_variables_ind, 2,self.user.munic))
+                        tot_alert.append([valCP, sum(acum)])
+                    pilares.append(int(i_pi[0]))
+                    # print tot_alert
+                    t0 = 0
+                    t1 = 0
+                    for t in tot_alert:
+                        t0 = t0 + t[0]
+                        t1 = t1 + t[1]
+                    alertP = getPilarAlert(p_name[1], "%.2f" % (t1 / t0))
+                    data[p_name[0] + "_alert"] = ["%.2f" % (t1 / t0), alertP[1].title(), alertP[0]]
 
-                        else:
-                            sa = getVarValue("MIDES", v.code_variable_ind, month, year, mides_uname)
-                            valCP = valCP + calcValue(sa, v.id_variables_ind, 1,self.user.munic)
+                    unames.append([db, self.user.login, alertP[0]])
 
-                            acum.append(calcValue(sa, v.id_variables_ind, 1,self.user.munic) * calcValue(sa, v.id_variables_ind, 2,self.user.munic))
+                    result = mySession.query(Grupo.val_grupos).filter(float("%.2f" % (t1 / t0)) <= Grupo.val_grupos).first()
+                    valEqui.append(int(result.val_grupos))
+                    result = mySession.query(Pilare.coef_pond).filter(Pilare.name_pilares == p_name[0]).first()
+                    coefPon.append(int(result.coef_pond))
 
-                    tot_alert.append([valCP, sum(acum)])
-                pilares.append(int(i_pi[0]))
-                # print tot_alert
-                t0 = 0
-                t1 = 0
-                for t in tot_alert:
-                    t0 = t0 + t[0]
-                    t1 = t1 + t[1]
-                alertP = getPilarAlert(p_name[1], "%.2f" % (t1 / t0))
-                data[p_name[0] + "_alert"] = ["%.2f" % (t1 / t0), alertP[1].title(), alertP[0]]
+                meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+                         "Noviembre", "Diciembre"]
 
-                unames.append([inst_id.insti_nombre, tmp_uname, alertP[0]])
-
-                result = mySession.query(Grupo.val_grupos).filter(float("%.2f" % (t1 / t0)) <= Grupo.val_grupos).first()
-                valEqui.append(int(result.val_grupos))
-                result = mySession.query(Pilare.coef_pond).filter(Pilare.name_pilares == p_name[0]).first()
-                coefPon.append(int(result.coef_pond))
-
-        meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
-                 "Noviembre", "Diciembre"]
-
-        des = int(float(getVarValue("MSPAS", "dec_mi_nutri_edas_8", month, year, des_uname)))
-
-        data["date"] = [meses[int(month) - 1], year, self.user.munic]
-        data["plt_values"] = {"lluvia": "%s-%s" % (str(monthrange(int(year), int(month))[1]),
-                                                   str(int(getVarValue("MAGA", "int_dia_sin_lluvia", month, year,
-                                                                       prec_uname)))),
-                              "nin_des": "%s-%s" % (str(des), str(100 - des))}
+                #*-*-*-*-*-
+                #des = int(float(getVarValue("MSPAS", "dec_mi_nutri_edas_8", month, year, des_uname)))
+                des = 10
+                data["date"] = [meses[int(month) - 1], year, self.user.munic]
+                data["plt_values"] = {"lluvia": "%s-%s" % (str(monthrange(int(year), int(month))[1]),
+                                                           str(int(12))),
+                                      "nin_des": "%s-%s" % (str(des), str(100 - des))}
 
     mySession.close()
 
@@ -166,17 +188,30 @@ def getSAN(value):
 
 def valReport(self, month, year):
     mySession = DBSession()
-    insti = ["MIDES", "CONALFA", "MSPAS", "MAGA"]
-    munic = self.user.munic
+    my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
+    myDB = []
+    if not my_forms is None:
+        for row in my_forms:
+            my_Pilars = mySession.query(Form).filter(Form.form_id == row.idforms).all()
+            if not my_Pilars is None:
+                for mp in my_Pilars:
+                    myDB.append(mp.form_db)
+
+
+    myDB = list(set(myDB))
+
     acum = []
-    for i in insti:
-        query = "SELECT COUNT(*) FROM DATA_%s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' ;" % (
-            i, str(month), str(year), "%" + munic + "%")
+    for i in myDB:
+        muni= i.split("_")
+        muni=muni[1]+ " "+muni[2]+ " "+self.user.login+"_"
+        print muni
+        query = "SELECT COUNT(*) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' ;" % (
+            i, str(month), str(year), "%" + muni + "%")
 
         result = mySession.execute(query).scalar()
         acum.append(int(result))
     mySession.close()
-    if sum(acum) == len(insti):
+    if sum(acum) == len(myDB):
         return True
     else:
         return False
@@ -394,6 +429,7 @@ def getVarValue(db, code, month, year, uname):
 
 def getCoefPond(idVar,munId):
     mySession = DBSession()
+
     result=mySession.query(CoefPond.coef_valor).filter(CoefPond.id_variables_ind==idVar).filter(CoefPond.munic_id==getMunicId(munId)).first()
     res = result.coef_valor
     mySession.close()
@@ -450,16 +486,16 @@ def getPilarAlert(idP, indP):
     return getAlertVar(int(result[0]), 2)
 
 
-def getRepInfo(ruuid, org, type):
+def getRepInfo(ruuid, db, type):
     mySession = DBSession()
     ret = []
     query = ""
     if type == "com":
-        query = "SELECT @a:=@a+1 No, lk.sem_comunidad_totales_des FROM (select @a:=0) r, DATA_%s.maintable_msel_sem_af_comunidad ma,DATA_%s.lkpsem_comunidad_totales lk where ma.sem_af_comunidad=lk.sem_comunidad_totales_cod and ma.device_id_3 = '%s'" % (
-            org, org, ruuid)
+        query = "SELECT @a:=@a+1 No, lk.sem_comunidad_totales_des FROM (select @a:=0) r, %s.maintable_msel_sem_af_comunidad ma,%s.lkpsem_comunidad_totales lk where ma.sem_af_comunidad=lk.sem_comunidad_totales_cod and ma.device_id_3 = '%s'" % (
+            db, db, ruuid)
     if type == "acc":
-        query = "SELECT repeat_prop_acciones_rowid, txt_prop_acciones_25 FROM DATA_%s.repeat_prop_acciones where device_id_3 = '%s';" % (
-            org, ruuid)
+        query = "SELECT repeat_prop_acciones_rowid, txt_prop_acciones_25 FROM %s.repeat_prop_acciones where device_id_3 = '%s';" % (
+            db, ruuid)
     result = mySession.execute(query)
     if not result is None:
         for res in result:
@@ -573,17 +609,17 @@ def getDashReportData(self, month, year):
                     alertP = getPilarAlert(p_name[1], "%.2f" % (t1 / t0))
 
                     data[p_name[0] + "_alert"] = ["%.2f" % (t1 / t0), alertP[1].title(), alertP[0]]
-            data["signatures"] = [
-                getSignature(self.user.login, self.user.organization, month, year, "rep", self.request),
-                getSignature(self.user.login, self.user.organization, month, year, "tec", self.request)]
-            ruuid = getVarValue(self.user.organization, "device_id_3", month, year, self.user.login)
-            data["comunidades"] = getRepInfo(ruuid, self.user.organization, "com")
-            com = getVarValue(self.user.organization, "sem_af_comunidad", month, year, self.user.login).split(" ")
+            #data["signatures"] = [
+            #    getSignature(self.user.login, self.user.organization, month, year, "rep", self.request),
+            #   getSignature(self.user.login, self.user.organization, month, year, "tec", self.request)]
+            ruuid = getVarValue(db, "device_id_3", month, year, self.user.login)
+            #data["comunidades"] = getRepInfo(ruuid, db, "com")
+            com = getVarValue(db, "sem_af_comunidad", month, year, self.user.login).split(" ")
             data["comunidades2"] = []
             for id_cu in com:
                 data["comunidades2"].append(getPob4Map(id_cu, alertP[0]))
-            data["acciones"] = getRepInfo(ruuid, self.user.organization, "acc")
-            data["coverage"] = calcDataCoverage(self.user.organization, ruuid, getMunicId(self.user.munic))
+            #data["acciones"] = getRepInfo(ruuid,db, "acc")
+            data["coverage"] = calcDataCoverage(db, ruuid, getMunicId(self.user.munic))
         else:
             data["error"] = True
 
@@ -596,9 +632,9 @@ def getDashReportData(self, month, year):
     # with open("/home/acoto/pr_pptx/sort_db/data.json", 'wb') as f:
     #    json.dump(r,f, ensure_ascii=False, encoding='utf8')
     mySession.close()
-    print "*-*-*-*-*"
-    pprint(data)
-    print "*-*-*-*-*"
+    #print "*-*-*-*-*"
+    #pprint(data)
+    #print "*-*-*-*-*"
 
     return data
 
@@ -724,10 +760,10 @@ def updateData(mun_id, data, flag):
         return ["Error", "Error al actualizar los datos", "error"]
 
 
-def calcDataCoverage(org, device_id_3, mun_id):
+def calcDataCoverage(db, device_id_3, mun_id):
     mySession = DBSession()
-    query = "SELECT (100/count(*)) * (select count(sem_comunidad_totales) from DATA_%s.maintable_msel_sem_comunidad_totales where device_id_3 ='%s')  FROM sesan_v1.centros_urbanos where munic_id=%s;" % (
-        org, device_id_3, mun_id)
+    query = "SELECT (100/count(*)) * (select count(sem_comunidad_totales) from %s.maintable_msel_sem_comunidad_totales where device_id_3 ='%s')  FROM sesan_v1.centros_urbanos where munic_id=%s;" % (
+        db, device_id_3, mun_id)
     result = mySession.execute(query).scalar()
     if result:
         return int(result)

@@ -1,6 +1,6 @@
 {% if user_role!=1 %}
 
-    {% set vals = [["dashboard", "Inicio", "fa-th-large"],["profile", "Perfil", "fa-user-circle-o"], ["dashboard", "Acerca de", "fa-ellipsis-h"]] %}
+    {% set vals = [["dashboard", "Inicio", "fa-th-large"],["profile", "Perfil", "fa-user-circle-o"], ["about", "Acerca de", "fa-ellipsis-h"]] %}
 
     {% for v in vals %}
 
@@ -22,8 +22,8 @@
     {% if rpt %}
 
         <li>
-            <a href="{{ request.route_url('report', date=dashData.date[0] +"_"+ dashData.date[1]) }}"><i
-                    class="fa fa-ellipsis-h"></i>
+            <a href="{{ request.route_url('report', date=dates) }}"><i
+                    class="fa fa-pie-chart"></i>
                 <span
                         class="nav-label">Reporte</span></a>
 

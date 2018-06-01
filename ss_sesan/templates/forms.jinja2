@@ -105,9 +105,9 @@
 
                                 <form method="POST" role="form" class="form-horizontal m-t sub_f"
                                       action="{{ request.path }}" id="submit_{{ row[0][1] }}" >
-                                    <input type="hidden" value="{{ (row[0][0]|string).encode("utf8") +"--"+ (row[0][1]|string).encode("utf8") }}" name="form_id">
+                                    <input type="text" value="{{ (row[0][0]|string).encode("utf8") +"--"+ (row[0][1]|string).encode("utf8") }}" name="form_id">
                                     <button type="submit" class="btn btn-danger btn-circle btn-xs" name="delUser"
-                                            id="delUser"><i class="fa fa-times"></i>
+                                            id="delUser_{{ (row[0][0]|string).encode("utf8") +"--"+ (row[0][1]|string).encode("utf8") }}"><i class="fa fa-times"></i>
                                     </button>
 
                                     <button class="btn btn-warning btn-circle btn-xs" type="button"

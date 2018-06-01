@@ -30,6 +30,16 @@ class profile_view(privateView):
 
         return {'activeUser': self.user, "config": getConfigQR(self.user.login,self.user.parent, self.request)}
 
+@view_config(route_name='about', renderer='templates/about.jinja2')
+class about_view(privateView):
+    def processView(self):
+        DashJS.need()
+        DashCSS.need()
+
+        return {'activeUser': self.user}
+
+
+
 
 @view_config(route_name='baseline', renderer='templates/baseline.jinja2')
 class baseline_view(privateView):
@@ -157,6 +167,7 @@ class forms_view(privateView):
         formsCSS_JS.need()
         msg=[]
 
+        print self.request
         if "form_id" in self.request.POST:
             msg=delForm(self.request,self.request.POST.get("form_id"), self.user.login)
 
@@ -212,6 +223,7 @@ class dashboard_view(privateView):
             date = datetime.now().strftime("%m %Y").split(" ")
             dashData = getDashReportData(self, date[0], date[1])
             rep = valReport(self, date[0], date[1])
+            print rep
         return {'activeUser': self.user, "dashData": dashData, "report": rep}
 
 
