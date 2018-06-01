@@ -16,131 +16,197 @@
 {% endblock pageheading %}
 
 {% block dashmenu %}
-    {% if activeUser.user_role!=1 %}
-    <li>
-        <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-th-large"></i> <span
-                class="nav-label">Inicio</span> </a>
-    </li>
-    <li>
-        <a href="{{ request.route_url('profile') }}"><i class="fa fa-user-circle-o"></i> <span
-                class="nav-label">Perfil</span></a>
-    </li>
-    <li>
-        <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-ellipsis-h"></i> <span
-                class="nav-label">Acerca de</span></a>
-
-    </li>
-    {% endif %}
-    {% if activeUser.user_role==1 %}
-        <li class="active">
-            <a href="{{ request.route_url('register') }}"><i class="fa fa-vcard-o"></i> <span
-                    class="nav-label">Agregar usuario</span></a>
-
-        </li>
-        <li>
-                                    <a href="{{ request.route_url('baseline') }}"><i class="fa fa-newspaper-o"></i> <span
-                                            class="nav-label">Lineas Base</span></a>
-                                    <a href="{{ request.route_url('pilares') }}"><i class="fa fa-newspaper-o"></i>
-                                        <span
-                                                class="nav-label">Pilares</span></a>
-
-                                </li>
-    {% endif %}
-
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="register" %}
 {% endblock dashmenu %}
 
 <div class="wrapper wrapper-content animated fadeInRight">
     {% block pagecontent %}
 
-        <div class="col-lg-10">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Complete el siguiente formulario para agregar usuarios nuevos</h5>
+        <!--------------------->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Lista de monitores </h5>
 
-                </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
 
-
-
-                <input type="hidden" value="{{ msj }}" id="msj">
-
-
-
-                <div class="ibox-content">
-                    <form method="POST" role="form" class="form-horizontal m-t" action="{{ request.path }}" id="submit">
-
-                        <div class="form-group"><label class="col-sm-2 control-label">Nombre completo</label>
-                            <div class="col-sm-10"><input required="" type="text" class="form-control" name="fullname">
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group"><label class="col-sm-2 control-label">Nombre de usuario</label>
-                            <div class="col-sm-10"><input required="" type="text" class="form-control" name="user_name">
-                                <span class="help-block m-b-none">Este es el nombre de usuario que se usara para ingresar al sistema</span>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group"><label class="col-sm-2 control-label">Contraseña</label>
-
-                            <div class="col-sm-10"><input required="" type="password" class="form-control" name="password"
-                                                          id="password"></div>
-                        </div>
-                        <div class="form-group"><label class="col-sm-2 control-label">Verificar</label>
-                            <div class="col-sm-10"><input required type="password" class="form-control" name="password2"
-                                                          id="password2"><span id='message'></span></div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group"><label class="col-sm-2 control-label">Correo electronico</label>
-                            <div class="col-sm-10"><input required type="email" class="form-control" name="email"></div>
-                        </div>
-
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group"><label class="col-sm-2 control-label">Institucion</label>
-
-                            <div class="col-sm-10">
-                                <select id="inst_list" name="inst" data-placeholder="Seleccione una institucion..."
-                                        class="chosen-select form-control m-b" tabindex="2">
-                                    <option value=""></option>
-                                    {% for row in fill_reg["insti"] %}
-                                        <option value="{{ row[0] }}" id="i_{{ row[0] }}"> {{ row[1] }}</option>
-                                    {% endfor %}
-                                </select>
-                                <span id='m_inst'></span>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-                        <div class="form-group"><label class="col-sm-2 control-label">Municipio</label>
-
-                            <div class="col-sm-10">
-                                <select id="munic_list" name="munic" data-placeholder="Seleccione un municipio..."
-                                        class="chosen-select form-control m-b" tabindex="2">
-                                    <option value=""></option>
-                                    {% for row in fill_reg["munic"] %}
-
-                                        <option value="{{ row[0] }}"
-                                                id="i_{{ row[0] }}"> {{ row[1].decode("utf").title() }}</option>
-                                    {% endfor %}
-                                </select>
-                                <span id='m_munic'></span>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group">
-                            <div class="col-sm-4 col-sm-offset-2">
-                                <button class="btn btn-white" type="button"
-                                        onclick="window.location.href='{{ request.route_url('dashboard') }}'">Cancelar
+                            <div class="col-sm-3">
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary " type="button"
+                                                style="text-align: center; width: 80%"
+                                                data-toggle="modal" data-target="#modalUsers"><i
+                                                class="fa fa-plus"></i>&nbsp;Nuevo usuario
                                 </button>
-                                <button class="btn btn-primary" type="submit" name="reg" id="reg">Registrar</button>
-
-
+                                    </span>
+                                </div>
                             </div>
                         </div>
-                    </form>
+                        <div class="table-responsive">
+                            <table class="table  table-bordered">
+                                <thead>
+                                <tr>
+
+
+                                    <th>Nombre</th>
+                                    <th>Usuario</th>
+                                    <th>Correo electronico</th>
+                                    <th>Municipio</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for row in ulist %}
+                                    <tr>
+                                        <td>{{ row[0] }}</td>
+                                        <td>{{ row[1] }}</td>
+                                        <td>{{ row[2] }}</td>
+                                        <td>{{ row[3] }}</td>
+                                        <td class="text-center">
+                                            <form method="POST" role="form" class="form-horizontal m-t"
+                                                  action="{{ request.path }}" id="submit{{ "_"+row[1] }}">
+                                                <input type="hidden" value="{{ row[1] }}" name="uname_u">
+                                                <button type="submit" class="btn btn-danger btn-circle btn-xs" name="delUser" id="delUser"><i class="fa fa-times"></i>
+                                                </button>
+
+                                                <button class="btn btn-warning btn-circle btn-xs" type="button"
+                                                        data-toggle="modal" data-target="#mo"><i class="fa fa-edit"></i>
+                                                </button>
+                                                <button class="btn btn-default btn-circle btn-xs" type="button"><i
+                                                        class="fa fa-plus"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
             </div>
+
         </div>
+
+        <!----------------------------->
+        <div class="modal inmodal " id="modalUsers" tabindex="-1" role="dialog" aria-hidden="true">
+
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                                class="sr-only">Close</span></button>
+                        <i class="fa fa-location-arrow modal-icon"></i>
+                        <h4 class="modal-title">Pilar nuevo</h4>
+
+                    </div>
+                    <div class="modal-body" style="overflow-y: auto; padding: 1px 0px 0px 0px ">
+
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Complete el siguiente formulario para agregar usuarios nuevos</h5>
+
+                            </div>
+
+
+                            <input type="hidden" value="{{ msj }}" id="msj">
+
+
+                            <div class="ibox-content">
+                                <form method="POST" role="form" class="form-horizontal m-t" action="{{ request.path }}"
+                                      id="submit">
+
+                                    <div class="form-group"><label class="col-sm-2 control-label">Nombre
+                                        completo</label>
+                                        <div class="col-sm-10"><input required="" type="text" class="form-control"
+                                                                      name="fullname">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Nombre de
+                                        usuario</label>
+                                        <div class="col-sm-10"><input required="" type="text" class="form-control"
+                                                                      name="user_name">
+                                            <span class="help-block m-b-none">Este es el nombre de usuario que se usara para ingresar al sistema</span>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Contraseña</label>
+
+                                        <div class="col-sm-10"><input required="" type="password" class="form-control"
+                                                                      name="password"
+                                                                      id="password"></div>
+                                    </div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Verificar</label>
+                                        <div class="col-sm-10"><input required type="password" class="form-control"
+                                                                      name="password2"
+                                                                      id="password2"><span id='message'></span></div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+
+                                    <div class="form-group"><label class="col-sm-2 control-label">Correo
+                                        electronico</label>
+                                        <div class="col-sm-10"><input required type="email" class="form-control"
+                                                                      name="email"></div>
+                                    </div>
+
+                                    <div class="hr-line-dashed"></div>
+
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Municipio</label>
+
+                                        <div class="col-sm-10">
+                                            <select id="munic_list" name="munic"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+                                                {% for row in fill_reg["munic"] %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="i_{{ row[0] }}"> {{ row[1].decode("utf").title() }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <span id='m_munic'></span>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <button class="btn btn-white" type="button"
+                                                    onclick="window.location.href='{{ request.route_url('dashboard') }}'">
+                                                Cancelar
+                                            </button>
+                                            <button class="btn btn-primary" type="submit" name="reg" id="reg">
+                                                Registrar
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        {#                        <button type="button" class="btn btn-primary">Save changes</button>#}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
 
     {% endblock pagecontent %}
 

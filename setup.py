@@ -8,12 +8,12 @@ with open(os.path.join(here, 'README.txt')) as f:
 with open(os.path.join(here, 'CHANGES.txt')) as f:
     CHANGES = f.read()
 
-requires = {
+requires = [
     'plaster_pastedeploy',
     'pyramid',
     'pyramid_jinja2',
     'pyramid_debugtoolbar',
-'pyramid_fanstatic',
+    'pyramid_fanstatic',
     'waitress',
     'fanstatic',
     'zbar',
@@ -25,9 +25,9 @@ requires = {
     'webhelpers',
     'pillow',
     'lxml',
-'MySQL-python',
-'xlsxwriter'
-}
+    'MySQL-python',
+    'xlsxwriter'
+]
 
 tests_require = [
     'WebTest >= 1.3.1',  # py3 compat
@@ -59,9 +59,9 @@ setup(
     install_requires=requires,
     entry_points={
         'paste.app_factory': [
-        'main = ss_sesan:main',
+            'main = ss_sesan:main',
         ],
         'fanstatic.libraries':
-        ['ss_sesan = ss_sesan.resources:library']
+            ['ss_sesan = ss_sesan.resources:library']
     },
 )

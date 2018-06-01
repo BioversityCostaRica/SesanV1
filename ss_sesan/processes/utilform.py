@@ -45,14 +45,6 @@ def isUserActive(uname):
         mySession.close()
         return False
 
-def isUserinOrg(uname,user_organization):
-    mySession = DBSession()
-    result = mySession.query(User).filter_by(user_name=uname).filter_by(user_organization=user_organization).filter_by(user_active="1").first()
-    if result:
-        return True
-    else:
-        return False
-    return True
 
 def getUserPassword(uname,request):
     mySession = DBSession()
@@ -61,56 +53,47 @@ def getUserPassword(uname,request):
     mySession.close()
     return dd
 
+def getParent(user):
+    mySession =DBSession()
 
-def getOrganization(uname):
-    mySession = DBSession()
-    result = mySession.query(User).filter(User.user_name == uname).first()
-    dd=getIntName(result.user_organization)
+    result=mySession.query(User.user_parent).filter(User.user_name==user).first()
     mySession.close()
-    return dd
+    return result.user_parent
 
-def getOrganizationID(uname):
-    mySession = DBSession()
-    result = mySession.query(User).filter(User.user_name == uname).first()
-    dd=result.user_organization
-    mySession.close()
-    return dd
-
-
-def getFormList(user, user_organization,request):
+def getFormList(user,request):
 
     prjList = []
-    path = os.path.join(request.registry.settings['user.repository'],*[user_organization, user,'*.json'])
+    path = os.path.join(request.registry.settings['user.repository'],*[getParent(user),"user", user,'*.json'])
     files = glob.glob(path)
     if files:
         with open(files[0]) as data_file:
             data = json.load(data_file)
-            data["downloadUrl"] = request.route_url('odkxmlform',organization=user_organization,user=user)
-            data["manifestUrl"] = request.route_url('odkmanifest', organization=user_organization,user=user)
+            data["downloadUrl"] = request.route_url('odkxmlform',parent=getParent(user),user=user)
+            data["manifestUrl"] = request.route_url('odkmanifest', parent=getParent(user),user=user)
         prjList.append(data)
     else:
         raise HTTPNotFound()
     return generateFormList(prjList)
 
 
-def getManifest(uname,organization, request):
-    path = os.path.join(request.registry.settings["user.repository"] , *[organization,uname, '*.*'])
+def getManifest(uname, request):
+    path = os.path.join(request.registry.settings["user.repository"] , *[getParent(uname),"user",uname, '*.*'])
     files = glob.glob(path)
     if files:
         fileArray = []
         for file in files:
             fileName = os.path.basename(file)
-            fileArray.append({'filename':fileName,'hash':'md5:' + md5(open(file, 'rb').read()).hexdigest(),'downloadUrl':request.route_url('odkmediafile', organization=organization, user=uname, fileid=fileName)})
+            fileArray.append({'filename':fileName,'hash':'md5:' + md5(open(file, 'rb').read()).hexdigest(),'downloadUrl':request.route_url('odkmediafile', parent=getParent(uname), user=uname, fileid=fileName)})
         return generateManifest(fileArray)
     else:
         return generateManifest([])
 
 
-def getMediaFile(organization, uname, request,fileid):
+def getMediaFile(uname, request,fileid):
 
     #path = os.path.join(request.registry.settings['user.repository'],*[organization,uname, organization.lower()+".png"])
     path = os.path.join(request.registry.settings['user.repository'],
-                        *[organization, uname, fileid])
+                        *[getParent(uname), "user",uname, fileid])
     if os.path.isfile(path):
         content_type, content_enc = mimetypes.guess_type(path)
         fileName = os.path.basename(path)
@@ -126,9 +109,9 @@ def getMediaFile(organization, uname, request,fileid):
         raise HTTPNotFound()
 
 
-def getXMLForm(uname,organization,request):
+def getXMLForm(uname,request):
 
-    path = os.path.join(request.registry.settings['user.repository'], *[organization, uname, '*.xml'])
+    path = os.path.join(request.registry.settings['user.repository'], *[getParent(uname),"user", uname, '*.xml'])
     files = glob.glob(path)
     if files:
         content_type, content_enc = mimetypes.guess_type(files[0])
@@ -153,15 +136,15 @@ def convertXMLToJSON(uname,XMLFile,iniqueID,request):
         #projectid = xFormIDParts[2]
         org =xFormIDParts[0].upper()
         path = None
-        path = os.path.join(request.registry.settings['user.repository'],*[org, uname, "data", 'xml',iniqueID, '*.xml'])
+        path = os.path.join(request.registry.settings['user.repository'],*[getParent(uname), "user",uname, "data", 'xml',iniqueID, '*.xml'])
         if path is not None:
             files = glob.glob(path)
             if files:
                 XMLtoJSON = os.path.join(request.registry.settings['odktools.path'], *["XMLtoJSON", "xmltojson"])
-                path = os.path.join(request.registry.settings['user.repository'], *[org, uname, "data", 'json', iniqueID])
+                path = os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "user", uname, "data", 'json', iniqueID])
                 os.makedirs(path)
-                JSONFile = os.path.join(request.registry.settings['user.repository'], *[org, uname, "data", 'json', iniqueID, XMLFileName.replace(".xml",".json")])
-                FormXML = os.path.join(request.registry.settings['user.repository'], *["forms",org,org+".xml"])
+                JSONFile = os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "user", uname, "data", 'json', iniqueID, XMLFileName.replace(".xml",".json")])
+                FormXML = os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",XFormID,XFormID+".xml"])
                 args = []
                 args.append(XMLtoJSON)
                 args.append("-i " + XMLFile)
@@ -186,24 +169,24 @@ def convertXMLToJSON(uname,XMLFile,iniqueID,request):
                     msg = msg + "Error: \n"
                     msg = msg + e.message
                     print msg
-                    return False
+                    return False,""
             else:
                 print "Unable to find XML Form File for ID" + XFormID
-                return False
+                return False,""
         else:
             print "Unable to find XML Form File path ID" + XFormID
-            return False
+            return False,""
     else:
         print "XFormID is empty"
-        return False
-    return True
+        return False,""
+    return True, XFormID
 
 # ~/odktools/odktools/JSONToMySQL/./jsontomysql -u root -p inspinia4 -m CONALFA/manifest.xml -j sesan_data/CONALFA/56d9b4de-e8bd-495b-b8c8-2c7341434519.json -s DATA_CONALFA -J custom.js;
-def makeJSONToMySQL(uname,iniqueID,request):
+def makeJSONToMySQL(uname,iniqueID,request,xformid):
 
     JSONToMySQL = os.path.join(request.registry.settings['odktools.path'], *["JSONToMySQL", "jsontomysql"])
 
-    JSONFile = os.path.join(request.registry.settings['user.repository'],*[getOrganization(uname), uname, "data", 'json', iniqueID, "*.json"])
+    JSONFile = os.path.join(request.registry.settings['user.repository'],*[getParent(uname), "user", uname, "data", 'json', iniqueID, "*.json"])
     JSONFile=glob.glob(JSONFile)
     if JSONFile:
 
@@ -211,22 +194,23 @@ def makeJSONToMySQL(uname,iniqueID,request):
         args.append(JSONToMySQL)
         args.append("-u " + request.registry.settings['mysql.user'])
         args.append("-p " + request.registry.settings['mysql.password'])
-        args.append("-m " + os.path.join(request.registry.settings['user.repository'], *["forms", getOrganization(uname), "manifest.xml"]))
+        args.append("-m " + os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",xformid, "manifest.xml"]))
         args.append("-j " + JSONFile[0])
-        args.append("-s " + "DATA_"+getOrganization(uname))
+        args.append("-s " + "DATA_"+getParent(uname)+"_"+xformid)
         #modify custom.js
 
         try:
-            file = open(os.path.join(request.registry.settings['user.repository'], *["forms", "custom.js"]), "r").read()
-            file2 = open(os.path.join(request.registry.settings['user.repository'], *["forms", "custom2.js"]), "w")
+            file = open(os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",xformid, "custom.js"]), "r").read()
+            file2 = open(os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",xformid, "custom2.js"]), "w")
             file2.write(file.replace("n_path", str(iniqueID)))
 
             file2.close()
         except:
             print "csacsacsacssss"
 
-        args.append("-J " +os.path.join(request.registry.settings['user.repository'], *["forms", "custom2.js"]) )
+        args.append("-J " +os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",xformid, "custom2.js"]) )
         try:
+            print args
             check_call(args)
             #print args
             #print "insert"
@@ -245,7 +229,7 @@ def makeJSONToMySQL(uname,iniqueID,request):
 def storeSubmission(uname,request):
     try:
         iniqueID = uuid4()
-        path = os.path.join(request.registry.settings['user.repository'],*[getOrganization(uname),uname, "data", 'xml',str(iniqueID)])
+        path = os.path.join(request.registry.settings['user.repository'],*[getParent(uname),"user",uname, "data", 'xml',str(iniqueID)])
         os.makedirs(path)
         XMLFile = ""
         for key in request.POST.keys():
@@ -264,8 +248,10 @@ def storeSubmission(uname,request):
             os.rename(temp_file_path, file_path)
         if XMLFile != "":
             #print "convert XMLtoJson"
-            if convertXMLToJSON(uname,XMLFile,str(iniqueID),request):
-                makeJSONToMySQL(uname,str(iniqueID),request)
+            flag, xformid=convertXMLToJSON(uname, XMLFile, str(iniqueID), request)
+
+            if flag:
+                makeJSONToMySQL(uname,str(iniqueID),request,xformid)
             else:
                 return False
         #Send the message to process the xml

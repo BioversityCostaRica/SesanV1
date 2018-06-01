@@ -1,0 +1,97 @@
+<!--Modal-->
+
+<div class="modal inmodal " id="modal_NewForm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <i class="fa fa-building modal-icon"></i>
+                <h4 class="modal-title">Formulario Nuevo </h4>
+
+            </div>
+
+
+            <div class="modal-body">
+
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Pilares disponibles</h5>
+
+                            </div>
+                            <div class="ibox-content">
+
+                                <p>
+                                    Cual es el nombre de este formulario<span style="color: red; opacity :0"
+                                                                              id="alertF">* Debe incluir un nombre</span>
+
+                                </p>
+                                <input type="text" class="form-control col-lg-12" id="f_name" value="">
+                                <br><br>
+                                <p>
+                                    Selecciones los pilares que quiere incluir en este formulario<span style="color: red; opacity :0"
+                                                                              id="alertF2">* Debe incluir al menos un pilar</span>
+
+                                </p>
+
+
+                                {% if lists[0]|length == 0 %}
+                                    <p style="color: red">No hay pilares disponibles</p>
+                                {% else %}
+
+                                    <select class="form-control dual_select" multiple id="dl1">
+
+                                        {% for row in lists[0] %}
+                                            <option value="{{ row[1] }}">{{ row[0] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+
+                                <br><br><br>
+                                <p>
+                                    Selecciones los usuarios que utilizaran este formulario
+
+                                </p>
+
+
+                                {% if lists[1]|length == 0 %}
+                                    <p style="color: red">No hay usuarios disponibles</p>
+                                {% else %}
+
+                                    <select class="form-control dual_select" multiple id="dl2">
+
+                                        {% for row in lists[1] %}
+                                            <option value="{{ row[1] }}">{{ row[0] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <form method="POST" role="form" class="" action="{{ request.path }}" id="form_newForm">
+                <div class="modal-footer">
+
+                    <input name="fn" id="fn" type="hidden" value="">
+
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="btn_save_form" id="btn_save_var">Guardar
+                        cambios
+                    </button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+<!--Modal-->

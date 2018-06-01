@@ -1,0 +1,65 @@
+{% if user_role!=1 %}
+
+    {% set vals = [["dashboard", "Inicio", "fa-th-large"],["profile", "Perfil", "fa-user-circle-o"], ["about", "Acerca de", "fa-ellipsis-h"]] %}
+
+    {% for v in vals %}
+
+        {% if v[0] == active %}
+            <li class="active">
+                <a href="{{ request.route_url(v[0]) }}"><i class="fa {{ v[2] }}"></i> <span
+                        class="nav-label">{{ v[1] }}</span> </a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ request.route_url(v[0]) }}"><i class="fa {{ v[2] }}"></i> <span
+                        class="nav-label">{{ v[1] }}</span> </a>
+            </li>
+
+        {% endif %}
+
+    {% endfor %}
+
+    {% if rpt %}
+
+        <li>
+            <a href="{{ request.route_url('report', date=dates) }}"><i
+                    class="fa fa-pie-chart"></i>
+                <span
+                        class="nav-label">Reporte</span></a>
+
+        </li>
+
+    {% endif %}
+
+{% endif %}
+
+{% if user_role==1 %}
+
+
+    {% set vals = [
+    ["pilares", "Pilares", "fa-location-arrow"],
+    ["baseline", "Lineas Base", "fa-newspaper-o"],
+    ["weighing", "Coeficientes de ponderacion", "fa-line-chart"],
+    ["register", "Agregar usuarios", "fa-vcard-o"],
+    ["forms", "Formularios", "fa-building"]
+    ] %}
+
+    {% for v in vals %}
+
+        {% if v[0] == active %}
+            <li class="active">
+                <a href="{{ request.route_url(v[0]) }}"><i class="fa {{ v[2] }}"></i> <span
+                        class="nav-label">{{ v[1] }}</span> </a>
+            </li>
+        {% else %}
+            <li>
+                <a href="{{ request.route_url(v[0]) }}"><i class="fa {{ v[2] }}"></i> <span
+                        class="nav-label">{{ v[1] }}</span> </a>
+            </li>
+
+        {% endif %}
+
+    {% endfor %}
+
+
+{% endif %}

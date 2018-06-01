@@ -42,10 +42,12 @@ DashJSArray.append(Resource(library, 'inspinia/js/plugins/chartJs/Chart.min.js',
 
 DashJSArray.append(Resource(library, 'dashboard/dist/jspdf.debug.js', depends=[JQuery], bottom=True))
 DashJSArray.append(Resource(library, 'inspinia/js/plugins/steps/jquery.steps.min.js', depends=[JQuery], bottom=True))
-DashJSArray.append(Resource(library, 'inspinia/js/plugins/validate/jquery.validate.min.js', depends=[JQuery], bottom=True))
-DashJSArray.append(Resource(library, 'inspinia/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js', depends=[JQuery], bottom=True))
-#DashJSArray.append(Resource(library, 'inspinia/js/plugins/jquery-ui/jquery-ui.min.js', depends=[JQuery], bottom=True))
-#DashJSArray.append(Resource(library, 'dashboard/range_slider/jquery-ui-range-slider.js', depends=[JQuery], bottom=True))
+DashJSArray.append(
+    Resource(library, 'inspinia/js/plugins/validate/jquery.validate.min.js', depends=[JQuery], bottom=True))
+DashJSArray.append(
+    Resource(library, 'inspinia/js/plugins/bootstrap-tagsinput/bootstrap-tagsinput.js', depends=[JQuery], bottom=True))
+# DashJSArray.append(Resource(library, 'inspinia/js/plugins/jquery-ui/jquery-ui.min.js', depends=[JQuery], bottom=True))
+# DashJSArray.append(Resource(library, 'dashboard/range_slider/jquery-ui-range-slider.js', depends=[JQuery], bottom=True))
 
 
 DashJSArray.append(Resource(library, 'dashboard/dashboard.js', depends=[JQuery], bottom=True))
@@ -60,9 +62,11 @@ DashCSSArray.append(
 DashCSSArray.append(Resource(library, 'inspinia/css/plugins/footable/footable.core.css', depends=[JQuery], bottom=True))
 DashCSSArray.append(Resource(library, 'inspinia/css/plugins/datapicker/datepicker3.css', depends=[JQuery], bottom=True))
 DashCSSArray.append(Resource(library, 'inspinia/css/plugins/steps/jquery.steps.css', depends=[JQuery], bottom=True))
-DashCSSArray.append(Resource(library, 'inspinia/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css', depends=[JQuery], bottom=True))
-#DashCSSArray.append(Resource(library, 'inspinia/js/plugins/jquery-ui/jquery-ui.min.css', depends=[JQuery], bottom=True))
-#DashCSSArray.append(Resource(library, 'dashboard/range_slider/jquery-ui-range-slider.css', depends=[JQuery], bottom=True))
+DashCSSArray.append(
+    Resource(library, 'inspinia/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css', depends=[JQuery],
+             bottom=True))
+# DashCSSArray.append(Resource(library, 'inspinia/js/plugins/jquery-ui/jquery-ui.min.css', depends=[JQuery], bottom=True))
+# DashCSSArray.append(Resource(library, 'dashboard/range_slider/jquery-ui-range-slider.css', depends=[JQuery], bottom=True))
 
 
 DashCSS = Group(DashCSSArray)
@@ -71,29 +75,36 @@ regJS_CSS = Group([Resource(library, 'inspinia/js/plugins/sweetalert/sweetalert.
                    Resource(library, 'inspinia/css/plugins/sweetalert/sweetalert.css', depends=[JQuery], bottom=True),
                    Resource(library, 'dashboard/register.js', depends=[JQuery], bottom=True)])
 
+reportJS = Group(
+    [Resource(library, 'inspinia/js/plugins/typehead/bootstrap3-typeahead.min.js', depends=[JQuery], bottom=True),
+     Resource(library, 'dashboard/pptxGenJS/jszip.min.js', depends=[JQuery], bottom=True),
+     Resource(library, 'dashboard/pptxGenJS/pptxgen.js', depends=[JQuery], bottom=True),
+     # Resource(library, 'inspinia/js/plugins/topojson/topojson.js', depends=[JQuery], bottom=True),
 
-reportJS = Group([Resource(library, 'inspinia/js/plugins/typehead/bootstrap3-typeahead.min.js', depends=[JQuery], bottom=True),
-                  Resource(library, 'dashboard/pptxGenJS/jszip.min.js', depends=[JQuery], bottom=True),
-                  Resource(library, 'dashboard/pptxGenJS/pptxgen.js', depends=[JQuery], bottom=True),
-                  #Resource(library, 'inspinia/js/plugins/topojson/topojson.js', depends=[JQuery], bottom=True),
+     # Resource(library, 'inspinia/js/plugins/datamaps/datamaps.all.min.js', depends=[JQuery], bottom=True),
+     Resource(library, 'dashboard/report.js', depends=[JQuery], bottom=True)])
 
-                  #Resource(library, 'inspinia/js/plugins/datamaps/datamaps.all.min.js', depends=[JQuery], bottom=True),
-                  Resource(library, 'dashboard/report.js', depends=[JQuery], bottom=True)])
+baselineR = Group([Resource(library, 'dashboard/baseline.js', depends=[JQuery], bottom=True)])
 
-
-baselineR=Group([Resource(library, 'dashboard/baseline.js', depends=[JQuery], bottom=True)])
-
-
-pilarArray=[]
+pilarArray = []
 pilarArray.append(Resource(library, 'inspinia/js/plugins/jquery-ui/jquery-ui.min.js', depends=[JQuery], bottom=True))
 pilarArray.append(Resource(library, 'inspinia/js/plugins/jquery-ui/jquery-ui.min.css', depends=[JQuery], bottom=True))
 
 pilarArray.append(Resource(library, 'dashboard/uiSlider/nouislider.css', depends=[JQuery], bottom=True))
 pilarArray.append(Resource(library, 'dashboard/uiSlider/nouislider.js', depends=[JQuery], bottom=True))
 
+pilarArray.append(Resource(library, 'dashboard/pilar_helps.js', depends=[JQuery], bottom=True))
+
 pilarCSS_JS = Group(pilarArray)
 
 
+formsCSS_JS = Group([Resource(library, 'inspinia/js/plugins/dualListbox/jquery.bootstrap-duallistbox.js',
+                              depends=[JQuery], bottom=True),
+                     Resource(library, 'dashboard/forms.js',
+                              depends=[JQuery], bottom=True),
+                     Resource(library, 'inspinia/css/plugins/dualListbox/bootstrap-duallistbox.min.css',
+                              depends=[JQuery], bottom=True)
+                     ])
 
 
 

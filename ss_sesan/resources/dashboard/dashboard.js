@@ -3,76 +3,28 @@ $(document).ready(function () {
     //---Wizard---------------------
 
 
-    /*
-     try {
-     max = 100;
-     min = 0;
-     var slider = document.getElementById('slider0');
-
-     noUiSlider.create(slider, {
-     start: [10, 20, 50],
-     connect: [true, true, true, true],
-     step: 1,
-     range: {
-     'min': [min],
-     'max': [max]
-     },
-     tooltips: false,
-     //format: "v",
-
-     });
 
 
-     var connect = slider.querySelectorAll('.noUi-connect');
-     var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
+    var vars = []
 
-     for (var i = 0; i < connect.length; i++) {
-     $(connect[i]).css({"background": color[i]});
-     }
-     $(".noUi-base, .noUi-connects").css({'position': 'initial'});
+    $("#newV_0").click(function () {
+        if (!$("#newT_0").val()) {
+            alert("texto en blanco")
+        }
+        else {
+            if (vars.indexOf($("#newT_0").val()) >= 0) {
+                alert("ya existe esa variable")
+            }
+            else {
+                vars.push($("#newT_0").val());
+                console.log("agregar var");
 
-     slider.noUiSlider.on('update', function (values) {
+            }
 
+        }
+        console.log(vars);
+    });
 
-     console.log("*-*-*-*-")
-     console.log("Sin afectacion: "+min.toString()+ " - "+values[0]);
-     console.log("Afectacion Moderada: "+ (Number(values[0]) +1).toString() +" - "+ values[1]);
-     console.log("Afectacion Alta: "+ (Number(values[1]) +1).toString() +" - "+ values[2]);
-     console.log("Afectacion muy alta: "+ (Number(values[2])).toString() +" - "+ max.toString());
-
-     });
-
-     }
-     catch (err) {
-
-     }
-
-
-     var vars = []
-
-     $("#newV_0").click(function () {
-     if (!$("#newT_0").val()) {
-     alert("texto en blanco")
-     }
-     else {
-     if (vars.indexOf($("#newT_0").val()) >= 0) {
-     alert("ya existe esa variable")
-     }
-     else {
-     vars.push($("#newT_0").val());
-     console.log("agregar var");
-
-     }
-
-     }
-     console.log(vars);
-     });*/
-
-
-    $("#mant_pilar").footable();
-
-
-    $('.footable').footable();
 
     function get_wizard_data() {
         //console.log("*-*-*-*");
@@ -80,6 +32,7 @@ $(document).ready(function () {
         jsonP["pilarName"] = $("#pilarName").val();
         jsonP["coef_pond"] = $("#coef_pond").val();
         jsonP["desc"] = $("#desc").val();
+        jsonP["rang"] = $("#vdR_nf").val();
 
         jsonP["ind"] = {};
 
@@ -230,7 +183,7 @@ $(document).ready(function () {
     }
 
 
-    $("#form").steps({
+    $(".formwiz").steps({
         bodyTag: "fieldset",
         onStepChanging: function (event, currentIndex, newIndex) {
             //set_white_tag();
