@@ -4,15 +4,23 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.response import Response
 from .classes import publicView, privateView, odkView
 from .auth import getUserData
-from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS
+from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS, formsCSS_JS
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
-    valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS
-from processes.utilform import isUserActive, getUserPassword, getFormList, isUserinOrg, getManifest, getMediaFile, \
-    getXMLForm, getOrganization, getOrganizationID, storeSubmission
+    valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser
+from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
+    getXMLForm, storeSubmission
 from datetime import datetime
 from pyramid.response import FileResponse
 import os
+from .processes.setFormVals import newPilar, getPilarData, delPilar, updateVar, getListPU, newForm, getForms,delForm,forms_id
 
+
+#task
+# validar que se pueda borrar un pilar en uso o un form en uso
+# elimnar usuario tambien del form
+# cantidad de envios del form
+# revisar que no se pueda borrar lineas base y coef en munic con datos solo update
+#
 
 @view_config(route_name='profile', renderer='templates/profile.jinja2')
 class profile_view(privateView):
@@ -20,7 +28,7 @@ class profile_view(privateView):
         DashJS.need()
         DashCSS.need()
 
-        return {'activeUser': self.user, "config": getConfigQR(self.user.login, self.user.organization, self.request)}
+        return {'activeUser': self.user, "config": getConfigQR(self.user.login,self.user.parent, self.request)}
 
 
 @view_config(route_name='baseline', renderer='templates/baseline.jinja2')
@@ -38,54 +46,128 @@ class baseline_view(privateView):
             fill_regN["sel"] = int(self.request.POST.get("munic", ""))
             fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
             fill_regN["lb_m"] = getBaselinesName()
-            lb_data = getBaselines(int(self.request.POST.get("munic", "")))
+            lb_data = getBaselines(int(self.request.POST.get("munic", "")), "lb")
         else:
             if "id_mun_sel" in self.request.POST and not "update_data" in self.request.POST and not "submit_lb" in self.request.POST:
-                msg = delete_lb(self.request.POST.get("id_mun_sel", ""))
+                msg = delete_lb(self.request.POST.get("id_mun_sel", ""), "lb")
                 fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
                 fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                 fill_regN["lb_m"] = getBaselinesName()
-                lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")))
+                lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "lb")
             else:
                 if "update_data" in self.request.POST:
                     msg = updateData(self.request.POST.get("id_mun_sel", ""),
-                                     self.request.POST.get("mun_sel_data2", ""))
+                                     self.request.POST.get("mun_sel_data2", ""), "lb")
                     fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
                     fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                     fill_regN["lb_m"] = getBaselinesName()
-                    lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")))
+                    lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "lb")
                 else:
                     if "submit_lb" in self.request.POST:
                         save_data = self.request.POST.get("mun_sel_data", "")
                         fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
                         fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                         fill_regN["lb_m"] = getBaselinesName()
-                        msg = newBaseline(save_data)
-                        lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")))
+                        msg = newBaseline(save_data, "lb")
+                        lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "lb")
                     else:
                         fill_regN["sel"] = 0
                         fill_regN["sel_name"] = ""
                         fill_regN["lb_m"] = []
-                        lb_data = getBaselines(0)
+                        lb_data = getBaselines(0, "lb")
 
         return {'activeUser': self.user, "lb_data": lb_data, "fill_reg": fill_regN, "msg": msg}
 
+@view_config(route_name='weighing', renderer='templates/weighing.jinja2')
+class weighing_view(privateView):
+    def processView(self):
+        DashJS.need()
+        DashCSS.need()
+        baselineR.need()
+        regJS_CSS.need()
+        fill_regN = fill_reg()
+        msg = []
+        if "submit" in self.request.POST:
+            # if "update_data" in self.request.POST:
 
+            fill_regN["sel"] = int(self.request.POST.get("munic", ""))
+            fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
+            fill_regN["lb_m"] = getBaselinesName()
+            lb_data = getBaselines(int(self.request.POST.get("munic", "")), "cf")
+        else:
+            if "id_mun_sel" in self.request.POST and not "update_data" in self.request.POST and not "submit_lb" in self.request.POST:
+                msg = delete_lb(self.request.POST.get("id_mun_sel", ""), "cf")
+                fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
+                fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
+                fill_regN["lb_m"] = getBaselinesName()
+                lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
+            else:
+                if "update_data" in self.request.POST:
+                    msg = updateData(self.request.POST.get("id_mun_sel", ""),
+                                     self.request.POST.get("mun_sel_data2", ""), "cf")
+                    fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
+                    fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
+                    fill_regN["lb_m"] = getBaselinesName()
+                    lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
+                else:
+                    if "submit_lb" in self.request.POST:
+                        save_data = self.request.POST.get("mun_sel_data", "")
+                        fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
+                        fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
+                        fill_regN["lb_m"] = getBaselinesName()
+                        msg = newBaseline(save_data, "cf")
+                        lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
+                    else:
+                        fill_regN["sel"] = 0
+                        fill_regN["sel_name"] = ""
+                        fill_regN["lb_m"] = []
+                        lb_data = getBaselines(0, "cf")
+
+        return {'activeUser': self.user, "lb_data": lb_data, "fill_reg": fill_regN, "msg": msg}
+
+from pprint import pprint
 @view_config(route_name='pilares', renderer='templates/pilares.jinja2')
 class pilares_view(privateView):
     def processView(self):
         DashJS.need()
         DashCSS.need()
+        regJS_CSS.need()
         pilarCSS_JS.need()
+        msg = []
         print self.request.POST
         if "jsondata" in self.request.POST:
-            print "*-*-*-*"
-            print self.request.POST.get("jsondata", "")
-            print "*-*-**-"
-
+            msg = newPilar(self.request.POST.get("jsondata", ""), self.user.login)
+        if "p_id" in self.request.POST:
+            msg = delPilar(self.request.POST.get("p_id"))
+        if "btn_save_var" in self.request.POST:
+            msg = updateVar(self.request.POST.get("vd1"), self.request.POST.get("vd2"), self.request.POST.get("vd3"),
+                            self.request.POST.get("vd4"), self.request.POST.get("vId"),self.request.POST.get("vdR"))
+        pilar_data,vars_id = getPilarData(self.user.login)
         # baselineR.need()
         # regJS_CSS.need()
-        return {'activeUser': self.user}
+        return {'activeUser': self.user, "pilar_data": pilar_data, "msg": msg, "vars_id":",".join(vars_id)}
+
+
+@view_config(route_name='forms', renderer='templates/forms.jinja2')
+class forms_view(privateView):
+    def processView(self):
+        DashJS.need()
+        DashCSS.need()
+        regJS_CSS.need()
+        formsCSS_JS.need()
+        msg=[]
+
+        if "form_id" in self.request.POST:
+            msg=delForm(self.request,self.request.POST.get("form_id"), self.user.login)
+
+        if "fn" in self.request.POST:
+            msg=newForm(self.request,self.request.POST.get("fn"), self.user.login)
+        formList=getForms(self.user.login)
+
+
+        return {'activeUser': self.user, "msg":msg, "lists":getListPU(self.user.login), "formList":formList, "forms_id":forms_id(self.user.login)}
+
+
 
 
 @view_config(route_name='report', renderer='templates/report.jinja2')
@@ -93,7 +175,6 @@ class report_view(privateView):
     def processView(self):
         basicCSS.need()
         DashJS.need()
-
         DashCSS.need()
         reportJS.need()
         date = self.request.matchdict["date"]
@@ -166,7 +247,7 @@ class login_view(publicView):
             if not user == None and user.check_password(passwd):
                 headers = remember(self.request, login)
                 if user.user_role == 1:
-                    response = HTTPFound(location=self.request.route_url('register'), headers=headers)
+                    response = HTTPFound(location=self.request.route_url('pilares'), headers=headers)
                 else:
                     response = HTTPFound(location=next, headers=headers)
                 response.set_cookie('_LOCALE_', value='es', max_age=31536000)
@@ -184,8 +265,14 @@ class register_view(privateView):
         DashCSS.need()
         regJS_CSS.need()
         result = []
+
+        #
+
+        if "delUser" in self.request.POST:
+            result = delUser(self.request.POST.get("uname_u", ""), self.user.login, self.request)
+
         if "reg" in self.request.POST:
-            user_val = addNewUser(self.request.POST, self.request)
+            user_val = addNewUser(self.request.POST, self.request, self.user.login)
             # user_val = 2
             if user_val == 0:
                 result.append("Error")
@@ -202,18 +289,21 @@ class register_view(privateView):
             if user_val == 3:
                 result.append("Error")
                 result.append("Error al registrar este usuario")
+                result.append("error")
+            if user_val == 4:
                 result.append("Error")
+                result.append("Antes de agregar un usuario a este municipio debe ingresar las lineas base y coeficientes respectivos")
+                result.append("error")
 
-        return {'activeUser': self.user, "fill_reg": fill_reg(), "msj": result}
+        return {'activeUser': self.user, "fill_reg": fill_reg(), "msj": result, "ulist": getUsersList(self.user.login)}
 
 
 class formList_view(odkView):
     def processView(self):
         try:
-            org = getOrganization(self.user)
             if isUserActive(self.user):
                 if self.authorize(getUserPassword(self.user, self.request)):
-                    return self.createXMLResponse(getFormList(self.user, org, self.request))
+                    return self.createXMLResponse(getFormList(self.user, self.request))
                 else:
                     return self.askForCredentials()
             else:
@@ -224,24 +314,19 @@ class formList_view(odkView):
 
 class manifest_view(odkView):
     def processView(self):
-        org = getOrganization(self.user)
-        orgId = getOrganizationID(self.user)
-        if isUserinOrg(self.user, orgId):
-            if self.authorize(getUserPassword(self.user, self.request)):
-                return self.createXMLResponse(getManifest(self.user, org, self.request))
-            else:
-                return self.askForCredentials()
+        if self.authorize(getUserPassword(self.user, self.request)):
+            return self.createXMLResponse(getManifest(self.user, self.request))
         else:
             return self.askForCredentials()
 
 
+
 class mediaFile_view(odkView):
     def processView(self):
-        org = getOrganization(self.user)
         fileid = self.request.matchdict['fileid']
         if isUserActive(self.user):
             if self.authorize(getUserPassword(self.user, self.request)):
-                return getMediaFile(org, self.user, self.request, fileid)
+                return getMediaFile(self.user, self.request, fileid)
             else:
                 return self.askForCredentials()
         else:
@@ -250,29 +335,30 @@ class mediaFile_view(odkView):
 
 class XMLForm_view(odkView):
     def processView(self):
-        orgId = getOrganizationID(self.user)
-        org = getOrganization(self.user)
-        if isUserinOrg(self.user, orgId):
-            if self.authorize(getUserPassword(self.user, self.request)):
-                return getXMLForm(self.user, org, self.request)
-            else:
-                return self.askForCredentials()
+
+        if self.authorize(getUserPassword(self.user, self.request)):
+            return getXMLForm(self.user, self.request)
         else:
             return self.askForCredentials()
 
 
+
 class push_view(odkView):
     def processView(self):
+
         if self.request.method == "POST":
             if isUserActive(self.user):
                 if self.authorize(getUserPassword(self.user, self.request)):
+
                     if storeSubmission(self.user, self.request):
                         response = Response(status=201)
                         return response
                     else:
+
                         response = Response(status=502)
                         return response
                 else:
+                    print "push"
                     return self.askForCredentials()
             else:
                 response = Response(status=401)
@@ -288,7 +374,7 @@ class submission_view(odkView):
         if self.request.method == 'HEAD':
             if isUserActive(self.user):
                 headers = [('location',
-                            self.request.route_url('odkpush', organization=getOrganization(self.user), user=self.user))]
+                            self.request.route_url('odkpush', parent=getParent(self.user), user=self.user))]
                 response = Response(headerlist=headers, status=204)
                 return response
             else:

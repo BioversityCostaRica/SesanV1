@@ -11,8 +11,6 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 
-
-
 Base = declarative_base()
 metadata = Base.metadata
 
@@ -31,11 +29,30 @@ class CentrosUrbano(Base):
     Y = Column(String(45))
 
 
+class CoefPond(Base):
+    __tablename__ = 'coef_pond'
+
+    idcoef_pond = Column(Integer, primary_key=True)
+    id_variables_ind = Column(Integer)
+    munic_id = Column(Integer)
+    coef_valor = Column(Numeric(10, 0))
+
+
 class Form(Base):
     __tablename__ = 'forms'
 
-    user_name = Column(String(40), primary_key=True)
-    user_datacol = Column(String(45))
+    form_id = Column(Integer, primary_key=True)
+    form_user = Column(String(45))
+    form_name = Column(String(45))
+    pilar_id = Column(String(45))
+    form_db = Column(String(45))
+
+
+class FormsByUser(Base):
+    __tablename__ = 'forms_by_user'
+
+    idforms = Column(Integer, primary_key=True)
+    id_user = Column(String(45))
 
 
 class Grupo(Base):
@@ -83,6 +100,8 @@ class Pilare(Base):
     id_pilares = Column(Integer, primary_key=True)
     name_pilares = Column(String(45))
     coef_pond = Column(Integer)
+    user_name = Column(String(45))
+    pilar_desc = Column(String(250))
 
 
 class RangosGrupo(Base):
@@ -118,7 +137,7 @@ class User(Base):
     user_fullname = Column(String(120))
     user_joindate = Column(DateTime)
     user_password = Column(String(80))
-    user_organization = Column(Integer)
+    user_parent = Column(String(50))
     user_email = Column(String(120))
     user_munic = Column(Integer)
     user_active = Column(Integer, server_default=text("'1'"))
@@ -130,9 +149,11 @@ class VariablesInd(Base):
 
     id_variables_ind = Column(Integer, primary_key=True)
     id_indicadores = Column(Integer)
-    insti_id = Column(Integer)
     name_variable_ind = Column(String(200))
     unidad_variable_ind = Column(String(200))
     lbase_variable_ind = Column(String(45))
     code_variable_ind = Column(String(45))
     coef_pond = Column(Integer)
+    v_pregunta = Column(String(45))
+    var_max = Column(Integer)
+    var_min = Column(String(45))

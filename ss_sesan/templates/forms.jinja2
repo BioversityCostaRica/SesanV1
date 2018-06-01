@@ -1,0 +1,141 @@
+{% extends 'dashboard.jinja2' %}
+{% block title %}
+    <title>SESAN | Forms</title>
+{% endblock title %}
+
+
+{% block pageheading %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-8 text-center">
+            <h2>Mantenimiento de formularios</h2>
+        </div>
+    </div>
+{% endblock pageheading %}
+
+{% block dashmenu %}
+
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="forms" %}
+
+{% endblock dashmenu %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% block pagecontent %}
+        <input type="hidden" value="{{ msg }}" id="msj">
+        <input type="hidden" value="{{ forms_id }}" id="forms_id">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Formularios</h5>
+                        <div class="ibox-tools">
+                            <div class="row">
+                                <div class="col-md-9">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-10">
+
+                                <button class="btn btn-primary " type="button" style="text-align: center; width: 80%"
+                                        data-toggle="modal" data-target="#modal_NewForm"><i
+                                        class="fa fa-plus"></i>&nbsp;Nuevo formulario
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <p style="margin-top: 8px; text-align: center"><span
+                                        class="label label-default">Total: {{ formList|length }}</span></p>
+                            </div>
+
+                            <!--->
+
+                            <!--->
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+
+                            </div>
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        {% if formList|length > 0 %}
+
+        <div class="ibox-content">
+            <div class="table-responsive">
+                <table class="table  table-bordered">
+                    <thead>
+                    <tr>
+
+
+                        <th>Formulario</th>
+                        <th>Pilares</th>
+                        <th>Usuarios</th>
+                        <th>Envios</th>
+                        <th></th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    {% for row in formList %}
+                        <tr>
+                            <td>{{ row[0][0].decode("latin1") }}</td>
+                            <td>{{ row[1]|length }}</td>
+                            <td>{{ row[2]|length }}</td>
+                            <td>{{ row[3] }}</td>
+
+                            <td class="text-center" >
+
+                                <form method="POST" role="form" class="form-horizontal m-t sub_f"
+                                      action="{{ request.path }}" id="submit_{{ row[0][1] }}" >
+                                    <input type="hidden" value="{{ (row[0][0]|string).encode("utf8") +"--"+ (row[0][1]|string).encode("utf8") }}" name="form_id">
+                                    <button type="submit" class="btn btn-danger btn-circle btn-xs" name="delUser"
+                                            id="delUser"><i class="fa fa-times"></i>
+                                    </button>
+
+                                    <button class="btn btn-warning btn-circle btn-xs" type="button"
+                                            data-toggle="modal" data-target="#mo"><i class="fa fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-default btn-circle btn-xs" type="button"><i
+                                            class="fa fa-plus"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+        {% snippet "snippets/newForm.jinja2", request=request,lists=lists %}
+
+
+
+    {% endblock pagecontent %}
+
+
+</div>
+
+
+
+
+

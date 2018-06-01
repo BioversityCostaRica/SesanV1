@@ -5,7 +5,7 @@
 $(document).ready(function () {
 
 
-    if ($("#msj").val() != "[]") {
+    if ($("#msj").val() != "[]" && typeof $("#msj").val() != 'undefined') {
 
         var msj = $("#msj").val().replace("[", "").replace("]", "").split(",");
 

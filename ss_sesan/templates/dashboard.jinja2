@@ -52,51 +52,10 @@
                             </div>
                         </li>
                         {% block dashmenu %}
-                            {% if activeUser.user_role!=1 %}
-                                <li class="active">
-                                    <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-th-large"></i> <span
-                                            class="nav-label">Inicio</span> </a>
-                                </li>
-                                <li>
-                                    <a href="{{ request.route_url('profile') }}"><i class="fa fa-user-circle-o"></i>
-                                        <span
-                                                class="nav-label">Perfil</span></a>
-                                </li>
-                                <li>
-                                    <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-ellipsis-h"></i>
-                                        <span
-                                                class="nav-label">Acerca de</span></a>
-
-                                </li>
-                            {% endif %}
-                            {% if activeUser.user_role==1 %}
-                                <li>
-                                    <a href="{{ request.route_url('register') }}"><i class="fa fa-vcard-o"></i> <span
-                                            class="nav-label">Usuarios</span></a>
 
 
-                                </li>
-                                <li>
-                                    <a href="{{ request.route_url('baseline') }}"><i class="fa fa-newspaper-o"></i>
-                                        <span
-                                                class="nav-label">Lineas Base</span></a>
+                            {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="dashboard", rpt=report %}
 
-
-
-
-                                </li>
-                            {% endif %}
-                            {% if report %}
-
-                                <li>
-                                    <a href="{{ request.route_url('report', date=dashData.date[0] +"_"+ dashData.date[1]) }}"><i
-                                            class="fa fa-ellipsis-h"></i>
-                                        <span
-                                                class="nav-label">Reporte</span></a>
-
-                                </li>
-
-                            {% endif %}
                         {% endblock dashmenu %}
 
                     </ul>

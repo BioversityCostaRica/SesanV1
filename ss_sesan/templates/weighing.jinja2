@@ -1,6 +1,6 @@
 {% extends 'dashboard.jinja2' %}
 {% block title %}
-    <title>SESAN | Lineas base</title>
+    <title>SESAN | Coeficientes de ponderacion</title>
 {% endblock title %}
 
 
@@ -10,13 +10,13 @@
 
         </div>
         <div class="col-sm-8 text-center">
-            <h2>Mantenimiento de lineas base</h2>
+            <h2>Mantenimiento de coeficientes de ponderación</h2>
         </div>
     </div>
 {% endblock pageheading %}
 
 {% block dashmenu %}
-    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="baseline" %}
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="weighing" %}
 {% endblock dashmenu %}
 
 <div class="wrapper wrapper-content animated fadeInRight">
@@ -29,7 +29,7 @@
 
                     <div class="ibox">
                         <div class="ibox-title">
-                            <h5>Seleccione un municipio para guardar o modificar su linea base</h5>
+                            <h5>Seleccione un municipio para guardar o modificar sus ponderaciones</h5>
                             <div class="ibox-tools">
 
                             </div>
@@ -82,9 +82,9 @@
                                                         aria-hidden="true">&times;</span><span
                                                         class="sr-only">Close</span>
                                                 </button>
-                                                <h4 class="modal-title">Registro de linea base para el municipio
+                                                <h4 class="modal-title">Registro de coeficientes de ponderacion para el municipio
                                                     de {{ fill_reg.sel_name }} </h4>
-                                                <small class="font-bold">Para registrar una linea base nueva debe
+                                                <small class="font-bold">Para registrar una ponderacion nueva debe
                                                     completar
                                                     todos los campos requeridos
                                                 </small>
@@ -168,13 +168,13 @@
                                         {% if lb_data|length == 0 and fill_reg["sel"] !=0 %}
 
                                             <div class="col-xs-8"><i class="fa fa-frown-o fa-5x"></i>
-                                                <h2 class="font-bold">El municipio seleccionado no cuenta con linea base
-                                                    registrada </h2>
+                                                <h2 class="font-bold">El municipio seleccionado no cuenta con ponderaciones
+                                                    registradas </h2>
 
 
                                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#myModal5">
-                                                    Agregar linea base de {{ fill_reg.sel_name }}
+                                                    Agregar los coeficientes de ponderacion a {{ fill_reg.sel_name }}
                                                 </button>
 
                                             </div>
@@ -231,3 +231,5 @@
         });
     </script>
 {% endblock javascript %}s
+
+

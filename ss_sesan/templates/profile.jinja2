@@ -15,28 +15,7 @@
     </div>
 {% endblock pageheading %}
 {% block dashmenu %}
-    {% if activeUser.user_role!=1 %}
-    <li>
-        <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-th-large"></i> <span
-                class="nav-label">Inicio</span> </a>
-    </li>
-    <li class="active">
-        <a href="{{ request.route_url('profile') }}"><i class="fa fa-user-circle-o"></i> <span
-                class="nav-label">Perfil</span></a>
-    </li>
-    <li>
-        <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-ellipsis-h"></i> <span
-                class="nav-label">Acerca de</span></a>
-
-    </li>
-    {% endif %}
-    {% if activeUser.user_role==1 %}
-        <li>
-            <a href="{{ request.route_url('register') }}"><i class="fa fa-vcard-o"></i> <span
-                    class="nav-label">Agregar usuario</span></a>
-
-        </li>
-    {% endif %}
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="profile", rpt=report %}
 
 {% endblock dashmenu %}
 
@@ -62,8 +41,8 @@
                             <div class="col-lg-5">
                                 <dl class="dl-horizontal">
 
-                                    <dt>Organizacion:</dt>
-                                    <dd><a href="#" class="text-navy"> {{ activeUser.organization }}</a></dd>
+                                    <dt>Parent:</dt>
+                                    <dd><a href="#" class="text-navy"> {{ activeUser.parent }}</a></dd>
                                     <dt>Municipio:</dt>
                                     <dd> {{ activeUser.munic }} </dd>
                                 </dl>
