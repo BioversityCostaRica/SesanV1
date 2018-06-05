@@ -24,10 +24,9 @@ def getPob4Map(id_cu, alert):
     mySession = DBSession()
 
     result = mySession.query(CentrosUrbano).filter(CentrosUrbano.id_cu == id_cu).first()
-    data = {"vals": []}
+    data = []
     if result:
-        data["vals"].append(
-            ([str(result.categoria).title(), str(result.cu_name).title(), float(result.Y), float(result.X), alert]))
+        data.append([str(result.categoria).title(), str(result.cu_name).title(), float(result.Y), float(result.X), alert])
 
     mySession.close()
 
@@ -44,7 +43,6 @@ def dataReport(self, month, year):
     valEqui = []
     coefPon = []
     unames = []
-
 
     ###
 
@@ -79,12 +77,6 @@ def dataReport(self, month, year):
     variables = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores.in_(resI)).all()
     indicadores = []
     pilares = []
-
-
-
-
-
-
 
     ###
 
@@ -123,9 +115,12 @@ def dataReport(self, month, year):
                             sa = getVarValue(db, v.code_variable_ind, month, year, self.user.login)
                             # add variables data
 
-                            valCP = valCP + calcValue(sa, v.id_variables_ind, 1,self.user.munic)
+                            valCP = valCP + calcValue(sa, v.id_variables_ind, 1, self.user.munic)
 
-                            acum.append(calcValue(sa, v.id_variables_ind, 1,self.user.munic) * calcValue(sa, v.id_variables_ind, 2,self.user.munic))
+                            acum.append(calcValue(sa, v.id_variables_ind, 1, self.user.munic) * calcValue(sa,
+                                                                                                          v.id_variables_ind,
+                                                                                                          2,
+                                                                                                          self.user.munic))
                         tot_alert.append([valCP, sum(acum)])
                     pilares.append(int(i_pi[0]))
                     # print tot_alert
@@ -139,16 +134,18 @@ def dataReport(self, month, year):
 
                     unames.append([db, self.user.login, alertP[0]])
 
-                    result = mySession.query(Grupo.val_grupos).filter(float("%.2f" % (t1 / t0)) <= Grupo.val_grupos).first()
+                    result = mySession.query(Grupo.val_grupos).filter(
+                        float("%.2f" % (t1 / t0)) <= Grupo.val_grupos).first()
                     valEqui.append(int(result.val_grupos))
                     result = mySession.query(Pilare.coef_pond).filter(Pilare.name_pilares == p_name[0]).first()
                     coefPon.append(int(result.coef_pond))
 
-                meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+                meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+                         "Octubre",
                          "Noviembre", "Diciembre"]
 
-                #*-*-*-*-*-
-                #des = int(float(getVarValue("MSPAS", "dec_mi_nutri_edas_8", month, year, des_uname)))
+                # *-*-*-*-*-
+                # des = int(float(getVarValue("MSPAS", "dec_mi_nutri_edas_8", month, year, des_uname)))
                 des = 10
                 data["date"] = [meses[int(month) - 1], year, self.user.munic]
                 data["plt_values"] = {"lluvia": "%s-%s" % (str(monthrange(int(year), int(month))[1]),
@@ -197,22 +194,20 @@ def valReport(self, month, year):
                 for mp in my_Pilars:
                     myDB.append(mp.form_db)
 
-
     myDB = list(set(myDB))
 
     acum = []
     for i in myDB:
-        muni= i.split("_")
-        muni=muni[1]+ " "+muni[2]+ " "+self.user.login+"_"
-        print muni
+        muni = i.split("_")
+        muni = muni[1] + " " + muni[2] + " " + self.user.login + "_"
         query = "SELECT COUNT(*) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' ;" % (
             i, str(month), str(year), "%" + muni + "%")
 
         result = mySession.execute(query).scalar()
         acum.append(int(result))
     mySession.close()
-    if sum(acum) == len(myDB):
-        return True
+    if sum(acum) >= 1:
+        return False
     else:
         return False
 
@@ -268,27 +263,47 @@ def make_qr(repo, login, passw, uname):
         myCode = QR(data=serialization.replace("\n", ""))
         myCode.encode()
 
-        img_path = os.path.join(repo, login,"user", uname, "config", "conf.png")
+        img_path = os.path.join(repo, login, "user", uname, "config", "conf.png")
 
         os.system("mv " + myCode.filename + " " + img_path)
     except Exception as e:
         print e
 
 
+def getSubmissionCount(fId):
+    mySession = DBSession()
+
+    result = mySession.query(Form.form_db).filter(Form.form_id == fId).first()
+
+    result = mySession.execute("SELECT COUNT(*) FROM %s.maintable;" % result.form_db).scalar()
+
+    return int(result)
+
+
+def getForm_By_User(uname):
+    mySession = DBSession()
+    result = mySession.query(func.count(FormsByUser.idforms)).filter(FormsByUser.id_user == uname).scalar()
+    return int(result)
+
+
 def delUser(uname, login, request):
     mySession = DBSession()
-    # try:
-    transaction.begin()
-    mySession.query(User).filter(User.user_name == uname).filter(User.user_parent == login).delete()
-    transaction.commit()
-    mySession.close()
-    path = os.path.join(request.registry.settings["user.repository"],
-                        *[login, "user", uname])
-    shutil.rmtree(path, ignore_errors=True)
-    mySession.close()
-    return ["Correcto", "Usuario eliminado exitosamente", "success"]
-    # except:
-    #    return ["Error", "No se pudo eliminar el usuario seleccinado", "error"]
+    try:
+        if getForm_By_User(uname) > 0:
+            return ["Precaucion", "Este usuario no se puede elimiar porque esta relacionado a uno o mass formularios",
+                    "warning"]
+
+        transaction.begin()
+        mySession.query(User).filter(User.user_name == uname).filter(User.user_parent == login).delete()
+        transaction.commit()
+        mySession.close()
+        path = os.path.join(request.registry.settings["user.repository"],
+                            *[login, "user", uname])
+        shutil.rmtree(path, ignore_errors=True)
+        mySession.close()
+        return ["Correcto", "Usuario eliminado exitosamente", "success"]
+    except:
+        return ["Error", "No se pudo eliminar el usuario seleccinado", "error"]
 
 
 def addNewUser(regDict, request, login):
@@ -372,7 +387,7 @@ def addNewUser(regDict, request, login):
                     result = mySession.query(CentrosUrbano.id_cu, CentrosUrbano.cu_name).filter_by(
                         munic_id=regDict["munic"]).all()
                     if result:
-                        csv_curb = open(path.replace("config","/curbanos.csv") , "w")
+                        csv_curb = open(path.replace("config", "/curbanos.csv"), "w")
                         csv_curb.write("urban_id,urban_name\n")
                         for row in result:
                             csv_curb.write(str(row.id_cu) + "," + str(row.cu_name) + "\n")
@@ -415,34 +430,51 @@ def getVarValue(db, code, month, year, uname):
     mySession = DBSession()
     ret = ""
 
-    try:
-        result = mySession.execute(
-            "SELECT %s FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
-                code, db, month, year, "%" + uname + "%"))
-        for res in result:
-            ret = str(res[0])
-    except:
-        ret = "ND"
+    # try:
+    result = mySession.execute(
+        "SELECT AVG(%s) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
+            code, db, month, year, "%" + uname + "%"))
+    for res in result:
+        ret = str(res[0])
+    # except:
+    #    ret = "ND"
     mySession.close()
     return ret
 
+def getComun(db, code, month, year, uname):
+    mySession = DBSession()
+    ret = ""
 
-def getCoefPond(idVar,munId):
+    # try:
+    result = mySession.execute(
+        "SELECT %s FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
+            code, db, month, year, "%" + uname + "%"))
+    for res in result:
+        ret = str(res[0])
+    # except:
+    #    ret = "ND"
+    mySession.close()
+    return ret
+
+def getCoefPond(idVar, munId):
     mySession = DBSession()
 
-    result=mySession.query(CoefPond.coef_valor).filter(CoefPond.id_variables_ind==idVar).filter(CoefPond.munic_id==getMunicId(munId)).first()
+    result = mySession.query(CoefPond.coef_valor).filter(CoefPond.id_variables_ind == idVar).filter(
+        CoefPond.munic_id == getMunicId(munId)).first()
     res = result.coef_valor
     mySession.close()
     return res
 
+
 def calcValue(val, idVar,
-              type,munId):  # if type = 2 calc Equivalent values elif type == 1 calc Weighting coefficient, if type =3 get pilar coeff
+              type,
+              munId):  # if type = 2 calc Equivalent values elif type == 1 calc Weighting coefficient, if type =3 get pilar coeff
     mySession = DBSession()
     res = ""
     if type == 1:
         res = getCoefPond(idVar, munId)
     elif type == 2:
-        sql = "CALL sesan_v1.getValueGroup(%s, %s);" % (idVar, val)
+        sql = "CALL sesan_v2.getValueGroup(%s, %s);" % (idVar, val)
         result = mySession.execute(sql)
         for res in result:
             res = str(res[0])
@@ -520,8 +552,8 @@ def getLB(id_var, munic):
 
 
 def getDashReportData(self, month, year):
-    # month = "08"
-    # year = "2017"
+    # month = "05"
+    # year = "2018"
 
     mySession = DBSession()
     data = {}
@@ -556,33 +588,39 @@ def getDashReportData(self, month, year):
     for var in variables:
         if int(var.id_indicadores) not in indicadores:
             indicadores.append(int(var.id_indicadores))
-
+    data["signatures"] = []
+    data["comunidades2"] = []
     for db in myDB:
-        print db
 
         result = mySession.execute(
             "SELECT COUNT(*) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' ;" % (
                 db, month, year, "%" + self.user.login + "%")).scalar()
 
+        pilares_ind_db = mySession.query(Form.pilar_id).filter(Form.form_db == db).first()
+        pilares_ind_db = pilares_ind_db[0].split(",")
+
         if int(result) != 0:
             for i in indicadores:
                 i_pi = mySession.query(Indicadore.Id_pilares).filter_by(id_indicadores=i).first()
-                if int(i_pi[0]) not in pilares:
+
+                if str(int(i_pi[0])) in pilares_ind_db:
                     p_name = mySession.query(Pilare.name_pilares, Pilare.id_pilares).filter_by(
                         id_pilares=int(i_pi[0])).first()
                     tot_alert = []
                     data[p_name[0]] = {}  # add pilar
                     i_name = mySession.query(Indicadore.name_indicadores, Indicadore.id_indicadores).filter_by(
-                            Id_pilares=int(i_pi[0])).all()
+                        Id_pilares=int(i_pi[0])).all()
 
                     for i_n in i_name:
                         # print i_n[0]
                         data[p_name[0]][i_n[0]] = {"var": [], "val": []}  # add indicadores
                         variables = mySession.query(VariablesInd).filter_by(id_indicadores=int(i_n[1])).all()
-                        valCP = 0
+                        valCP = 1
                         acum = []
                         for v in variables:
+                            print v.code_variable_ind
                             sa = getVarValue(db, v.code_variable_ind, month, year, self.user.login)
+
                             # add variables data
 
                             if sa != "ND":
@@ -591,12 +629,21 @@ def getDashReportData(self, month, year):
                                 data[p_name[0]][i_n[0]]["var"].append(
                                     [v.name_variable_ind, v.unidad_variable_ind, l_base, sa,
                                      getComp(l_base, sa),
-                                     getAlertVar(calcValue(sa, v.id_variables_ind, 2,self.user.munic), 1)])
-                                valCP = valCP + calcValue(sa, v.id_variables_ind, 1,self.user.munic)
+                                     getAlertVar(calcValue(sa, v.id_variables_ind, 2, self.user.munic), 1)])
+                                valCP = valCP + calcValue(sa, v.id_variables_ind, 1, self.user.munic)
 
-                                acum.append(calcValue(sa, v.id_variables_ind, 1,self.user.munic) * calcValue(sa, v.id_variables_ind, 2,self.user.munic))
+                                acum.append(calcValue(sa, v.id_variables_ind, 1, self.user.munic) * calcValue(sa,
+                                                                                                              v.id_variables_ind,
+                                                                                                              2,
+                                                                                                              self.user.munic))
 
                         tot_alert.append([valCP, sum(acum)])
+                        # print "**-*-*-*-*-*\n\n\n\n\n\n\n"
+                        # print db
+                        # print valCP
+                        # print v.id_variables_ind
+                        # print "%.2f" % (sum(acum))
+                        # print "**-*-*-*-*-*\n\n\n\n\n\n\n"
                         data[p_name[0]][i_n[0]]["val"].append("%.2f" % (sum(acum) / valCP))
                         # data[p_name[0]][i_n[0]]["val"].append("CCCC")
                     pilares.append(int(i_pi[0]))
@@ -609,19 +656,24 @@ def getDashReportData(self, month, year):
                     alertP = getPilarAlert(p_name[1], "%.2f" % (t1 / t0))
 
                     data[p_name[0] + "_alert"] = ["%.2f" % (t1 / t0), alertP[1].title(), alertP[0]]
-            #data["signatures"] = [
-            #    getSignature(self.user.login, self.user.organization, month, year, "rep", self.request),
-            #   getSignature(self.user.login, self.user.organization, month, year, "tec", self.request)]
-            ruuid = getVarValue(db, "device_id_3", month, year, self.user.login)
-            #data["comunidades"] = getRepInfo(ruuid, db, "com")
-            com = getVarValue(db, "sem_af_comunidad", month, year, self.user.login).split(" ")
-            data["comunidades2"] = []
+            #(db, uname, parent, month, year, request)
+            data["signatures"].append(getSignature(db,self.user.login, self.user.parent, month, year, self.request))
+
+
+        
+            ruuid = getComun(db, "device_id_3", month, year, self.user.login)
+            # data["comunidades"] = getRepInfo(ruuid, db, "com")
+            com = getComun(db, "sem_comunidad_totales", month, year, self.user.login).split(" ")
+            #data["comunidades2"] = []
+
             for id_cu in com:
                 data["comunidades2"].append(getPob4Map(id_cu, alertP[0]))
-            #data["acciones"] = getRepInfo(ruuid,db, "acc")
+            # data["acciones"] = getRepInfo(ruuid,db, "acc")
             data["coverage"] = calcDataCoverage(db, ruuid, getMunicId(self.user.munic))
-        else:
-            data["error"] = True
+
+
+        # else:
+        #    data["error"] = True
 
     meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
              "Noviembre", "Diciembre"]
@@ -632,31 +684,39 @@ def getDashReportData(self, month, year):
     # with open("/home/acoto/pr_pptx/sort_db/data.json", 'wb') as f:
     #    json.dump(r,f, ensure_ascii=False, encoding='utf8')
     mySession.close()
-    #print "*-*-*-*-*"
-    #pprint(data)
-    #print "*-*-*-*-*"
+    print "*-*-*-*-*"
+    for i,s in enumerate(data["comunidades2"]):
+        #if (s[0] not in data["comunidades2"]):
+        data["comunidades2"][i] = s[0]
+    #print list(set(data["comunidades2"]))
+    pprint(data["comunidades2"])
+
+    print "*-*-*-*-*"
 
     return data
 
 
-def getSignature(uname, org, month, year, rol, request):
-    if rol == "tec":
-        varSig = getVarValue(org, "img_sig_tec", month, year, uname)
-        varName = getVarValue(org, "txt_tecnico_reporta_7", month, year, uname)
-    else:
-        varSig = getVarValue(org, "img_sig_rep", month, year, uname)
-        varName = getVarValue(org, "txt_rep_muni_comusan_4", month, year, uname)
+def getSignature(db, uname, parent, month, year, request):
+    # if rol == "tec":
+    mySession = DBSession()
+    result = mySession.execute(
+        "SELECT txt_rep_muni_comusan_4,img_sig_resp FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
+            db, month, year, "%" + uname + "%")).first()
 
-    img_path = os.path.join(request.registry.settings["user.repository"], *[org, uname, "data", "xml", varSig])
+    img_path = os.path.join(request.registry.settings["user.repository"],
+                            *[parent,"user", uname, "data", "xml",result[1]])#"_".join(db.split("_")[2:]),
+    print img_path
     f = open(img_path)
     data = f.read()
     f.close()
     img = base64.b64encode(data)
-    return ["data:image/png;base64,%s" % img, varName]
+    return ["data:image/png;base64,%s" % img, result[0],"_".join(db.split("_")[2:])]
+    #return [ result[0],"_".join(db.split("_")[2:]) ]
 
 
-def getConfigQR(uname,parent, request):
-    img_path = os.path.join(request.registry.settings["user.repository"], *[parent,"user", uname, "config", "conf.png"])
+def getConfigQR(uname, parent, request):
+    img_path = os.path.join(request.registry.settings["user.repository"],
+                            *[parent, "user", uname, "config", "conf.png"])
     f = open(img_path)
     data = f.read()
     f.close()
@@ -720,9 +780,25 @@ def newBaseline(data, flag):
         return ["Error", "Ya existe un usuario para esa institucion en el municipio seleccionado", "error"]
 
 
+def userInMunic(mun_id):
+    mySession = DBSession()
+    result = mySession.query(func.count(User.user_munic)).filter(User.user_munic == mun_id).scalar()
+    return int(result)
+
+
 def delete_lb(mun_id, flag):
     mySession = DBSession()
     try:
+
+        if userInMunic(mun_id) >= 1:
+            if flag == "lb":
+                return ["Precaucion", "Esta linea base no se puede elimiar porque hay usuarios relacionados a ella",
+                        "warning"]
+            elif flag == "cf":
+                return ["Precaucion",
+                        "Estos coeficientes de ponderacion no se puede elimiar porque hay usuarios relacionados a ellos",
+                        "warning"]
+
         transaction.begin()
         if flag == "lb":
             mySession.query(LineasBase).filter(LineasBase.munic_id == mun_id).delete()
@@ -762,7 +838,7 @@ def updateData(mun_id, data, flag):
 
 def calcDataCoverage(db, device_id_3, mun_id):
     mySession = DBSession()
-    query = "SELECT (100/count(*)) * (select count(sem_comunidad_totales) from %s.maintable_msel_sem_comunidad_totales where device_id_3 ='%s')  FROM sesan_v1.centros_urbanos where munic_id=%s;" % (
+    query = "SELECT (100/count(*)) * (select count(sem_comunidad_totales) from %s.maintable_msel_sem_comunidad_totales where device_id_3 ='%s')  FROM sesan_v2.centros_urbanos where munic_id=%s;" % (
         db, device_id_3, mun_id)
     result = mySession.execute(query).scalar()
     if result:
@@ -772,6 +848,7 @@ def calcDataCoverage(db, device_id_3, mun_id):
 
 
 def genXLS(self, data):
+    print data
     data.pop('signatures', None)
     path = os.path.join(self.request.registry.settings['user.repository'], "TMP", "datos_reporte.xlsx")
 
@@ -781,7 +858,7 @@ def genXLS(self, data):
     # worksheet.write(y, x, str)
     worksheet.write(0, 0, "Sala Situacional para el mes de %s, %s" % (data["date"][0], data["date"][1]))
     worksheet.write(1, 0, "Municipio: " + str(self.user.munic).title())
-    worksheet.write(2, 0, "Institucion que reporta: " + str(self.user.organization))
+    #worksheet.write(2, 0, "Institucion que reporta: " + str(self.user.organization))
     worksheet.write(3, 0, "Covertura en comunidades: " + str(data["coverage"]) + "%")
 
     pilares = []
@@ -809,7 +886,7 @@ def genXLS(self, data):
                     row += 1
                 row += 2
 
-    o_vals = [["comunidades", "Comunidades mas afectadas"], ["acciones", "Acciones propuestas a implementar"]]
+    o_vals = [["comunidades2", "Comunidades mas afectadas"]]
 
     for o in o_vals:
         worksheet.write(row, 0, o[1])

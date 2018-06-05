@@ -86,110 +86,117 @@
                             <h5 style="color: #3f9aff">&nbsp;
                                 (CP : {{ pilar_data[p].coef }})</h5>
                         </div>
-                        <form method="POST" role="form" action="{{ request.path }}" id="Form_Pilar">
-                            <input type="hidden" value="{{ pilar_data[p].p_id }}" name="p_id">
-                            <button type="submit" class="btn btn-danger btn-circle btn-xs" type="button"><i
-                                    class="fa fa-times"></i>
-                            </button>
+                        <form method="POST" role="form" action="{{ request.path }}" id="Form_Pilar" class="Form_Pilar">
+                            <div style="text-align: right">
+                                <input type="hidden" value="{{ pilar_data[p].p_id }}" name="p_id">
+                                {% if pilar_data[p].state %}
+                                    <button class="btn btn-success btn-circle btn-xs" type="button"
+                                            title="Pilar Completo"><i class="fa fa-check"></i>
+                                    </button>
+                                {% endif %}
+
+                                <button type="submit" class="btn btn-danger btn-circle btn-xs" type="button"><i
+                                        class="fa fa-times"></i>
+                                </button>
 
 
-                            <button class="btn btn-warning btn-circle btn-xs" type="button" data-toggle="modal"
-                                    data-target="#mo{{ pilar_data[p].p_id|string }}"><i class="fa fa-edit"></i>
-                            </button>
-                            <button class="btn btn-success btn-circle btn-xs" type="button"><i class="fa fa-check"></i>
-                            </button>
+                                {#                            <button class="btn btn-warning btn-circle btn-xs" type="button" data-toggle="modal"#}
+                                {#                                    data-target="#mo{{ pilar_data[p].p_id|string }}"><i class="fa fa-edit"></i>#}
+                                {#                            </button>#}
+
                         </form>
-
                     </div>
-                    <div class="ibox-content">
 
-                        <table class="footable table table-stripped toggle-arrow-tiny">
-                            <thead>
-                            <tr>
+                </div>
+                <div class="ibox-content">
 
-                                <th data-toggle="true" data-sortable="false"
-                                    class="footable-visible footable-first-column footable-sortable">Indicador<span
-                                        class="footable-sort-indicator"></span></th>
+                    <table class="footable table table-stripped toggle-arrow-tiny">
+                        <thead>
+                        <tr>
 
-
-                                <th data-hide="all" style="display: none;" class="footable-sortable"><span
-                                        class="footable-sort-indicator"></span></th>
-                            </tr>
-                            </thead>
-                            <tbody>
+                            <th data-toggle="true" data-sortable="false"
+                                class="footable-visible footable-first-column footable-sortable">Indicador<span
+                                    class="footable-sort-indicator"></span></th>
 
 
-                            {% for i in pilar_data[p].ind %}
-                                <tr style="" class="footable-even">
+                            <th data-hide="all" style="display: none;" class="footable-sortable"><span
+                                    class="footable-sort-indicator"></span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
 
-                                    <td class="footable-visible footable-first-column"><span
-                                            class="footable-toggle"></span>{{ i.name }}
-                                    </td>
+
+                        {% for i in pilar_data[p].ind %}
+                            <tr style="" class="footable-even">
+
+                                <td class="footable-visible footable-first-column"><span
+                                        class="footable-toggle"></span>{{ i.name }}
+                                </td>
 
 
-                                    <td style="display: none;">
-                                        <table class="table">
-                                            <thead>
+                                <td style="display: none;">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Variable</th>
+                                            <th>Unidad de medida</th>
+                                            <th>Pregunta</th>
+                                            <th>Acciones</th>
+
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for v in i.vars %}
                                             <tr>
-                                                <th>Variable</th>
-                                                <th>Unidad de medida</th>
-                                                <th>Pregunta</th>
-                                                <th>Acciones</th>
+                                                <td>{{ v.name_variable_ind.decode("utf-8") }}</td>
+                                                <td class="text-center">{{ v.unidad_variable_ind.decode("utf-8") }}</td>
+                                                <td class="text-center">{{ v.v_pregunta.decode("latin1") }}</td>
+                                                <td class="text-center">
+
+
+                                                    <button class="btn btn-warning btn-circle btn-xs"
+                                                            type="button"
+                                                            data-toggle="modal"
+                                                            data-target="#modal_v_{{ v.id_variables_ind }}"><i
+                                                            class="fa fa-edit"></i>
+                                                    </button>
+
+                                                    {% snippet "snippets/edit_variables.jinja2", request=request, id_variables_ind=v.id_variables_ind, name_variable_ind=v.name_variable_ind.decode("utf-8"), v_pregunta=v.v_pregunta.decode("latin1"),unidad_variable_ind=v.unidad_variable_ind.decode("latin1"), min=v.var_min, max=v.var_max %}
+
+
+                                                </td>
 
 
                                             </tr>
-                                            </thead>
-                                            <tbody>
-
-                                            {% for v in i.vars %}
-                                                <tr>
-                                                    <td>{{ v.name_variable_ind.decode("utf-8") }}</td>
-                                                    <td class="text-center">{{ v.unidad_variable_ind.decode("latin1") }}</td>
-                                                    <td class="text-center">{{ v.v_pregunta.decode("latin1") }}</td>
-                                                    <td class="text-center">
+                                        {% endfor %}
 
 
-                                                        <button class="btn btn-warning btn-circle btn-xs"
-                                                                type="button"
-                                                                data-toggle="modal"
-                                                                data-target="#modal_v_{{ v.id_variables_ind }}"><i
-                                                                class="fa fa-edit"></i>
-                                                        </button>
+                                        </tbody>
+                                    </table>
+                                </td>
 
-                                                        {% snippet "snippets/edit_variables.jinja2", request=request, id_variables_ind=v.id_variables_ind, name_variable_ind=v.name_variable_ind.decode("latin1"), v_pregunta=v.v_pregunta.decode("latin1"),unidad_variable_ind=v.unidad_variable_ind.decode("latin1"), min=v.var_min, max=v.var_max %}
-
-
-                                                    </td>
-
-
-                                                </tr>
-                                            {% endfor %}
-
-
-                                            </tbody>
-                                        </table>
-                                    </td>
-
-
-                                </tr>
-
-                            {% endfor %}
-
-
-                            </tbody>
-                            <tfoot>
-                            <tr>
 
                             </tr>
-                            </tfoot>
-                        </table>
 
-                    </div>
+                        {% endfor %}
+
+
+                        </tbody>
+                        <tfoot>
+                        <tr>
+
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
                 </div>
                 {#                {% snippet "snippets/update_pilar_modal.jinja2", request=request, pp=p, mId="mo"+ pilar_data[p].p_id|string,data=pilar_data[p], indL=pilar_data[p].indL  %}#}
 
             {% endfor %}
-            <input type="hidden" value="{{ vars_id }}" id="vars_id">
+        <input type="hidden" value="{{ vars_id }}" id="vars_id">
 
         </div>
         <!---------------->
@@ -377,30 +384,30 @@
                                         <h1>Finalizar</h1>
                                         <fieldset>
                                             <h2>Seleccione los rangos criticos para este pilar</h2>
-                                                                                        <!----->
+                                            <!----->
 
                                             <div id="rangos_div">
 
                                                 <ul class="sortable-list connectList agile-list" id="todo">
 
 
-                                                        <div class="agile-detail">
+                                                    <div class="agile-detail">
 
-                                                            <br><br><br>
-                                                            <div class="col-sm-12 form-control input-sm slider0"
-                                                                 id="slider_nf"></div>
-                                                            <br><br>
-                                                            <div class="row">
-                                                                <small class="col-lg-3 " id="rang1_nf">rang1</small>
-                                                                <small class="col-lg-3 " id="rang2_nf">rang1</small>
-                                                                <small class="col-lg-3 " id="rang3_nf">rang1</small>
-                                                                <small class="col-lg-3 " id="rang4_nf">rang1</small>
-                                                            </div>
-                                                            <br><br>
-
-                                                            <br><br>
+                                                        <br><br><br>
+                                                        <div class="col-sm-12 form-control input-sm slider0"
+                                                             id="slider_nf"></div>
+                                                        <br><br>
+                                                        <div class="row">
+                                                            <small class="col-lg-3 " id="rang1_nf">rang1</small>
+                                                            <small class="col-lg-3 " id="rang2_nf">rang1</small>
+                                                            <small class="col-lg-3 " id="rang3_nf">rang1</small>
+                                                            <small class="col-lg-3 " id="rang4_nf">rang1</small>
                                                         </div>
-                                                <input name="vdR_nf" id="vdR_nf" type="hidden" value="">
+                                                        <br><br>
+
+                                                        <br><br>
+                                                    </div>
+                                                    <input name="vdR_nf" id="vdR_nf" type="hidden" value="">
 
                                                 </ul>
 

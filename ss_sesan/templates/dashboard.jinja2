@@ -203,12 +203,15 @@
 
 
                                                         <!--->
-                                                        <form role="form" method="POST" action="/down/datos_reporte.xlsx"
+                                                        <form role="form" method="POST"
+                                                              action="/down/datos_reporte.xlsx"
                                                               id="formXLS"
                                                               enctype='multipart/form-data'>
 
 
-                                                            <input type="hidden" id="genXLS" value="{{ dashData.date[0] }} {{ dashData.date[1] }}" name="genXLS">
+                                                            <input type="hidden" id="genXLS"
+                                                                   value="{{ dashData.date[0] }} {{ dashData.date[1] }}"
+                                                                   name="genXLS">
                                                         </form>
 
                                                         <!--->
@@ -236,7 +239,7 @@
                                                     <tbody>
                                                     {% for ind in dashData[p].keys() %}
                                                         <tr>
-                                                            <td>{{ ind.decode('latin-1') }}</td>
+                                                            <td>{{ ind.encode("utf8")  | replace("_", " ") }}</td>
                                                             {#                                            #ff1313 rojo#}
                                                             {#                                            #ff9936 naranja#}
                                                             {#                                            #ffe132 amarillo#}
@@ -398,16 +401,15 @@
 
                                 {% if dashData.signatures %}
                                     <br>
-                                    <a class="btn btn-primary btn-facebook btn-outline" style="display: block"
-                                       data-toggle="modal" data-target="#myModalREP">
-                                        <i class="fa fa-check"> </i> Representante COMUSAN
-                                    </a>
-                                    <br>
-                                    <a class="btn btn-primary btn-facebook btn-outline" style="display: block"
-                                       data-toggle="modal" data-target="#myModalTEC">
-                                        <i class="fa fa-check"> </i> Tecnico que reporta
-                                    </a>
-                                    <br><h3>Cobertura en comunidades {{ dashData.coverage }} %</h3>
+                                    {% for s in dashData.signatures %}
+                                        <a class="btn btn-primary btn-facebook btn-outline" style="display: block"
+                                           data-toggle="modal" data-target="#myModal{{ loop.index0 }}">
+                                            <i class="fa fa-check"> </i> Responsable de {{ s[2] }}
+                                        </a>
+                                        <br>
+                                    {% endfor %}
+
+                                    <h3>Cobertura en comunidades {{ dashData.coverage }} %</h3>
 
 
                                     <!-------->
@@ -460,7 +462,9 @@
 
                     {% endif %}
                     {% if dashData.signatures %}
-                        <div class="modal inmodal" id="myModalREP" tabindex="-1" role="dialog" aria-hidden="true">
+
+                        {% for s in dashData.signatures %}
+                        <div class="modal inmodal" id="myModal{{ loop.index0 }}" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content animated fadeIn">
                                     <div class="modal-header">
@@ -469,17 +473,16 @@
                                         </button>
                                         <i class="fa fa-check modal-icon"></i>
                                         <h2 class="modal-title">La informacion que se muestra en este informe ha sido
-                                            aprobada por el
-                                            sigueinte representante de la COMUSAN</h2>
+                                            aprobada por la siguiente persona</h2>
                                     </div>
                                     <div class="modal-body">
                                         <!---->
                                         <p>
                                             <strong>
-                                                {{ dashData.signatures[0][1] }}
+                                                {{ s[1] }}
                                             </strong>
                                         </p>
-                                        <img src="{{ dashData.signatures[0][0] }}" alt="person" style="width: 100%;"/>
+                                        <img src="{{ s[0] }}" alt="person" style="width: 100%;"/>
                                         <!---->
                                     </div>
                                     <div class="modal-footer">
@@ -491,35 +494,8 @@
                         </div>
 
 
-                        <div class="modal inmodal" id="myModalTEC" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content animated fadeIn">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"><span
-                                                aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                                        </button>
-                                        <i class="fa fa-check modal-icon"></i>
-                                        <h2 class="modal-title">La informacion que se muestra en este informe ha sido
-                                            reportada por el
-                                            siguiente tecnico:</h2>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!---->
-                                        <p>
-                                            <strong>
-                                                {{ dashData.signatures[1][1] }}
-                                            </strong>
-                                        </p>
-                                        <img src="{{ dashData.signatures[1][0] }}" alt="person" style="width: 100%;"/>
-                                        <!---->
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
+                        {% endfor %}
                     {% endif %}
                     <!----->
 

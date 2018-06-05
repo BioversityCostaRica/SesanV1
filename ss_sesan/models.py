@@ -11,6 +11,9 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 
+
+
+
 Base = declarative_base()
 metadata = Base.metadata
 
@@ -51,8 +54,9 @@ class Form(Base):
 class FormsByUser(Base):
     __tablename__ = 'forms_by_user'
 
-    idforms = Column(Integer, primary_key=True)
+    idforms = Column(Integer)
     id_user = Column(String(45))
+    id = Column(Integer, primary_key=True)
 
 
 class Grupo(Base):
@@ -154,6 +158,6 @@ class VariablesInd(Base):
     lbase_variable_ind = Column(String(45))
     code_variable_ind = Column(String(45))
     coef_pond = Column(Integer)
-    v_pregunta = Column(String(45))
+    v_pregunta = Column(String(200))
     var_max = Column(Integer)
     var_min = Column(String(45))

@@ -1,7 +1,8 @@
 $(document).ready(function () {
 
 
-    $("#Form_Pilar").submit(function (e) {
+    $(".Form_Pilar").submit(function (e) {
+        var form = this;
         e.preventDefault();
 
         swal({
@@ -10,7 +11,7 @@ $(document).ready(function () {
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Si, deseo eliminarlos!",
+                confirmButtonText: "Si, deseo eliminarlo!",
                 cancelButtonText: "No, deseo cancelar!",
                 closeOnConfirm: false,
                 closeOnCancel: false
@@ -18,7 +19,7 @@ $(document).ready(function () {
             function (isConfirm) {
                 if (isConfirm) {
                     //"#jqEditTable").off('submit').submit();
-                    $("#Form_Pilar").off('submit').submit();
+                    form.submit();
                 } else {
                     swal({
                         title: "Cancelado",

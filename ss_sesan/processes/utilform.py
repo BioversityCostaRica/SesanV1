@@ -1,7 +1,7 @@
 import os,glob,json
 from lxml import etree
 from ..encdecdata import decodeData
-from ..models import DBSession, User
+from ..models import DBSession, User, FormsByUser, Form
 from pyramid.httpexceptions import HTTPNotFound
 from hashlib import md5
 from pyramid.response import FileResponse
@@ -13,6 +13,7 @@ from subprocess import check_call, CalledProcessError
 
 def generateFormList(projectArray):
     root = etree.Element("xforms",xmlns="http://openrosa.org/xforms/xformsList")
+
     for project in projectArray:
         xformTag = etree.Element("xform")
         for key,value in project.iteritems():
@@ -61,29 +62,48 @@ def getParent(user):
     return result.user_parent
 
 def getFormList(user,request):
-
     prjList = []
-    path = os.path.join(request.registry.settings['user.repository'],*[getParent(user),"user", user,'*.json'])
-    files = glob.glob(path)
-    if files:
-        with open(files[0]) as data_file:
-            data = json.load(data_file)
-            data["downloadUrl"] = request.route_url('odkxmlform',parent=getParent(user),user=user)
-            data["manifestUrl"] = request.route_url('odkmanifest', parent=getParent(user),user=user)
-        prjList.append(data)
-    else:
-        raise HTTPNotFound()
+
+    mySession = DBSession()
+    result=mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user==user).all()
+
+    for row in result:
+        forms=mySession.query(Form.form_db).filter(Form.form_id==row.idforms).first()
+        fname="_".join(forms.form_db.split("_")[2:])
+        path = os.path.join(request.registry.settings['user.repository'], *[getParent(user), "user", user,fname, '*.json'])
+        files=glob.glob(path)[0]
+
+        if files:
+            with open(files) as data_file:
+                data = json.load(data_file)
+                data["downloadUrl"] = request.route_url('odkxmlform',parent=getParent(user),user=user,form=fname)
+                data["manifestUrl"] = request.route_url('odkmanifest', parent=getParent(user),user=user,form=fname)
+
+            prjList.append(data)
+        else:
+            raise HTTPNotFound()
+
     return generateFormList(prjList)
 
 
 def getManifest(uname, request):
-    path = os.path.join(request.registry.settings["user.repository"] , *[getParent(uname),"user",uname, '*.*'])
-    files = glob.glob(path)
-    if files:
-        fileArray = []
-        for file in files:
-            fileName = os.path.basename(file)
-            fileArray.append({'filename':fileName,'hash':'md5:' + md5(open(file, 'rb').read()).hexdigest(),'downloadUrl':request.route_url('odkmediafile', parent=getParent(uname), user=uname, fileid=fileName)})
+
+    mySession = DBSession()
+    result = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == uname).all()
+    fileArray = []
+    for row in result:
+        forms = mySession.query(Form.form_db).filter(Form.form_id == row.idforms).first()
+        fname = "_".join(forms.form_db.split("_")[2:])
+        path = os.path.join(request.registry.settings['user.repository'],
+                            *[getParent(uname), "user", uname, fname, '*.*'])
+
+        files = glob.glob(path)
+        if files:
+            for file in files:
+                fileName = os.path.basename(file)
+                fileArray.append({'filename':fileName,'hash':'md5:' + md5(open(file, 'rb').read()).hexdigest(),'downloadUrl':request.route_url('odkmediafile', parent=getParent(uname), user=uname,form=fname, fileid=fileName)})
+            #print fileArray
+    if fileArray:
         return generateManifest(fileArray)
     else:
         return generateManifest([])
@@ -92,8 +112,9 @@ def getManifest(uname, request):
 def getMediaFile(uname, request,fileid):
 
     #path = os.path.join(request.registry.settings['user.repository'],*[organization,uname, organization.lower()+".png"])
+    fname = str(request.url).split("/")[-2:][0]
     path = os.path.join(request.registry.settings['user.repository'],
-                        *[getParent(uname), "user",uname, fileid])
+                        *[getParent(uname), "user",uname, fname,fileid])
     if os.path.isfile(path):
         content_type, content_enc = mimetypes.guess_type(path)
         fileName = os.path.basename(path)
@@ -111,13 +132,16 @@ def getMediaFile(uname, request,fileid):
 
 def getXMLForm(uname,request):
 
-    path = os.path.join(request.registry.settings['user.repository'], *[getParent(uname),"user", uname, '*.xml'])
+    fname=str(request.url).split("/")[-2:][0]
+
+    path = os.path.join(request.registry.settings['user.repository'], *[getParent(uname),"user", uname,fname, '*.xml'])
     files = glob.glob(path)
     if files:
-        content_type, content_enc = mimetypes.guess_type(files[0])
-        fileName = os.path.basename(files[0])
+        f=files[0]
+        content_type, content_enc = mimetypes.guess_type(f)
+        fileName = os.path.basename(f)
         response = FileResponse(
-            files[0],
+            f,
             request=request,
             content_type=content_type
         )
@@ -126,7 +150,9 @@ def getXMLForm(uname,request):
     else:
         raise HTTPNotFound()
 
+
 def convertXMLToJSON(uname,XMLFile,iniqueID,request):
+
     XMLFileName = os.path.basename(XMLFile)
     tree = etree.parse(XMLFile)
     root = tree.getroot()
@@ -210,7 +236,6 @@ def makeJSONToMySQL(uname,iniqueID,request,xformid):
 
         args.append("-J " +os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",xformid, "custom2.js"]) )
         try:
-            print args
             check_call(args)
             #print args
             #print "insert"
@@ -228,6 +253,8 @@ def makeJSONToMySQL(uname,iniqueID,request,xformid):
 
 def storeSubmission(uname,request):
     try:
+        fname = str(request.url).split("/")[-2:][0]
+
         iniqueID = uuid4()
         path = os.path.join(request.registry.settings['user.repository'],*[getParent(uname),"user",uname, "data", 'xml',str(iniqueID)])
         os.makedirs(path)
@@ -235,6 +262,7 @@ def storeSubmission(uname,request):
         for key in request.POST.keys():
             #print key
             filename = request.POST[key].filename
+            print filename
             input_file = request.POST[key].file
             file_path = os.path.join(path, filename)
             if file_path.upper().find('.XML') >=0:

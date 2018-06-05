@@ -6,7 +6,7 @@ from .classes import publicView, privateView, odkView
 from .auth import getUserData
 from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS, formsCSS_JS
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
-    valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser
+    valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser,getForm_By_User
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
     getXMLForm, storeSubmission
 from datetime import datetime
@@ -28,7 +28,7 @@ class profile_view(privateView):
         DashJS.need()
         DashCSS.need()
 
-        return {'activeUser': self.user, "config": getConfigQR(self.user.login,self.user.parent, self.request)}
+        return {'activeUser': self.user, "config": getConfigQR(self.user.login,self.user.parent, self.request), "forms":getForm_By_User(self.user.login)}
 
 @view_config(route_name='about', renderer='templates/about.jinja2')
 class about_view(privateView):
@@ -167,7 +167,7 @@ class forms_view(privateView):
         formsCSS_JS.need()
         msg=[]
 
-        print self.request
+        print self.request.POST
         if "form_id" in self.request.POST:
             msg=delForm(self.request,self.request.POST.get("form_id"), self.user.login)
 
@@ -223,7 +223,7 @@ class dashboard_view(privateView):
             date = datetime.now().strftime("%m %Y").split(" ")
             dashData = getDashReportData(self, date[0], date[1])
             rep = valReport(self, date[0], date[1])
-            print rep
+
         return {'activeUser': self.user, "dashData": dashData, "report": rep}
 
 
@@ -280,7 +280,7 @@ class register_view(privateView):
 
         #
 
-        if "delUser" in self.request.POST:
+        if "uname_u" in self.request.POST:
             result = delUser(self.request.POST.get("uname_u", ""), self.user.login, self.request)
 
         if "reg" in self.request.POST:
@@ -307,16 +307,19 @@ class register_view(privateView):
                 result.append("Antes de agregar un usuario a este municipio debe ingresar las lineas base y coeficientes respectivos")
                 result.append("error")
 
-        return {'activeUser': self.user, "fill_reg": fill_reg(), "msj": result, "ulist": getUsersList(self.user.login)}
+        return {'activeUser': self.user, "fill_reg": fill_reg(), "msg": result, "ulist": getUsersList(self.user.login)}
 
 
 class formList_view(odkView):
     def processView(self):
         try:
             if isUserActive(self.user):
+
                 if self.authorize(getUserPassword(self.user, self.request)):
+
                     return self.createXMLResponse(getFormList(self.user, self.request))
                 else:
+
                     return self.askForCredentials()
             else:
                 return self.askForCredentials()

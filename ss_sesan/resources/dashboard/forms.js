@@ -41,11 +41,10 @@ $(document).ready(function () {
 
 
     //$("#submitF").one('submit', function (e) {
-    var x;
+
     $(".sub_f").submit(function (e) {
 
-        x=$(this).attr("id");
-
+        var form = this;
         e.preventDefault();
 
 
@@ -65,10 +64,9 @@ $(document).ready(function () {
                 if (isConfirm) {
 
                     //$("#submitF").off('submit').submit();
-                    console.log(x);
-                    $(this).closest(x).submit();
-
-                    //$(x).off('submit').submit();
+                    //console.log(x);
+                    form.submit();
+                    //$($x).off('submit').submit();
 
                 } else {
 
