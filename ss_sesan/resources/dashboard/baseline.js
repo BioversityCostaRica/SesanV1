@@ -81,11 +81,11 @@ $(document).ready(function () {
 
             swal({
                     title: "Se eliminaran estos datos!",
-                    text: "Seguro que desea eliminar la linea base para este municipio?",
+                    text: "Seguro que desea eliminar la informacion para este municipio?",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Si, deseo eliminarlos!",
+                    confirmButtonText: "Si, deseo eliminarla!",
                     cancelButtonText: "No, deseo cancelar!",
                     closeOnConfirm: false,
                     closeOnCancel: false
@@ -97,7 +97,7 @@ $(document).ready(function () {
                     } else {
                         swal({
                             title: "Cancelado",
-                            text: "No se eliminara esta linea base",
+                            text: "No se eliminara esta informacion",
                             type: "success"
                         });
                     }

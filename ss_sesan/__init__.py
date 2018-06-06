@@ -65,9 +65,9 @@ def main(global_config, **settings):
     config.add_route('odkformlist', '{parent}/{user}/formList')
     config.add_route('odksubmission', '/{parent}/{user}/submission')
     config.add_route('odkpush', '/{parent}/{user}/push')
-    config.add_route('odkxmlform', '/{parent}/{user}/xmlform')
-    config.add_route('odkmanifest', '/{parent}/{user}/manifest')
-    config.add_route('odkmediafile', '/{parent}/{user}/{fileid}')
+    config.add_route('odkxmlform', '/{parent}/{user}/{form}/xmlform')
+    config.add_route('odkmanifest', '/{parent}/{user}/{form}/manifest')
+    config.add_route('odkmediafile', '/{parent}/{user}/{form}/{fileid}')
 
     config.add_view(formList_view, route_name="odkformlist", renderer=None)
     config.add_view(manifest_view, route_name="odkmanifest", renderer=None)

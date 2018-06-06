@@ -104,13 +104,13 @@
                                                                           t_id="{{ row.id }}">{{ row.id }}</span>
                                                                 </td>
                                                                 <td class="project-title">
-                                                                    <a>{{ row.var.decode('latin-1') }}</a>
+                                                                    <a>{{ row.var.decode("utf-8") }}</a>
 
 
                                                                 </td>
                                                                 <td>
                                                                     <small>
-                                                                        Indicador: {{ row.ind.decode('latin-1') }} </small>
+                                                                        Indicador: {{ row.ind.decode("utf-8") }} </small>
                                                                 </td>
 
                                                                 <td class="project-people">
@@ -145,7 +145,7 @@
 
                             <input type="hidden" value="{{ msg }}" id="msj">
 
-                            <form method="POST" role="form" class="form-horizontal m-t" action="{{ request.path }}"
+                            <form method="POST" role="form" class="form-horizontal m-t submitCP" action="{{ request.path }}"
                                   id="form_lb_m">
                                 {% if lb_data|length > 0 and fill_reg["sel"] !=0 %}
                                     <button class="btn btn-primary btn-sm " class="fa fa-check" type="submit"
@@ -154,7 +154,7 @@
                                     </button>
                                     <button class="btn btn-danger btn-sm " class="fa fa-check" type="submit"
                                             name="delete_data"
-                                            id="delete_data" value="delete">&nbsp;Eliminar esta linea base
+                                            id="delete_data" value="delete">&nbsp;Eliminar estos valores
                                     </button>
                                     <input type="hidden" value="{{ fill_reg.sel }}" name="id_mun_sel">
                                     <input type="hidden" value="" name="mun_sel_data2" id="mun_sel_data2">
@@ -187,13 +187,13 @@
                                                         <span class="label label-primary" t_id="{{ row }}">{{ row }}</span>
                                                     </td>
                                                     <td class="project-title">
-                                                        <a>{{ lb_data[row].var.decode('latin-1') }}</a>
+                                                        <a>{{ lb_data[row].var.decode("utf-8") }}</a>
 
 
                                                     </td>
                                                     <td>
                                                         <small>
-                                                            Indicador: {{ lb_data[row].ind.decode('latin-1') }} </small>
+                                                            Indicador: {{ lb_data[row].ind.decode("utf-8") }} </small>
                                                     </td>
 
                                                     <td class="project-people">

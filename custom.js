@@ -4,7 +4,7 @@ function beforeInsert(table,data)
   var i1 = data.getIndexByColumnName("start_time_survey_1");
   var i2 = data.getIndexByColumnName("end_time_survey_26");
 
-  //var sig1 = data.getIndexByColumnName("img_sig_rep");
+  var sig1 = data.getIndexByColumnName("img_sig_resp");
   //var sig2 = data.getIndexByColumnName("img_sig_tec");
 
   var d_id = data.getIndexByColumnName("device_id_3");
@@ -23,8 +23,8 @@ function beforeInsert(table,data)
     data.setItemValue(i2,date);
 
 
-    //sig=data.itemValue(sig1);
-    //data.setItemValue(sig1,"n_path/"+sig);
+    sig=data.itemValue(sig1);
+    data.setItemValue(sig1,"n_path/"+sig);
 
     //sig=data.itemValue(sig2);
     //data.setItemValue(sig2,"n_path/"+sig);

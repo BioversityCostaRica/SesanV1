@@ -584,8 +584,9 @@ function genMap() {
     //map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
     var map_points = $('#map_points').val();
-
-    map_points2 = JSON.parse("[" + map_points.replace(/'/g, '"') + "]");
+    map_points2=map_points.replace("[[", "").replace("]]","").split("], [");
+    //map_points2 = map_points.split("], [");
+    //map_points2 = JSON.parse("[" + map_points.replace(/'/g, '"') + "]");
 
     var map_name = $('#map_name').val().replace(" ", "_");
 
@@ -601,30 +602,33 @@ function genMap() {
     var lon = [];
 
 
-    for (i = 0; i < map_points2[0].length; i++) {
+    for (i = 0; i < map_points2.length; i++) {
+        var  row=map_points2[i].split(",");
+
         var marker = new google.maps.Marker({
-            position: {lat: map_points2[0][i].vals[0][2], lng: map_points2[0][i].vals[0][3]},
+
+            position: {lat: parseFloat(row[2].toString().replace(" ", "")), lng: parseFloat(row[3].toString().replace(" ", ""))},
 
             map: map1,
-            title: map_points2[0][i].vals[0][1],
+            title: row[1].split("'").join(""),
             //label: { text: map_points2[0][i].vals[0][1] },
 
             icon: {
                 path: google.maps.SymbolPath.CIRCLE,
                 scale: 8.5,
-                fillColor: map_points2[0][i].vals[0][4],
+                fillColor: row[4].split("'").join(""),
                 fillOpacity: 0.4,
                 strokeWeight: 0.4
             },
             //icon: 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=0ahUKEwjN6OaB79rYAhWDyVMKHeehAwMQjBwIBA&url=https%3A%2F%2Fwww.pr7.it%2Fwp-content%2Fuploads%2F2013%2F04%2Fpr7-green-point.png&psig=AOvVaw26MJGpQogf07H2wF4a7xiV&ust=1516136566665061'
         });
 
-        if (!lat.includes(map_points2[0][i].vals[0][2])) {
-            lat.push(map_points2[0][i].vals[0][2])
+        if (!lat.includes(parseFloat(row[2].toString().replace(" ", "")))) {
+            lat.push(parseFloat(row[2].toString().replace(" ", "")))
         }
 
-        if (!lon.includes(map_points2[0][i].vals[0][3])) {
-            lon.push(map_points2[0][i].vals[0][3])
+        if (!lon.includes(parseFloat(row[3].toString().replace(" ", "")))) {
+            lon.push(parseFloat(row[3].toString().replace(" ", "")))
         }
     }
 
