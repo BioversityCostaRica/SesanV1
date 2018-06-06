@@ -1,33 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e854dd02-1a11-4d61-8d2f-eebb1bb83e49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cen_u.sql" afterPath="$PROJECT_DIR$/cen_u.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/custom.js" afterPath="$PROJECT_DIR$/custom.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/imported.log" afterPath="$PROJECT_DIR$/imported.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output.csv" afterPath="$PROJECT_DIR$/output.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/__init__.py" afterPath="$PROJECT_DIR$/ss_sesan/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/models.py" afterPath="$PROJECT_DIR$/ss_sesan/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/utilform.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/utilform.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/baseline.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/baseline.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/forms.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/forms.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/register.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/register.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/forms.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/forms.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/profile.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/profile.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/register.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/register.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/snippets/edit_variables.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/snippets/edit_variables.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/views.py" afterPath="$PROJECT_DIR$/ss_sesan/views.py" />
-    </list>
+    <list default="true" id="e854dd02-1a11-4d61-8d2f-eebb1bb83e49" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -89,7 +63,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="get_vals.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="get_vals.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ss_sesan/processes/get_vals.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="460">
@@ -146,11 +120,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="setFormVals.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="setFormVals.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11160">
-              <caret line="569" column="17" lean-forward="false" selection-start-line="569" selection-start-column="17" selection-end-line="569" selection-end-column="17" />
+            <state relative-caret-position="238">
+              <caret line="324" column="16" lean-forward="true" selection-start-line="324" selection-start-column="16" selection-end-line="324" selection-end-column="16" />
               <folding>
                 <element signature="e#15#181#0" expanded="true" />
                 <marker date="1528238594072" expanded="true" signature="13360:13468" ph="INSERT INTO " />
@@ -184,7 +158,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>valRe</find>
       <find>CoefPond</find>
       <find>getPil</find>
       <find>Actu</find>
@@ -214,6 +187,7 @@
       <find>comunu</find>
       <find>map_points</find>
       <find>getPob4Map</find>
+      <find>genX</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -257,9 +231,9 @@
         <option value="$PROJECT_DIR$/output.csv" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/utilform.py" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2" />
-        <option value="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
       </list>
     </option>
   </component>
@@ -676,7 +650,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="48" y="-11" width="1873" height="1092" extended-state="6" />
+    <frame x="48" y="-11" width="1873" height="1092" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18920363" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1067,19 +1041,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11160">
-          <caret line="569" column="17" lean-forward="false" selection-start-line="569" selection-start-column="17" selection-end-line="569" selection-end-column="17" />
-          <folding>
-            <element signature="e#15#181#0" expanded="true" />
-            <marker date="1528238594072" expanded="true" signature="13360:13468" ph="INSERT INTO " />
-            <marker date="1528238594072" expanded="true" signature="13360:13473" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
-            <marker date="1528238594072" expanded="true" signature="27424:27457" ph="SELECT COUNT... " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8860">
@@ -1117,6 +1078,19 @@
             <marker date="1528242702093" expanded="true" signature="28952:29094" ph="select v.id_... variables_ind" />
             <marker date="1528242702093" expanded="true" signature="32345:32522" ph="SELECT (100/... centros_urbanos" />
             <marker date="1528242702093" expanded="true" signature="32370:32474" ph="select count... maintable_msel_sem_comunidad_totales" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="324" column="16" lean-forward="true" selection-start-line="324" selection-start-column="16" selection-end-line="324" selection-end-column="16" />
+          <folding>
+            <element signature="e#15#181#0" expanded="true" />
+            <marker date="1528238594072" expanded="true" signature="13360:13468" ph="INSERT INTO " />
+            <marker date="1528238594072" expanded="true" signature="13360:13473" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
+            <marker date="1528238594072" expanded="true" signature="27424:27457" ph="SELECT COUNT... " />
           </folding>
         </state>
       </provider>
