@@ -322,7 +322,7 @@ def add_CU(db, request, login):
 
     result = mySession.query(CentrosUrbano.id_cu, CentrosUrbano.cu_name).filter(
         CentrosUrbano.munic_id.in_(munics)).all()
-    file = open("cen_u.sql", "w")
+    file = open(request.registry.settings["user.repository"]+"/cen_u.sql", "w")
     for row in result:
         file.write(
             "INSERT INTO %s.lkpsem_comunidad_totales (sem_comunidad_totales_cod,sem_comunidad_totales_des)  VALUES ('%s','%s');" % (
@@ -335,7 +335,7 @@ def add_CU(db, request, login):
     args.append("--defaults-file=" + request.registry.settings['mysql.cnf'])
     args.append(db)
 
-    with open("cen_u.sql") as input_file:
+    with open(request.registry.settings["user.repository"]+"/cen_u.sql") as input_file:
         proc = Popen(args, stdin=input_file, stderr=PIPE, stdout=PIPE)
         output, error = proc.communicate()
         if output != "" or error != "":
@@ -356,8 +356,14 @@ def genForm_Files(login, pilarId, request, fname):
 
     outputDir = os.path.join(request.registry.settings["user.repository"], login, "forms",
                              fname.title().replace(" ", "_"))
+
+    # oldmask = os.umask(000)
+    print "*-*-*-*-*-\n\n\n\n\n\n\n"
+    print outputDir
+    print "*-*-*-*-*-\n\n\n\n\n\n\n"
     if not os.path.exists(outputDir):
-        os.makedirs(outputDir)
+        os.makedirs(outputDir,0777)
+
     book = xlsxwriter.Workbook(path)
 
     sheet1 = book.add_worksheet("survey")
@@ -603,8 +609,9 @@ def genForm_Files(login, pilarId, request, fname):
             return e
 
     if not error:
+
         xls2xform.xls2xform_convert(path, path.replace(".xlsx", ".xml"))
-        os.system("cp custom.js %s" % outputDir + "/custom.js")
+        os.system("cp "+request.registry.settings["user.repository"]+"/custom.js %s" % outputDir + "/custom.js")
 
     return True
 
@@ -613,40 +620,41 @@ def genForm_Files(login, pilarId, request, fname):
 
 def newForm(request, vals, login):
     vals = vals.split("++")
-    # try:
-    mySession = DBSession()
+    try:
+        mySession = DBSession()
 
-    newF = Form(form_user=login, form_name=vals[0], pilar_id=vals[1],
-                form_db="DATA_" + login + "_" + vals[0].title().replace(" ", "_"))
-    transaction.begin()
+        newF = Form(form_user=login, form_name=vals[0], pilar_id=vals[1],
+                    form_db="DATA_" + login + "_" + vals[0].title().replace(" ", "_"))
+        transaction.begin()
 
-    mySession.add(newF)
+        mySession.add(newF)
 
-    if vals[2] != "" and vals[2] != "undefined":
-        mySession.flush()
-        id_F = newF.form_id
-        mySession.refresh(newF)
-        uList = vals[2].split(",")
-        for u in uList:
-            newF_U = FormsByUser(idforms=id_F, id_user=u)
-            mySession.add(newF_U)
+        if vals[2] != "" and vals[2] != "undefined":
+            mySession.flush()
+            id_F = newF.form_id
+            mySession.refresh(newF)
+            uList = vals[2].split(",")
+            for u in uList:
+                newF_U = FormsByUser(idforms=id_F, id_user=u)
+                mySession.add(newF_U)
 
-    transaction.commit()
 
-    mySession.close()
 
-    if not genForm_Files(login, vals[1], request, vals[0]):
-        delForm(request, id_F, login)
+        if not genForm_Files(login, vals[1], request, vals[0]):
+            delForm(request, id_F, login)
+            raise
+        else:
+            form_to_user(request, login, vals[0], vals[2])
+            add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login)
 
-        raise
-    else:
-        form_to_user(request, login, vals[0], vals[2])
-        add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login)
+        transaction.commit()
+        mySession.close()
+        return ["Correcto", "Formulario creado con exito", "success"]
 
-    return ["Correcto", "Formulario creado con exito", "success"]
 
-    # except:
-    #   return ["Error", "Sucedio un error al generar el formulario", "error"]
+    except:
+        mySession.close()
+        return ["Error", "Sucedio un error al generar el formulario", "error"]
 
 
 def getPilarNames(ids):
@@ -736,10 +744,14 @@ def delForm(request, formid, login):
         for row in result:
             files = os.path.join(request.registry.settings["user.repository"], login, "user", row.id_user,
                                  formid[0].title().replace(' ', '_'))
-            shutil.rmtree(files)
+            try:
+                shutil.rmtree(files)
+            except:
+                pass
 
         transaction.begin()
         mySession.query(Form).filter(Form.form_id == formid[1]).delete(synchronize_session='fetch')
+        print formid[1]
         mySession.query(FormsByUser).filter(FormsByUser.idforms == formid[1]).delete(synchronize_session='fetch')
 
         transaction.commit()
