@@ -37,7 +37,7 @@
 
 
                                         {% if activeUser.user_role!=1 %}
-                                            | {{ activeUser.organization }}{% endif %}</strong>
+                                            | {{ activeUser.munic.title() }}{% endif %}</strong>
 
                                 </span>
                                     <span>
@@ -159,7 +159,7 @@
                     <div class="col-md-9">
 
 
-                        {% if dashData.error == True %}
+                        {% if dashData.signatures == [] %}
                             <div class="col-md-9">
                                 <div class="widget style1">
                                     {% if activeUser.user_role!=1 %}
@@ -404,7 +404,7 @@
                                     {% for s in dashData.signatures %}
                                         <a class="btn btn-primary btn-facebook btn-outline" style="display: block"
                                            data-toggle="modal" data-target="#myModal{{ loop.index0 }}">
-                                            <i class="fa fa-check"> </i> Responsable de {{ s[2] }}
+                                            <i class="fa fa-check"> </i> Firma: {{ s[2].replace("_", " ") }}
                                         </a>
                                         <br>
                                     {% endfor %}

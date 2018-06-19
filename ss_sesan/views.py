@@ -6,13 +6,13 @@ from .classes import publicView, privateView, odkView
 from .auth import getUserData
 from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS, formsCSS_JS
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
-    valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser,getForm_By_User
+    valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser,getForm_By_User,getHelpFiles,getFileResponse
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
     getXMLForm, storeSubmission
 from datetime import datetime
 from pyramid.response import FileResponse
 import os
-from .processes.setFormVals import newPilar, getPilarData, delPilar, updateVar, getListPU, newForm, getForms,delForm,forms_id
+from .processes.setFormVals import newPilar, getPilarData, delPilar, updateVar, getListPU, newForm, getForms,delForm,forms_id,updateFU
 
 
 #task
@@ -35,10 +35,7 @@ class about_view(privateView):
     def processView(self):
         DashJS.need()
         DashCSS.need()
-
-        return {'activeUser': self.user}
-
-
+        return {'activeUser': self.user, "file_list":getHelpFiles(self.request)}
 
 
 @view_config(route_name='baseline', renderer='templates/baseline.jinja2')
@@ -168,6 +165,10 @@ class forms_view(privateView):
         msg=[]
 
         print self.request.POST
+
+        for f in self.request.POST:
+            if "fu_" in f:
+                msg=updateFU(self.request.POST.get(f), self.request, self.user.login)
         if "form_id" in self.request.POST:
             msg=delForm(self.request,self.request.POST.get("form_id"), self.user.login)
 
@@ -223,7 +224,7 @@ class dashboard_view(privateView):
             date = datetime.now().strftime("%m %Y").split(" ")
             dashData = getDashReportData(self, date[0], date[1])
             rep = valReport(self, date[0], date[1])
-
+        print rep
         return {'activeUser': self.user, "dashData": dashData, "report": rep}
 
 
@@ -234,9 +235,15 @@ class download_xls(privateView):
         if "genXLS" in self.request.POST:
             date = self.request.POST.get('genXLS', '').split(" ")
             date[0] = str(meses.index(date[0]) + 1)
-            response = genXLS(self, getDashReportData(self, date[0], date[1]))
+            response = genXLS(self, getDashReportData(self, date[0], date[1]),date[0])
 
         return response
+
+
+class download_helpfiles(privateView):
+    def processView(self):
+        return getFileResponse(self.request)
+
 
 
 @view_config(route_name='home', renderer='templates/login.jinja2')

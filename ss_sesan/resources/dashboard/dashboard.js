@@ -3,7 +3,9 @@ $(document).ready(function () {
     //---Wizard---------------------
 
 
-
+    $('.file-box').each(function() {
+                animationHover(this, 'pulse');
+            });
 
     var vars = []
 

@@ -1,7 +1,7 @@
 #Authorization framework
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
-from .views import formList_view,manifest_view,mediaFile_view, XMLForm_view, push_view, submission_view,munic_kml,download_xls
+from .views import formList_view,manifest_view,mediaFile_view, XMLForm_view, push_view, submission_view,munic_kml,download_xls,download_helpfiles
 from pyramid.config import Configurator
 from sqlalchemy import create_engine
 from .models import (
@@ -82,6 +82,11 @@ def main(global_config, **settings):
 
     config.add_route('down', '/down/{name}.xlsx')
     config.add_view(download_xls, route_name="down", renderer=None)
+
+    config.add_route('helpfiles', '/about/{filename}')
+    config.add_view(download_helpfiles, route_name="helpfiles", renderer=None)
+
+
 
     config.scan()
 

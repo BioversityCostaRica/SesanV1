@@ -122,7 +122,6 @@ def verifyPilar(pId):
     for r in result:
         var = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == r.id_indicadores).all()
         for v in var:
-            print
             if v.unidad_variable_ind == "" or v.v_pregunta == "":
                 return False
     return True
@@ -311,12 +310,15 @@ def form_to_user(request, login, fname, users):
     return
 
 
-def add_CU(db, request, login):
+def add_CU(db, request, login, users):
     mySession = DBSession()
-
+    users=users.split(",")
+    print "*-*-*-*"
+    print users
+    print "*-*-*-*"
     munics = []
 
-    result = mySession.query(User.user_munic).filter(User.user_munic != 1000).filter(User.user_parent == login).all()
+    result = mySession.query(User.user_munic).filter(User.user_munic != 1000).filter(User.user_parent == login).filter(User.user_name.in_(users)).all()
     for row in result:
         munics.append(row.user_munic)
 
@@ -358,9 +360,6 @@ def genForm_Files(login, pilarId, request, fname):
                              fname.title().replace(" ", "_"))
 
     # oldmask = os.umask(000)
-    print "*-*-*-*-*-\n\n\n\n\n\n\n"
-    print outputDir
-    print "*-*-*-*-*-\n\n\n\n\n\n\n"
     if not os.path.exists(outputDir):
         os.makedirs(outputDir,0777)
 
@@ -645,7 +644,7 @@ def newForm(request, vals, login):
             raise
         else:
             form_to_user(request, login, vals[0], vals[2])
-            add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login)
+            add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login, vals[2])
 
         transaction.commit()
         mySession.close()
@@ -751,7 +750,7 @@ def delForm(request, formid, login):
 
         transaction.begin()
         mySession.query(Form).filter(Form.form_id == formid[1]).delete(synchronize_session='fetch')
-        print formid[1]
+
         mySession.query(FormsByUser).filter(FormsByUser.idforms == formid[1]).delete(synchronize_session='fetch')
 
         transaction.commit()
@@ -778,3 +777,74 @@ def delForm(request, formid, login):
         return ["Correcto", "Formulario eliminado correctamente", "success"]
     except:
         return ["Error", "Sucedio un error al eliminar este formulario", "error"]
+
+
+def getFormName(fid):
+    mySession = DBSession()
+    result = mySession.query(Form.form_name).filter(Form.form_id==fid).first()
+    mySession.close()
+    return result[0]
+
+
+def verifyUserData(db,uname):
+    mySession= DBSession()
+    result =mySession.execute("SELECT COUNT(*) FROM %s.maintable WHERE surveyid like binary '%s' ;" % (db, "% " + uname + "_%")).scalar()
+
+    return result
+
+def updateFU(vals, request, login):
+    vals=vals.split("*")
+    fid = vals[1]
+
+    mySession =DBSession()
+
+    result= mySession.query(FormsByUser.id_user).filter(FormsByUser.idforms==fid).all()
+    result = [r[0] for r in result]
+    cont=0
+    try:
+        if vals[0]!= "":
+            ulist=vals[0].split(",")
+
+            for u in ulist:
+                if u not in result:
+                    #add
+                    form_to_user(request, login, getFormName(fid), u)
+                    add_CU('DATA_' +login+"_"+getFormName(fid).title().replace(" ", "_"), request, login, u)
+                    result.append(u)
+                    transaction.begin()
+                    newF_U = FormsByUser(idforms=fid, id_user=u)
+                    mySession.add(newF_U)
+                    transaction.commit()
+            for r in result:
+                if r not in ulist:
+                    if verifyUserData('DATA_' +login+"_"+getFormName(fid).title().replace(" ", "_"), r)==0:
+                        files = os.path.join(request.registry.settings["user.repository"], login, "user", r, getFormName(fid).title().replace(" ", "_"))
+                        try:
+                            shutil.rmtree(files)
+                        except:
+                            pass
+                        transaction.begin()
+                        mySession.query(FormsByUser).filter(FormsByUser.id_user == r).filter(FormsByUser.idforms == fid).delete(
+                            synchronize_session='fetch')
+                        transaction.commit()
+                else:
+                    cont=cont+1
+        else:
+            for r in result:
+                if verifyUserData('DATA_' +login+"_"+ getFormName(fid).title().replace(" ", "_"), r) == 0:
+                    files = os.path.join(request.registry.settings["user.repository"], login, "user",r,getFormName(fid).title().replace(" ", "_"))
+                    try:
+                        shutil.rmtree(files)
+                    except:
+                        pass
+                    transaction.begin()
+                    mySession.query(FormsByUser).filter(FormsByUser.id_user == r).filter(FormsByUser.idforms==fid).delete(synchronize_session='fetch')
+                    transaction.commit()
+                else:
+                    cont=cont+1
+
+            #new = list(set(ulist) - set(result))
+
+        return ["Correcto", "Formulario modificado correctamente", "success"]
+    except:
+        return ["Error", "Sucedio un error al modificar los usuarios de este formulario", "error"]

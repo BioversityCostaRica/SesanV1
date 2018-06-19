@@ -27,7 +27,8 @@ requires = [
     'lxml',
     'MySQL-python',
     'xlsxwriter',
-    'pyxform'
+    'pyxform',
+    'babel'
 ]
 
 tests_require = [

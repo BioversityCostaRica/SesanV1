@@ -16,6 +16,7 @@ pillow
 lxml
 MySQL-python
 xlsxwriter
+pyxform
 
 [testing]
 WebTest>=1.3.1
