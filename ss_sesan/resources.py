@@ -106,6 +106,7 @@ formsCSS_JS = Group([Resource(library, 'inspinia/js/plugins/dualListbox/jquery.b
                               depends=[JQuery], bottom=True)
                      ])
 
+gtoolCSS_JS = Group([Resource(library, 'dashboard/gtool.js', depends=[JQuery], bottom=True),])
 
 
 # requiered files for profile

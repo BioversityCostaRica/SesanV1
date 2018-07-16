@@ -11,6 +11,9 @@
         <title>SESAN | Dashboard</title>
     {% endblock title %}
 
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">google.load('visualization', '1.0', {'packages':['corechart','charteditor', "controls"]});</script>
+
 </head>
 
 
@@ -54,8 +57,9 @@
                         {% block dashmenu %}
 
 
-                            {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="dashboard", rpt=report,dates=dashData.date[0] +"_"+ dashData.date[1] %}
+                            {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="dashboard", dates=dashData.date[0] +"_"+ dashData.date[1] %}
 
+                            <input type="hidden" id="cur_date" value="{{ dashData.date[0] }}_{{ dashData.date[1] }}" name="cur_date">
                         {% endblock dashmenu %}
 
                     </ul>

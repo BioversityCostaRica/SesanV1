@@ -17,7 +17,7 @@
 
 {% block dashmenu %}
 
-    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="about" %}
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="about",dates=dates[0] +"_"+ dates[1] %}
 
 {% endblock dashmenu %}
 

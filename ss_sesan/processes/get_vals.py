@@ -50,6 +50,13 @@ def dataReport(self, month, year):
 
 
     mySession = DBSession()
+
+    if not valReport(self, month, year):
+        return {}
+
+
+
+
     data = {}
 
     my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
@@ -166,9 +173,7 @@ def dataReport(self, month, year):
     #    for x in getVarValue(o[0], "sem_af_comunidad", month, year, o[1]).split((" ")):
     #        data["points"].append(getPob4Map(x, o[2]))
 
-    print "*-*-*-*-"
-    pprint(data)
-    print "*-*-*-*-"
+
     return data
 
 
@@ -724,7 +729,7 @@ def getDashReportData(self, month, year):
         data["comunidades2"][i] = s[0]
     # print list(set(data["comunidades2"]))
 
-
+    #pprint(data["san"])
 
 
     return data
@@ -894,7 +899,7 @@ def genXLS(self, data, month):
     worksheet = workbook.add_worksheet("Metadata")
 
     san = dataReport(self, month, data["date"][1])
-    data["san"]=san["san"]
+    data["san"] = san["san"]
     # worksheet.write(y, x, str)
     worksheet.write(0, 0, "Sala Situacional para el mes de %s, %s" % (data["date"][0], data["date"][1]))
     worksheet.write(1, 0, "Municipio: " + str(self.user.munic).title())
@@ -1052,8 +1057,138 @@ def getRanges(code, munic):
     print "*-*-*"
     mySession = DBSession()
 
-
-    result= mySession.query()
+    result = mySession.query()
     rang = [0, 10, 11, 15, 16, 22, 23, 100]
 
     return rang
+
+
+def getColName(id, db):
+    mySession = DBSession()
+
+    if db == "Pilares":
+        res = mySession.query(Pilare.name_pilares).filter(Pilare.id_pilares == id).first()
+        return res[0]
+    elif db == "Indicadores":
+        res = mySession.query(Indicadore.name_indicadores).filter(Indicadore.id_indicadores == id).first()
+        return res[0]
+    elif db == "Variables":
+        res = mySession.query(VariablesInd.name_variable_ind).filter(VariablesInd.id_variables_ind == id).first()
+        return res[0]
+    elif db == "SAN":
+        return "SAN"
+    else:
+        return ""
+
+
+def _finditem(obj, key):  # recursive function for find any key in python dict
+    if key in obj: return obj[key]
+    for k, v in obj.items():
+        if isinstance(v, dict):
+            return _finditem(v, key)  # added return statement
+
+
+def getData4Analize(self, vals):
+    print vals
+    mySession = DBSession()
+
+    if len(vals) > 1:
+        if vals[0] == "" and vals[1] != "SAN":
+            return 1, ["Precaucion", "Debe seleccionar algun subset de datos", "warning"]
+        else:
+
+            data = [[]]
+            data[0].append("Date")
+            for v in vals[0].split(","):
+                data[0].append(getColName(v, vals[1]))
+
+            my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
+
+            myDB = []
+            if not my_forms is None:
+                for row in my_forms:
+                    my_Pilars = mySession.query(Form).filter(Form.form_id == row.idforms).all()
+                    if not my_Pilars is None:
+                        for mp in my_Pilars:
+                            myDB.append(mp.form_db)
+            myDB = list(set(myDB))
+
+            datesF = []
+            for db in myDB:
+                dates = mySession.execute(
+                    "SELECT date_fecha_informe_6 FROM %s.maintable WHERE surveyid like binary '%s';" % (
+                    db, "%" + self.user.login + "_%"))
+                for d in dates:
+                    datesF.append(d[0])
+            datesF.sort()
+            datesF = list(set(datesF))
+
+            for d in datesF:
+                row = []
+                dt = str(d).split("-")
+                row.append(str(d))
+                rowM = getDashReportData(self, dt[1], dt[0])
+
+                if vals[1]=="SAN":
+                    rowM=dataReport(self, dt[1], dt[0])
+                    row.append(float(rowM["san"][0]))
+                    #print rowM["san"]
+                    #print "SAN"
+
+                if vals[1] == "Pilares":
+                    for v in vals[0].split(","):
+                        try:
+                            row.append(float(rowM[getColName(v, vals[1]) + "_alert"][0]))
+                        except:
+                            row.append(None)
+                if vals[1] == "Indicadores":
+                    for v in vals[0].split(","):
+                        try:
+                            row.append(float(_finditem(rowM, getColName(v, vals[1]))["val"][0]))
+                        except:
+                            row.append(None)
+                if vals[1] == "Variables":
+                    for vv in vals[0].split(","):
+                        flag = False
+                        try:
+                            for v in rowM:
+                                if "_alert" not in v and v not in ["date", "comunidades2", "coverage", "signatures"]:
+                                    for c in rowM[v]:
+                                        for w in rowM[v][c]["var"]:
+                                            if w[0] == getColName(vv, vals[1]):
+                                                row.append(float(w[3]))
+                                                flag = True
+
+
+                        except:
+                            row.append(None)
+                        if not flag:
+                            row.append(None)
+
+                data.append(row)
+
+            pprint(data)
+            return 2, data
+
+
+    else:
+        return 1, ["Precaucion", "Debe seleccionar algun subset de datos", "warning"]
+
+
+def getGToolData(self):
+    mySession = DBSession()
+
+    data = {"pilar": [], "ind": [], "var": []}
+
+    result = mySession.query(Pilare).filter(Pilare.user_name == self.user.parent).all()
+
+    for r in result:
+        data["pilar"].append([r.id_pilares, r.name_pilares])
+        inds = mySession.query(Indicadore).filter(Indicadore.Id_pilares == r.id_pilares).all()
+        for i in inds:
+            data["ind"].append([i.id_indicadores, i.name_indicadores.replace("_", " ")])
+            vars = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == i.id_indicadores).all()
+            for v in vars:
+                data["var"].append([v.id_variables_ind, v.name_variable_ind])
+    mySession.close()
+    return json.dumps(data)
