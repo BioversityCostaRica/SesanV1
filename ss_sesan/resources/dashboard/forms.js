@@ -79,6 +79,13 @@ $(document).ready(function () {
             });
     });
 
+    //form_fu
+    $(".form_fu").submit(function (e) {
+        $("#fu_"+$(this).attr("id")).val($('#fu_l_'+$(this).attr("id")).val()+"*"+$(this).attr("id"))
+    });
+
+
+
 
     $('#f_name').bind('input', function () {
         if ($("#f_name").val() != "") {

@@ -3,7 +3,20 @@ $(document).ready(function () {
     //---Wizard---------------------
 
 
+    if ($("#cur_date").val() != undefined) {
 
+        var expires = new Date();
+        expires.setTime(expires.getTime() + (1 * 24 * 60 * 60 * 1000));
+        document.cookie = "cur_date" + '=' + $("#cur_date").val() + ';expires=' + expires.toUTCString();
+
+    }
+
+
+    //alert(document.cookie);
+
+    $('.file-box').each(function () {
+        animationHover(this, 'pulse');
+    });
 
     var vars = []
 
@@ -584,7 +597,7 @@ function genMap() {
     //map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
 
     var map_points = $('#map_points').val();
-    map_points2=map_points.replace("[[", "").replace("]]","").split("], [");
+    map_points2 = map_points.replace("[[", "").replace("]]", "").split("], [");
     //map_points2 = map_points.split("], [");
     //map_points2 = JSON.parse("[" + map_points.replace(/'/g, '"') + "]");
 
@@ -603,11 +616,14 @@ function genMap() {
 
 
     for (i = 0; i < map_points2.length; i++) {
-        var  row=map_points2[i].split(",");
+        var row = map_points2[i].split(",");
 
         var marker = new google.maps.Marker({
 
-            position: {lat: parseFloat(row[2].toString().replace(" ", "")), lng: parseFloat(row[3].toString().replace(" ", ""))},
+            position: {
+                lat: parseFloat(row[2].toString().replace(" ", "")),
+                lng: parseFloat(row[3].toString().replace(" ", ""))
+            },
 
             map: map1,
             title: row[1].split("'").join(""),

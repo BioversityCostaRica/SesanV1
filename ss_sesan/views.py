@@ -4,23 +4,18 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.response import Response
 from .classes import publicView, privateView, odkView
 from .auth import getUserData
-from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS, formsCSS_JS
+from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS, formsCSS_JS, gtoolCSS_JS
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
-    valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser,getForm_By_User
+    valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser, getForm_By_User, \
+    getHelpFiles, getFileResponse, getGToolData, getData4Analize
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
     getXMLForm, storeSubmission
 from datetime import datetime
 from pyramid.response import FileResponse
 import os
-from .processes.setFormVals import newPilar, getPilarData, delPilar, updateVar, getListPU, newForm, getForms,delForm,forms_id
+from .processes.setFormVals import newPilar, getPilarData, delPilar, updateVar, getListPU, newForm, getForms, delForm, \
+    forms_id, updateFU
 
-
-#task
-# validar que se pueda borrar un pilar en uso o un form en uso
-# elimnar usuario tambien del form
-# cantidad de envios del form
-# revisar que no se pueda borrar lineas base y coef en munic con datos solo update
-#
 
 @view_config(route_name='profile', renderer='templates/profile.jinja2')
 class profile_view(privateView):
@@ -28,7 +23,9 @@ class profile_view(privateView):
         DashJS.need()
         DashCSS.need()
 
-        return {'activeUser': self.user, "config": getConfigQR(self.user.login,self.user.parent, self.request), "forms":getForm_By_User(self.user.login)}
+        return {'activeUser': self.user, "config": getConfigQR(self.user.login, self.user.parent, self.request),
+                "forms": getForm_By_User(self.user.login), "dates": self.request.cookies["cur_date"].split("_")}
+
 
 @view_config(route_name='about', renderer='templates/about.jinja2')
 class about_view(privateView):
@@ -36,9 +33,8 @@ class about_view(privateView):
         DashJS.need()
         DashCSS.need()
 
-        return {'activeUser': self.user}
-
-
+        return {'activeUser': self.user, "file_list": getHelpFiles(self.request),
+                "dates": self.request.cookies["cur_date"].split("_")}
 
 
 @view_config(route_name='baseline', renderer='templates/baseline.jinja2')
@@ -88,6 +84,7 @@ class baseline_view(privateView):
 
         return {'activeUser': self.user, "lb_data": lb_data, "fill_reg": fill_regN, "msg": msg}
 
+
 @view_config(route_name='weighing', renderer='templates/weighing.jinja2')
 class weighing_view(privateView):
     def processView(self):
@@ -135,7 +132,10 @@ class weighing_view(privateView):
 
         return {'activeUser': self.user, "lb_data": lb_data, "fill_reg": fill_regN, "msg": msg}
 
+
 from pprint import pprint
+
+
 @view_config(route_name='pilares', renderer='templates/pilares.jinja2')
 class pilares_view(privateView):
     def processView(self):
@@ -151,11 +151,11 @@ class pilares_view(privateView):
             msg = delPilar(self.request.POST.get("p_id"))
         if "btn_save_var" in self.request.POST:
             msg = updateVar(self.request.POST.get("vd1"), self.request.POST.get("vd2"), self.request.POST.get("vd3"),
-                            self.request.POST.get("vd4"), self.request.POST.get("vId"),self.request.POST.get("vdR"))
-        pilar_data,vars_id = getPilarData(self.user.login)
+                            self.request.POST.get("vd4"), self.request.POST.get("vId"), self.request.POST.get("vdR"))
+        pilar_data, vars_id = getPilarData(self.user.login)
         # baselineR.need()
         # regJS_CSS.need()
-        return {'activeUser': self.user, "pilar_data": pilar_data, "msg": msg, "vars_id":",".join(vars_id)}
+        return {'activeUser': self.user, "pilar_data": pilar_data, "msg": msg, "vars_id": ",".join(vars_id)}
 
 
 @view_config(route_name='forms', renderer='templates/forms.jinja2')
@@ -165,20 +165,22 @@ class forms_view(privateView):
         DashCSS.need()
         regJS_CSS.need()
         formsCSS_JS.need()
-        msg=[]
+        msg = []
 
         print self.request.POST
+
+        for f in self.request.POST:
+            if "fu_" in f:
+                msg = updateFU(self.request.POST.get(f), self.request, self.user.login)
         if "form_id" in self.request.POST:
-            msg=delForm(self.request,self.request.POST.get("form_id"), self.user.login)
+            msg = delForm(self.request, self.request.POST.get("form_id"), self.user.login)
 
         if "fn" in self.request.POST:
-            msg=newForm(self.request,self.request.POST.get("fn"), self.user.login)
-        formList=getForms(self.user.login)
+            msg = newForm(self.request, self.request.POST.get("fn"), self.user.login)
+        formList = getForms(self.user.login)
 
-
-        return {'activeUser': self.user, "msg":msg, "lists":getListPU(self.user.login), "formList":formList, "forms_id":forms_id(self.user.login)}
-
-
+        return {'activeUser': self.user, "msg": msg, "lists": getListPU(self.user.login), "formList": formList,
+                "forms_id": forms_id(self.user.login)}
 
 
 @view_config(route_name='report', renderer='templates/report.jinja2')
@@ -188,13 +190,14 @@ class report_view(privateView):
         DashJS.need()
         DashCSS.need()
         reportJS.need()
-        date = self.request.matchdict["date"]
+        # date = self.request.matchdict["date"]
 
-        date = date.split("_")
+        date = self.request.url.split("/")[-1].split("_")
+        # date = date.split("_")
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
         return {'activeUser': self.user, "date": int(meses.index(date[0])) + 1,
-                "dataReport": dataReport(self, str(int(meses.index(date[0])) + 1), str(date[1]))}
+                "dataReport": dataReport(self, str(int(meses.index(date[0])) + 1), str(date[1])), "dates": date, }
 
 
 @view_config(route_name='logout', renderer=None)
@@ -204,27 +207,56 @@ def logout_view(request):
     return HTTPFound(location=loc, headers=headers)
 
 
+@view_config(route_name='gtool', renderer='templates/gtool.jinja2')
+class gtool_view(privateView):
+    def processView(self):
+        DashJS.need()
+        DashCSS.need()
+        regJS_CSS.need()
+        msg = []
+        data4plot = []
+        gtoolCSS_JS.need()
+
+        if "getData4Analize" in self.request.POST:
+            vals = self.request.POST.get('getData4Analize', '').split("*$%")
+            val, data4plot = getData4Analize(self, vals)
+            if val == 1:
+                msg = data4plot
+                data4plot = []
+
+        return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
+                "dates": self.request.cookies["cur_date"].split("_")}
+
+
 @view_config(route_name='dashboard', renderer='templates/dashboard.jinja2')
 class dashboard_view(privateView):
     def processView(self):
         # self.needJS('dashboard')
 
+
+
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
         DashJS.need()
         DashCSS.need()
-        date = ""
+
 
         if 'dateP' in self.request.POST:
             date = self.request.POST.get('dateP', '').split(" ")
             dashData = getDashReportData(self, str(meses.index(date[0]) + 1), date[1])
-            rep = valReport(self, str(meses.index(date[0]) + 1), date[1])
-        else:
-            date = datetime.now().strftime("%m %Y").split(" ")
-            dashData = getDashReportData(self, date[0], date[1])
-            rep = valReport(self, date[0], date[1])
 
-        return {'activeUser': self.user, "dashData": dashData, "report": rep}
+        else:
+            if "cur_date" in self.request.cookies:
+                print self.request.cookies["cur_date"].split("_")
+                date = self.request.cookies["cur_date"].split("_")
+                dashData = getDashReportData(self, str(meses.index(date[0]) + 1), date[1])
+            else:
+                date = datetime.now().strftime("%m %Y").split(" ")
+                dashData = getDashReportData(self, date[0], date[1])
+
+        return {'activeUser': self.user, "dashData": dashData, "report": True}
+
+        # return render_to_response({'activeUser': self.user, "dashData": dashData, "report": True}, request=request)
 
 
 class download_xls(privateView):
@@ -234,9 +266,14 @@ class download_xls(privateView):
         if "genXLS" in self.request.POST:
             date = self.request.POST.get('genXLS', '').split(" ")
             date[0] = str(meses.index(date[0]) + 1)
-            response = genXLS(self, getDashReportData(self, date[0], date[1]))
+            response = genXLS(self, getDashReportData(self, date[0], date[1]), date[0])
 
         return response
+
+
+class download_helpfiles(privateView):
+    def processView(self):
+        return getFileResponse(self.request)
 
 
 @view_config(route_name='home', renderer='templates/login.jinja2')
@@ -304,7 +341,8 @@ class register_view(privateView):
                 result.append("error")
             if user_val == 4:
                 result.append("Error")
-                result.append("Antes de agregar un usuario a este municipio debe ingresar las lineas base y coeficientes respectivos")
+                result.append(
+                    "Antes de agregar un usuario a este municipio debe ingresar las lineas base y coeficientes respectivos")
                 result.append("error")
 
         return {'activeUser': self.user, "fill_reg": fill_reg(), "msg": result, "ulist": getUsersList(self.user.login)}
@@ -335,7 +373,6 @@ class manifest_view(odkView):
             return self.askForCredentials()
 
 
-
 class mediaFile_view(odkView):
     def processView(self):
         fileid = self.request.matchdict['fileid']
@@ -355,7 +392,6 @@ class XMLForm_view(odkView):
             return getXMLForm(self.user, self.request)
         else:
             return self.askForCredentials()
-
 
 
 class push_view(odkView):

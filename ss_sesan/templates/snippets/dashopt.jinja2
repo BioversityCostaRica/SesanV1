@@ -1,19 +1,49 @@
 {% if user_role!=1 %}
 
-    {% set vals = [["dashboard", "Inicio", "fa-th-large"],["profile", "Perfil", "fa-user-circle-o"], ["about", "Acerca de", "fa-ellipsis-h"]] %}
+    {% set vals = [["dashboard", "Inicio", "fa-th-large"],
+    ["report", "Reporte", "fa-pie-chart"],
+    ["gtool", "GTool", "fa-bar-chart-o"],
+    ["profile", "Perfil", "fa-user-circle-o"],
+    ["about", "Acerca de", "fa-ellipsis-h"]
+
+    ] %}
 
     {% for v in vals %}
 
         {% if v[0] == active %}
-            <li class="active">
-                <a href="{{ request.route_url(v[0]) }}"><i class="fa {{ v[2] }}"></i> <span
-                        class="nav-label">{{ v[1] }}</span> </a>
-            </li>
+            {% if v[0]== "report" %}
+                <li class="active">
+                    <a href="{{ request.route_url('report', date=dates) }}"><i
+                            class="fa {{ v[2] }}"></i>
+                        </i> <span
+                            class="nav-label">{{ v[1] }}</span> </a>
+
+                </li>
+            {% else %}
+
+                <li class="active">
+                    <a href="{{ request.route_url(v[0]) }}"><i class="fa {{ v[2] }}"></i> <span
+                            class="nav-label">{{ v[1] }}</span> </a>
+                </li>
+
+            {% endif %}
         {% else %}
-            <li>
-                <a href="{{ request.route_url(v[0]) }}"><i class="fa {{ v[2] }}"></i> <span
-                        class="nav-label">{{ v[1] }}</span> </a>
-            </li>
+             {% if v[0]== "report" %}
+                <li>
+                    <a href="{{ request.route_url('report', date=dates) }}"><i
+                            class="fa {{ v[2] }}"></i>
+                        </i> <span
+                            class="nav-label">{{ v[1] }}</span> </a>
+
+                </li>
+            {% else %}
+
+                <li>
+                    <a href="{{ request.route_url(v[0]) }}"><i class="fa {{ v[2] }}"></i> <span
+                            class="nav-label">{{ v[1] }}</span> </a>
+                </li>
+
+            {% endif %}
 
         {% endif %}
 

@@ -262,7 +262,7 @@ def storeSubmission(uname,request):
         for key in request.POST.keys():
             #print key
             filename = request.POST[key].filename
-            print filename
+
             input_file = request.POST[key].file
             file_path = os.path.join(path, filename)
             if file_path.upper().find('.XML') >=0:

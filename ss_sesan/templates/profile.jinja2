@@ -15,7 +15,7 @@
     </div>
 {% endblock pageheading %}
 {% block dashmenu %}
-    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="profile", rpt=report %}
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="profile", dates=dates[0] +"_"+ dates[1]%}
 
 {% endblock dashmenu %}
 

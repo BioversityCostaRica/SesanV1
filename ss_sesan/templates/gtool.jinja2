@@ -1,0 +1,105 @@
+{% extends 'dashboard.jinja2' %}
+{% block title %}
+    <title>SESAN | GTool</title>
+
+{% endblock title %}
+
+
+
+{% block pageheading %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-8 text-center">
+            <h2>GTool</h2>
+        </div>
+    </div>
+{% endblock pageheading %}
+{% block dashmenu %}
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="gtool", dates=dates[0] +"_"+ dates[1] %}
+
+{% endblock dashmenu %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% block pagecontent %}
+        <input type="hidden" value="{{ msg }}" id="msj">
+
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>Heramienta de analisis de datos de los indices de afectacion</h5>
+                <div class="ibox-tools">
+
+                </div>
+            </div>
+            <div class="ibox-content">
+                <div class="row m-b-sm m-t-sm">
+                    <div class="form-group text-center">
+                        <input type="hidden" id="filldata" value="{{ filldata }}">
+                        <div class="col-sm-3">
+                            <select id="dset" name="dset"
+                                    data-placeholder="Seleccione un set de datos..."
+                                    class="chosen-select form-control m-b" tabindex="2">
+                                <option value=""></option>
+
+                                <option value="SAN">SAN</option>
+                                <option value="Pilares">Pilares</option>
+                                <option value="Indicadores">Indicadores</option>
+                                <option value="Variables">Variables</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-sm-3">
+                            <select id="dset2" name="dset2"
+                                    data-placeholder="Subsets"
+                                    class="chosen-select form-control m-b" multiple tabindex="2">
+
+                            </select>
+
+                        </div>
+
+                        <div class="col-sm-1">
+                            <form method="POST" role="form" class=""
+                                  action="{{ request.path }}" id="submit">
+
+                                <button type="submit" name="submit" id="loading-example-btn"
+                                        class="btn btn-white btn-sm form-control"><i
+                                        class="fa fa-search"></i> Buscar
+                                </button>
+
+                                <input type="hidden" value="" id="getData4Analize" name="getData4Analize">
+                            </form>
+
+                        </div>
+
+                        <input type="hidden" value="{{ data4plot }}" id="data4plot">
+
+                        {% if data4plot not in [[], ""] %}
+                            <div id="chart" style="width: 100%; height: 500px" class="col-sm-12 "></div>
+
+
+                            <div class="col-sm-12 ">
+                                <button class="btn btn-primary btn-circle btn-lg btn-outline" type="button" id="editchart" title="Editar grafico"><i
+                                        class="fa fa-edit"></i></button>
+                                <button class="btn btn-primary btn-circle btn-lg btn-outline" type="button" id="downplot" title="Descargar grafico"><i
+                                        class="fa fa-download"></i></button>
+                                <button class="btn btn-primary btn-circle btn-lg btn-outline" type="button" id="downdata" title="Descargar datos"><i
+                                        class="fa fa-table"></i></button>
+                            </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+
+
+    {% endblock pagecontent %}
+
+</div>

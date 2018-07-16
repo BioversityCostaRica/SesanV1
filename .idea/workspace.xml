@@ -2,30 +2,20 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e854dd02-1a11-4d61-8d2f-eebb1bb83e49" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/gtool.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ss_sesan/templates/gtool.jinja2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cen_u.sql" afterPath="$PROJECT_DIR$/cen_u.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/custom.js" afterPath="$PROJECT_DIR$/custom.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development.ini" afterPath="$PROJECT_DIR$/development.ini" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/imported.log" afterPath="$PROJECT_DIR$/imported.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/output.csv" afterPath="$PROJECT_DIR$/output.csv" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/setup.py" afterPath="$PROJECT_DIR$/setup.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/__init__.py" afterPath="$PROJECT_DIR$/ss_sesan/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/models.py" afterPath="$PROJECT_DIR$/ss_sesan/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/utilform.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/utilform.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/baseline.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/baseline.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources.py" afterPath="$PROJECT_DIR$/ss_sesan/resources.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/forms.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/forms.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/register.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/register.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/about.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/about.jinja2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/forms.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/forms.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/profile.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/profile.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/register.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/register.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/snippets/edit_variables.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/snippets/edit_variables.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/report.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/report.jinja2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/views.py" afterPath="$PROJECT_DIR$/ss_sesan/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -47,11 +37,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ss_sesan/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7420">
-              <caret line="385" column="31" lean-forward="false" selection-start-line="385" selection-start-column="31" selection-end-line="385" selection-end-column="31" />
+            <state relative-caret-position="360">
+              <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -59,11 +49,83 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="883">
+              <caret line="63" column="37" lean-forward="false" selection-start-line="63" selection-start-column="37" selection-end-line="63" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="report.jinja2" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/report.jinja2">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="380">
+              <caret line="52" column="25" lean-forward="true" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="dashboard.jinja2" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8860">
-              <caret line="449" column="75" lean-forward="false" selection-start-line="449" selection-start-column="65" selection-end-line="449" selection-end-column="75" />
+            <state relative-caret-position="520">
+              <caret line="59" column="169" lean-forward="true" selection-start-line="59" selection-start-column="132" selection-end-line="59" selection-end-column="169" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gtool.jinja2" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/gtool.jinja2">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="380">
+              <caret line="19" column="133" lean-forward="false" selection-start-line="19" selection-start-column="133" selection-end-line="19" selection-end-column="133" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="profile.jinja2" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/profile.jinja2">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="17" column="135" lean-forward="false" selection-start-line="17" selection-start-column="135" selection-end-line="17" selection-end-column="135" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dashopt.jinja2" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="6" column="43" lean-forward="false" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gtool.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/gtool.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="283">
+              <caret line="187" column="0" lean-forward="true" selection-start-line="187" selection-start-column="0" selection-end-line="187" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#40#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="about.jinja2" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/about.jinja2">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="243">
+              <caret line="19" column="132" lean-forward="false" selection-start-line="19" selection-start-column="132" selection-end-line="19" selection-end-column="132" />
               <folding />
             </state>
           </provider>
@@ -72,103 +134,9 @@
       <file leaf-file-name="dashboard.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="605" column="43" lean-forward="false" selection-start-line="605" selection-start-column="43" selection-end-line="605" selection-end-column="43" />
+            <state relative-caret-position="320">
+              <caret line="16" column="37" lean-forward="true" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="classes.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/classes.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="740">
-              <caret line="45" column="30" lean-forward="false" selection-start-line="45" selection-start-column="23" selection-end-line="45" selection-end-column="30" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="get_vals.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/processes/get_vals.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="460">
-              <caret line="888" column="59" lean-forward="false" selection-start-line="888" selection-start-column="59" selection-end-line="888" selection-end-column="59" />
-              <folding>
-                <element signature="e#0#174#0" expanded="true" />
-                <marker date="1528242702093" expanded="true" signature="2486:2625" ph="SELECT COUNT... maintable" />
-                <marker date="1528242702093" expanded="true" signature="7340:7479" ph="SELECT COUNT... maintable" />
-                <marker date="1528242702093" expanded="true" signature="9881:9914" ph="SELECT COUNT... maintable" />
-                <marker date="1528242702093" expanded="true" signature="16399:16545" ph="SELECT missi... maintable" />
-                <marker date="1528242702093" expanded="true" signature="16866:17007" ph="SELECT missi... maintable" />
-                <marker date="1528242702093" expanded="true" signature="19426:19647" ph="SELECT @a:=@... " />
-                <marker date="1528242702093" expanded="true" signature="19719:19828" ph="SELECT repea... repeat_prop_acciones" />
-                <marker date="1528242702093" expanded="true" signature="21734:21873" ph="SELECT COUNT... maintable" />
-                <marker date="1528242702093" expanded="true" signature="26968:27142" ph="SELECT AVG(m... maintable" />
-                <marker date="1528242702093" expanded="true" signature="28080:28310" ph="select v.id_... variables_ind" />
-                <marker date="1528242702093" expanded="true" signature="28379:28449" ph="select v.id_... variables_ind" />
-                <marker date="1528242702093" expanded="true" signature="28379:28609" ph="select v.id_... variables_ind" />
-                <marker date="1528242702093" expanded="true" signature="28952:29094" ph="select v.id_... variables_ind" />
-                <marker date="1528242702093" expanded="true" signature="32345:32522" ph="SELECT (100/... centros_urbanos" />
-                <marker date="1528242702093" expanded="true" signature="32370:32474" ph="select count... maintable_msel_sem_comunidad_totales" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="output.csv" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/output.csv">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="20">
-              <caret line="1" column="99" lean-forward="false" selection-start-line="1" selection-start-column="78" selection-end-line="1" selection-end-column="99" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="forms.jinja2" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/forms.jinja2">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2180">
-              <caret line="109" column="77" lean-forward="false" selection-start-line="109" selection-start-column="77" selection-end-line="109" selection-end-column="92" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="imported.log" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/imported.log">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="setFormVals.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="11160">
-              <caret line="569" column="17" lean-forward="false" selection-start-line="569" selection-start-column="17" selection-end-line="569" selection-end-column="17" />
-              <folding>
-                <element signature="e#15#181#0" expanded="true" />
-                <marker date="1528238594072" expanded="true" signature="13360:13468" ph="INSERT INTO " />
-                <marker date="1528238594072" expanded="true" signature="13360:13473" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
-                <marker date="1528238594072" expanded="true" signature="27424:27457" ph="SELECT COUNT... " />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="utilform.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/processes/utilform.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5080">
-              <caret line="264" column="26" lean-forward="false" selection-start-line="264" selection-start-column="26" selection-end-line="264" selection-end-column="26" />
-              <folding>
-                <element signature="e#0#19#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -179,41 +147,42 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>valRe</find>
-      <find>CoefPond</find>
-      <find>getPil</find>
-      <find>Actu</find>
-      <find>data[&quot;error&quot;]</find>
-      <find>prof</find>
-      <find>No se pudo actualizar la informacion para esta</find>
-      <find>getPilarD</find>
-      <find>modal_NewForm</find>
-      <find>getFOr</find>
-      <find>forms</find>
-      <find>verifyP</find>
-      <find>newP</find>
-      <find>form_to_user</find>
-      <find>newU</find>
-      <find>pilares</find>
-      <find>alertP</find>
-      <find>delForm</find>
-      <find>ruuid</find>
-      <find>Pila</find>
-      <find>variables</find>
-      <find>code</find>
-      <find>verifyCode</find>
-      <find>Pilar:</find>
-      <find>sign</find>
-      <find>Cob</find>
-      <find>getSi</find>
-      <find>comunu</find>
-      <find>map_points</find>
-      <find>getPob4Map</find>
+      <find>genXLS</find>
+      <find>getRanges</find>
+      <find>xls2xform</find>
+      <find>Perfil</find>
+      <find>self</find>
+      <find>basel</find>
+      <find>hide</find>
+      <find>cho</find>
+      <find>chosen-select</find>
+      <find>Sele</find>
+      <find>sw</find>
+      <find>ms</find>
+      <find>hid</find>
+      <find>for</find>
+      <find>getSignature</find>
+      <find>SS+</find>
+      <find>clic</find>
+      <find>html2canvas</find>
+      <find>css</find>
+      <find>gt</find>
+      <find>data4plot</find>
+      <find>valReport(</find>
+      <find>rep</find>
+      <find>report</find>
+      <find>response</find>
+      <find>request</find>
+      <find>return</find>
+      <find>hidd</find>
+      <find>date</find>
+      <find>auth_tkt</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -224,42 +193,45 @@
       <list>
         <option value="$PROJECT_DIR$/pyramid.wsgi" />
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/report.js" />
-        <option value="$PROJECT_DIR$/ss_sesan/templates/report.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/update_pilar_modal.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/jinja_extensions.py" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/getCoef.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/resources.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/newForm.jinja2" />
         <option value="$PROJECT_DIR$/mysql.cnf" />
-        <option value="$PROJECT_DIR$/development.ini" />
         <option value="$PROJECT_DIR$/ss_sesan/classes.py" />
         <option value="$PROJECT_DIR$/cen_u.sql" />
         <option value="$PROJECT_DIR$/ss_sesan/auth.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2" />
-        <option value="$PROJECT_DIR$/ss_sesan/templates/about.jinja2" />
-        <option value="$PROJECT_DIR$/setup.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/forms.js" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/register.jinja2" />
-        <option value="$PROJECT_DIR$/ss_sesan/templates/forms.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js" />
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/baseline.js" />
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/register.js" />
         <option value="$PROJECT_DIR$/custom.js" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2" />
-        <option value="$PROJECT_DIR$/ss_sesan/templates/profile.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/models.py" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/edit_variables.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2" />
-        <option value="$PROJECT_DIR$/ss_sesan/__init__.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/views.py" />
         <option value="$PROJECT_DIR$/imported.log" />
         <option value="$PROJECT_DIR$/output.csv" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/utilform.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/newForm.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/forms.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/forms.js" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/Edit_FormByUser.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" />
+        <option value="$PROJECT_DIR$/setup.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/__init__.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/resources.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/gtool.js" />
+        <option value="$PROJECT_DIR$/development.ini" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/report.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/about.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/gtool.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/profile.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/views.py" />
       </list>
     </option>
   </component>
@@ -270,10 +242,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="48" />
-    <option name="y" value="-11" />
+    <option name="x" value="47" />
+    <option name="y" value="25" />
     <option name="width" value="1873" />
-    <option name="height" value="1092" />
+    <option name="height" value="1055" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -293,6 +265,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -419,13 +393,11 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../MrBot/mb_0.1/mb01" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../env_18/bin/python2.7" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -676,10 +648,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="48" y="-11" width="1873" height="1092" extended-state="6" />
+    <frame x="47" y="25" width="1873" height="1055" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18920363" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18312867" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -696,7 +668,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32925585" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3285568" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -735,48 +707,11 @@
           <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="9" />
+      <option name="time" value="11" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/update_pilar_modal" />
-    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/update_pilar_modal.html" />
-    <entry file="file://$PROJECT_DIR$/../../climmob_env/local/lib/python2.7/site-packages/Jinja2-2.9.6-py2.7.egg/jinja2/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../climmob_env/local/lib/python2.7/site-packages/Jinja2-2.9.6-py2.7.egg/jinja2/ext.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="60" column="4" lean-forward="false" selection-start-line="60" selection-start-column="4" selection-end-line="60" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/update_pilar_modal.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1720">
-          <caret line="86" column="74" lean-forward="false" selection-start-line="86" selection-start-column="74" selection-end-line="86" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../climmob_env/local/lib/python2.7/site-packages/Jinja2-2.9.6-py2.7.egg/jinja2/environment.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4012">
-          <caret line="1002" column="36" lean-forward="false" selection-start-line="1002" selection-start-column="36" selection-end-line="1002" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/processes/jinja_extensions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="580">
@@ -795,18 +730,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="318">
           <caret line="625" column="16" lean-forward="false" selection-start-line="625" selection-start-column="16" selection-end-line="625" selection-end-column="16" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/processes/getCoef.py" />
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="174">
-          <caret line="73" column="9" lean-forward="false" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.PyCharm2017.1/system/python_stubs/-602729745/__builtin__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="318">
@@ -825,7 +752,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="318">
           <caret line="28" column="6" lean-forward="false" selection-start-line="28" selection-start-column="6" selection-end-line="28" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -836,67 +762,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/about.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="580">
-          <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/scripts/insert_values.sql">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20">
-          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/report.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20">
-          <caret line="199" column="92" lean-forward="false" selection-start-line="199" selection-start-column="81" selection-end-line="199" selection-end-column="92" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="29" column="12" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="68" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/production.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-60">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pyramid.wsgi">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/development.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="45" column="32" lean-forward="false" selection-start-line="45" selection-start-column="32" selection-end-line="45" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/forms.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="680">
-          <caret line="67" column="20" lean-forward="true" selection-start-line="67" selection-start-column="20" selection-end-line="67" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -907,31 +776,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
-          <caret line="28" column="17" lean-forward="true" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/baseline.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2160">
-          <caret line="108" column="0" lean-forward="false" selection-start-line="108" selection-start-column="0" selection-end-line="108" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan.egg-info/dependency_links.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/register.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="860">
-          <caret line="43" column="24" lean-forward="false" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -942,52 +790,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cen_u.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-536">
-          <caret line="0" column="0" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/custom.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="22" column="31" lean-forward="false" selection-start-line="22" selection-start-column="31" selection-end-line="22" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="112" column="109" lean-forward="false" selection-start-line="112" selection-start-column="109" selection-end-line="112" selection-end-column="109" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3780">
-          <caret line="189" column="94" lean-forward="false" selection-start-line="189" selection-start-column="94" selection-end-line="189" selection-end-column="94" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/profile.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="48" column="49" lean-forward="false" selection-start-line="48" selection-start-column="49" selection-end-line="48" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cen_u.sql" />
+    <entry file="file://$PROJECT_DIR$/custom.js" />
     <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/edit_variables.jinja2">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="760">
           <caret line="38" column="42" lean-forward="false" selection-start-line="38" selection-start-column="42" selection-end-line="38" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/newForm.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="48" column="52" lean-forward="false" selection-start-line="48" selection-start-column="52" selection-end-line="48" selection-end-column="52" />
         </state>
       </provider>
     </entry>
@@ -1002,16 +810,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3040">
           <caret line="160" column="34" lean-forward="false" selection-start-line="160" selection-start-column="34" selection-end-line="160" selection-end-column="34" />
-          <folding>
-            <element signature="e#16#87#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1100">
-          <caret line="66" column="49" lean-forward="false" selection-start-line="66" selection-start-column="49" selection-end-line="66" selection-end-column="49" />
         </state>
       </provider>
     </entry>
@@ -1019,25 +817,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7420">
-          <caret line="385" column="31" lean-forward="false" selection-start-line="385" selection-start-column="31" selection-end-line="385" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/forms.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2180">
-          <caret line="109" column="77" lean-forward="false" selection-start-line="109" selection-start-column="77" selection-end-line="109" selection-end-column="92" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1049,74 +828,265 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/utilform.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5080">
-          <caret line="264" column="26" lean-forward="false" selection-start-line="264" selection-start-column="26" selection-end-line="264" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/output.csv">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="20">
           <caret line="1" column="99" lean-forward="false" selection-start-line="1" selection-start-column="78" selection-end-line="1" selection-end-column="99" />
-          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pytest.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pyramid.wsgi">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="3" column="39" lean-forward="false" selection-start-line="3" selection-start-column="39" selection-end-line="3" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/production.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/utilform.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2480">
+          <caret line="134" column="10" lean-forward="false" selection-start-line="134" selection-start-column="10" selection-end-line="134" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3380">
+          <caret line="169" column="43" lean-forward="false" selection-start-line="169" selection-start-column="43" selection-end-line="179" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="560">
+          <caret line="28" column="17" lean-forward="false" selection-start-line="28" selection-start-column="17" selection-end-line="28" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/forms.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2140">
+          <caret line="107" column="159" lean-forward="false" selection-start-line="107" selection-start-column="152" selection-end-line="107" selection-end-column="159" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/inspinia/font-awesome/css/font-awesome.min.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/newForm.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1260">
+          <caret line="63" column="93" lean-forward="false" selection-start-line="63" selection-start-column="90" selection-end-line="63" selection-end-column="93" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/register.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="860">
+          <caret line="43" column="24" lean-forward="false" selection-start-line="43" selection-start-column="24" selection-end-line="43" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="28" column="13" lean-forward="false" selection-start-line="28" selection-start-column="13" selection-end-line="28" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="11160">
-          <caret line="569" column="17" lean-forward="false" selection-start-line="569" selection-start-column="17" selection-end-line="569" selection-end-column="17" />
-          <folding>
-            <element signature="e#15#181#0" expanded="true" />
-            <marker date="1528238594072" expanded="true" signature="13360:13468" ph="INSERT INTO " />
-            <marker date="1528238594072" expanded="true" signature="13360:13473" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
-            <marker date="1528238594072" expanded="true" signature="27424:27457" ph="SELECT COUNT... " />
-          </folding>
+        <state relative-caret-position="12060">
+          <caret line="614" column="15" lean-forward="false" selection-start-line="614" selection-start-column="15" selection-end-line="614" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2">
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/forms.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8860">
-          <caret line="449" column="75" lean-forward="false" selection-start-line="449" selection-start-column="65" selection-end-line="449" selection-end-column="75" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/Edit_FormByUser.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1100">
+          <caret line="55" column="43" lean-forward="false" selection-start-line="55" selection-start-column="43" selection-end-line="55" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2900">
+          <caret line="145" column="28" lean-forward="false" selection-start-line="145" selection-start-column="28" selection-end-line="145" selection-end-column="76" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js">
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="605" column="43" lean-forward="false" selection-start-line="605" selection-start-column="43" selection-end-line="605" selection-end-column="43" />
+        <state relative-caret-position="1420">
+          <caret line="73" column="9" lean-forward="false" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/report.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2900">
+          <caret line="145" column="3" lean-forward="false" selection-start-line="145" selection-start-column="3" selection-end-line="153" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/baseline.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="700">
+          <caret line="35" column="42" lean-forward="false" selection-start-line="35" selection-start-column="4" selection-end-line="35" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/development.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="24" column="23" lean-forward="false" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/processes/get_vals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="888" column="59" lean-forward="false" selection-start-line="888" selection-start-column="59" selection-end-line="888" selection-end-column="59" />
+        <state relative-caret-position="480">
+          <caret line="54" column="15" lean-forward="true" selection-start-line="54" selection-start-column="15" selection-end-line="54" selection-end-column="17" />
           <folding>
             <element signature="e#0#174#0" expanded="true" />
-            <marker date="1528242702093" expanded="true" signature="2486:2625" ph="SELECT COUNT... maintable" />
-            <marker date="1528242702093" expanded="true" signature="7340:7479" ph="SELECT COUNT... maintable" />
-            <marker date="1528242702093" expanded="true" signature="9881:9914" ph="SELECT COUNT... maintable" />
-            <marker date="1528242702093" expanded="true" signature="16399:16545" ph="SELECT missi... maintable" />
-            <marker date="1528242702093" expanded="true" signature="16866:17007" ph="SELECT missi... maintable" />
-            <marker date="1528242702093" expanded="true" signature="19426:19647" ph="SELECT @a:=@... " />
-            <marker date="1528242702093" expanded="true" signature="19719:19828" ph="SELECT repea... repeat_prop_acciones" />
-            <marker date="1528242702093" expanded="true" signature="21734:21873" ph="SELECT COUNT... maintable" />
-            <marker date="1528242702093" expanded="true" signature="26968:27142" ph="SELECT AVG(m... maintable" />
-            <marker date="1528242702093" expanded="true" signature="28080:28310" ph="select v.id_... variables_ind" />
-            <marker date="1528242702093" expanded="true" signature="28379:28449" ph="select v.id_... variables_ind" />
-            <marker date="1528242702093" expanded="true" signature="28379:28609" ph="select v.id_... variables_ind" />
-            <marker date="1528242702093" expanded="true" signature="28952:29094" ph="select v.id_... variables_ind" />
-            <marker date="1528242702093" expanded="true" signature="32345:32522" ph="SELECT (100/... centros_urbanos" />
-            <marker date="1528242702093" expanded="true" signature="32370:32474" ph="select count... maintable_msel_sem_comunidad_totales" />
+            <element signature="e#33844#41378#0" expanded="false" />
+            <marker date="1531764012359" expanded="true" signature="2543:2682" ph="SELECT COUNT... maintable" />
+            <marker date="1531764012359" expanded="true" signature="8452:8591" ph="SELECT COUNT... maintable" />
+            <marker date="1531764012359" expanded="true" signature="10991:11024" ph="SELECT COUNT... maintable" />
+            <marker date="1531764012359" expanded="true" signature="17509:17655" ph="SELECT missi... maintable" />
+            <marker date="1531764012359" expanded="true" signature="17979:18120" ph="SELECT missi... maintable" />
+            <marker date="1531764012359" expanded="true" signature="20542:20763" ph="SELECT @a:=@... " />
+            <marker date="1531764012359" expanded="true" signature="20835:20944" ph="SELECT repea... repeat_prop_acciones" />
+            <marker date="1531764012359" expanded="true" signature="22850:22989" ph="SELECT COUNT... maintable" />
+            <marker date="1531764012359" expanded="true" signature="28100:28274" ph="SELECT AVG(m... maintable" />
+            <marker date="1531764012359" expanded="true" signature="29203:29433" ph="select v.id_... variables_ind" />
+            <marker date="1531764012359" expanded="true" signature="29502:29572" ph="select v.id_... variables_ind" />
+            <marker date="1531764012359" expanded="true" signature="29502:29732" ph="select v.id_... variables_ind" />
+            <marker date="1531764012359" expanded="true" signature="30075:30217" ph="select v.id_... variables_ind" />
+            <marker date="1531764012359" expanded="true" signature="33468:33645" ph="SELECT (100/... centros_urbanos" />
+            <marker date="1531764012359" expanded="true" signature="33493:33597" ph="select count... maintable_msel_sem_comunidad_totales" />
+            <marker date="1531764012359" expanded="true" signature="44184:44261" ph="SELECT date_... maintable" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="883">
+          <caret line="63" column="37" lean-forward="false" selection-start-line="63" selection-start-column="37" selection-end-line="63" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="59" column="169" lean-forward="true" selection-start-line="59" selection-start-column="132" selection-end-line="59" selection-end-column="169" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/gtool.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="283">
+          <caret line="187" column="0" lean-forward="true" selection-start-line="187" selection-start-column="0" selection-end-line="187" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#40#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/about.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="243">
+          <caret line="19" column="132" lean-forward="false" selection-start-line="19" selection-start-column="132" selection-end-line="19" selection-end-column="132" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/gtool.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="19" column="133" lean-forward="false" selection-start-line="19" selection-start-column="133" selection-end-line="19" selection-end-column="133" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/profile.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="17" column="135" lean-forward="false" selection-start-line="17" selection-start-column="135" selection-end-line="17" selection-end-column="135" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/report.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="52" column="25" lean-forward="true" selection-start-line="52" selection-start-column="25" selection-end-line="52" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="16" column="37" lean-forward="true" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="6" column="43" lean-forward="false" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="18" column="0" lean-forward="true" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>

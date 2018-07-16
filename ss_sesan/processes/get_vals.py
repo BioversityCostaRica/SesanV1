@@ -26,7 +26,8 @@ def getPob4Map(id_cu, alert):
     result = mySession.query(CentrosUrbano).filter(CentrosUrbano.id_cu == id_cu).first()
     data = []
     if result:
-        data.append([str(result.categoria).title(), str(result.cu_name).title(), float(result.Y), float(result.X), alert])
+        data.append(
+            [str(result.categoria).title(), str(result.cu_name).title(), float(result.Y), float(result.X), alert])
 
     mySession.close()
 
@@ -49,6 +50,13 @@ def dataReport(self, month, year):
 
 
     mySession = DBSession()
+
+    if not valReport(self, month, year):
+        return {}
+
+
+
+
     data = {}
 
     my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
@@ -82,25 +90,24 @@ def dataReport(self, month, year):
 
 
 
-
-
-
     for var in variables:
         if int(var.id_indicadores) not in indicadores:
             indicadores.append(int(var.id_indicadores))
 
     for db in myDB:
-        print db
 
         result = mySession.execute(
             "SELECT COUNT(*) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' ;" % (
-                db, month, year, "%" + self.user.login + "%")).scalar()
+                db, month, year, "% " + self.user.login + "_%")).scalar()
+
+        pilares_ind_db = mySession.query(Form.pilar_id).filter(Form.form_db == db).first()
+        pilares_ind_db = pilares_ind_db[0].split(",")
 
         if int(result) != 0:
 
             for i in indicadores:
                 i_pi = mySession.query(Indicadore.Id_pilares).filter_by(id_indicadores=i).first()
-                if int(i_pi[0]) not in pilares:
+                if str(int(i_pi[0])) in pilares_ind_db:
                     p_name = mySession.query(Pilare.name_pilares, Pilare.id_pilares).filter_by(
                         id_pilares=int(i_pi[0])).first()
                     tot_alert = []
@@ -162,10 +169,41 @@ def dataReport(self, month, year):
     data["san"] = [san, getSAN(san)[0], getSAN(san)[1]]
 
     data["points"] = []
-    for o in unames:
-        for x in getVarValue(o[0], "sem_af_comunidad", month, year, o[1]).split((" ")):
-            data["points"].append(getPob4Map(x, o[2]))
+    # for o in unames:
+    #    for x in getVarValue(o[0], "sem_af_comunidad", month, year, o[1]).split((" ")):
+    #        data["points"].append(getPob4Map(x, o[2]))
 
+
+    return data
+
+
+def getHelpFiles(request):
+    files = glob(request.registry.settings['user.repository'] + "help_files/*.*")
+
+    data = []
+    files.sort(key=lambda item: (-len(item), item))
+    for f in files:
+        ext = os.path.splitext(f)[1]
+        fa = ""
+        if ext in [".jpg", ".jpg", ".png", ".svg"]:
+            fa = "fa-file-picture-o"
+        elif ext in [".mp4", ".mpg4"]:
+            fa = "fa-file-movie-o"
+        elif ext in [".mp3", ".wma"]:
+            fa = "fa-file-sound-o"
+        elif ext in [".doc", ".docx"]:
+            fa = "fa-file-word-o"
+        elif ext in [".xlsx", ".xls"]:
+            fa = "fa-file-excel-o"
+        elif ext in [".pdf"]:
+            fa = "fa-file-pdf-o"
+        elif ext in [".ppt", "pptx"]:
+            fa = "fa-file-powerpoint-o"
+        else:
+            fa = "fa-file"
+
+        data.append([f, fa, os.path.basename(f)])
+    print data
     return data
 
 
@@ -199,15 +237,15 @@ def valReport(self, month, year):
     acum = []
     for i in myDB:
         muni = i.split("_")
-        muni = muni[1] + " " + muni[2] + " " + self.user.login + "_"
+
+        muni = " ".join(muni[1:]) + " " + self.user.login + "_"
         query = "SELECT COUNT(*) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' ;" % (
             i, str(month), str(year), "%" + muni + "%")
-
         result = mySession.execute(query).scalar()
         acum.append(int(result))
     mySession.close()
     if sum(acum) >= 1:
-        return False
+        return True
     else:
         return False
 
@@ -433,13 +471,14 @@ def getVarValue(db, code, month, year, uname):
     # try:
     result = mySession.execute(
         "SELECT AVG(%s) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
-            code, db, month, year, "%" + uname + "%"))
+            code, db, month, year, "% " + uname + "_%"))
     for res in result:
         ret = str(res[0])
     # except:
     #    ret = "ND"
     mySession.close()
     return ret
+
 
 def getComun(db, code, month, year, uname):
     mySession = DBSession()
@@ -448,13 +487,14 @@ def getComun(db, code, month, year, uname):
     # try:
     result = mySession.execute(
         "SELECT %s FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
-            code, db, month, year, "%" + uname + "%"))
+            code, db, month, year, "% " + uname + "_%"))
     for res in result:
         ret = str(res[0])
     # except:
     #    ret = "ND"
     mySession.close()
     return ret
+
 
 def getCoefPond(idVar, munId):
     mySession = DBSession()
@@ -594,7 +634,7 @@ def getDashReportData(self, month, year):
 
         result = mySession.execute(
             "SELECT COUNT(*) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' ;" % (
-                db, month, year, "%" + self.user.login + "%")).scalar()
+                db, month, year, "% " + self.user.login + "_%")).scalar()
 
         pilares_ind_db = mySession.query(Form.pilar_id).filter(Form.form_db == db).first()
         pilares_ind_db = pilares_ind_db[0].split(",")
@@ -618,7 +658,7 @@ def getDashReportData(self, month, year):
                         valCP = 1
                         acum = []
                         for v in variables:
-                            print v.code_variable_ind
+                            # print v.code_variable_ind
                             sa = getVarValue(db, v.code_variable_ind, month, year, self.user.login)
 
                             # add variables data
@@ -629,7 +669,8 @@ def getDashReportData(self, month, year):
                                 data[p_name[0]][i_n[0]]["var"].append(
                                     [v.name_variable_ind, v.unidad_variable_ind, l_base, sa,
                                      getComp(l_base, sa),
-                                     getAlertVar(calcValue(sa, v.id_variables_ind, 2, self.user.munic), 1)])
+                                     getAlertVar(calcValue(sa, v.id_variables_ind, 2, self.user.munic), 1),
+                                     v.code_variable_ind])
                                 valCP = valCP + calcValue(sa, v.id_variables_ind, 1, self.user.munic)
 
                                 acum.append(calcValue(sa, v.id_variables_ind, 1, self.user.munic) * calcValue(sa,
@@ -656,15 +697,13 @@ def getDashReportData(self, month, year):
                     alertP = getPilarAlert(p_name[1], "%.2f" % (t1 / t0))
 
                     data[p_name[0] + "_alert"] = ["%.2f" % (t1 / t0), alertP[1].title(), alertP[0]]
-            #(db, uname, parent, month, year, request)
-            data["signatures"].append(getSignature(db,self.user.login, self.user.parent, month, year, self.request))
+            # (db, uname, parent, month, year, request)
+            data["signatures"].append(getSignature(db, self.user.login, self.user.parent, month, year, self.request))
 
-
-        
             ruuid = getComun(db, "device_id_3", month, year, self.user.login)
             # data["comunidades"] = getRepInfo(ruuid, db, "com")
             com = getComun(db, "sem_comunidad_totales", month, year, self.user.login).split(" ")
-            #data["comunidades2"] = []
+            # data["comunidades2"] = []
 
             for id_cu in com:
                 data["comunidades2"].append(getPob4Map(id_cu, alertP[0]))
@@ -672,8 +711,8 @@ def getDashReportData(self, month, year):
             data["coverage"] = calcDataCoverage(db, ruuid, getMunicId(self.user.munic))
 
 
-        # else:
-        #    data["error"] = True
+            # else:
+            #    data["error"] = True
 
     meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
              "Noviembre", "Diciembre"]
@@ -684,14 +723,14 @@ def getDashReportData(self, month, year):
     # with open("/home/acoto/pr_pptx/sort_db/data.json", 'wb') as f:
     #    json.dump(r,f, ensure_ascii=False, encoding='utf8')
     mySession.close()
-    print "*-*-*-*-*"
-    for i,s in enumerate(data["comunidades2"]):
-        #if (s[0] not in data["comunidades2"]):
-        data["comunidades2"][i] = s[0]
-    #print list(set(data["comunidades2"]))
-    pprint(data["comunidades2"])
 
-    print "*-*-*-*-*"
+    for i, s in enumerate(data["comunidades2"]):
+        # if (s[0] not in data["comunidades2"]):
+        data["comunidades2"][i] = s[0]
+    # print list(set(data["comunidades2"]))
+
+    #pprint(data["san"])
+
 
     return data
 
@@ -701,17 +740,17 @@ def getSignature(db, uname, parent, month, year, request):
     mySession = DBSession()
     result = mySession.execute(
         "SELECT txt_rep_muni_comusan_4,img_sig_resp FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
-            db, month, year, "%" + uname + "%")).first()
+            db, month, year, "% " + uname + "_%")).first()
 
     img_path = os.path.join(request.registry.settings["user.repository"],
-                            *[parent,"user", uname, "data", "xml",result[1]])#"_".join(db.split("_")[2:]),
-    print img_path
+                            *[parent, "user", uname, "data", "xml", result[1]])  # "_".join(db.split("_")[2:]),
+
     f = open(img_path)
     data = f.read()
     f.close()
     img = base64.b64encode(data)
-    return ["data:image/png;base64,%s" % img, result[0],"_".join(db.split("_")[2:])]
-    #return [ result[0],"_".join(db.split("_")[2:]) ]
+    return ["data:image/png;base64,%s" % img, result[0], "_".join(db.split("_")[2:])]
+    # return [ result[0],"_".join(db.split("_")[2:]) ]
 
 
 def getConfigQR(uname, parent, request):
@@ -847,55 +886,138 @@ def calcDataCoverage(db, device_id_3, mun_id):
         return False
 
 
-def genXLS(self, data):
-    print data
+def genXLS(self, data, month):
     data.pop('signatures', None)
+
     path = os.path.join(self.request.registry.settings['user.repository'], "TMP", "datos_reporte.xlsx")
 
     workbook = xlsxwriter.Workbook(path)
-    worksheet = workbook.add_worksheet()
 
+    pilares = []
+    workbook = xlsxwriter.Workbook(path)
+
+    worksheet = workbook.add_worksheet("Metadata")
+
+    san = dataReport(self, month, data["date"][1])
+    data["san"] = san["san"]
     # worksheet.write(y, x, str)
     worksheet.write(0, 0, "Sala Situacional para el mes de %s, %s" % (data["date"][0], data["date"][1]))
     worksheet.write(1, 0, "Municipio: " + str(self.user.munic).title())
-    #worksheet.write(2, 0, "Institucion que reporta: " + str(self.user.organization))
-    worksheet.write(3, 0, "Covertura en comunidades: " + str(data["coverage"]) + "%")
+    # worksheet.write(2, 0, "Institucion que reporta: " + str(self.user.organization))
+    worksheet.write(3, 0, "Cobertura en comunidades: " + str(data["coverage"]) + "%")
 
-    pilares = []
-    row = 7
+    color = ["#11c300", "#ffe132", "#ff9936", "#ff1313"]
+
+    worksheet = workbook.add_worksheet("Rangos Criticos")
+    worksheet2 = workbook.add_worksheet("Datos de monitoreo")
+    worksheet3 = workbook.add_worksheet("Reporte de SSM")
+
+    format = workbook.add_format({'bg_color': "#d0d0d0", "top": 1, "bottom": 1, "left": 1, "right": 1})
+
+    worksheet.write(1, 0, "Pilar", format)
+    worksheet.write(1, 1, "Indicador", format)
+    worksheet.write(1, 2, "Variable", format)
+    worksheet.write(1, 3, "Unidad de medida", format)
+
+    format = workbook.add_format({'bg_color': color[0], "top": 1, "bottom": 1, "left": 1, "right": 1})
+    worksheet.merge_range("E2:F2", "Sin Afectacion", format)
+    format = workbook.add_format({'bg_color': color[1], "top": 1, "bottom": 1, "left": 1, "right": 1})
+    worksheet.merge_range("G2:H2", "Afectacion Moderada", format)
+    format = workbook.add_format({'bg_color': color[2], "top": 1, "bottom": 1, "left": 1, "right": 1})
+    worksheet.merge_range("I2:J2", "Afectacion Alta", format)
+    format = workbook.add_format({'bg_color': color[3], "top": 1, "bottom": 1, "left": 1, "right": 1})
+    worksheet.merge_range("K2:L2", "Afectacion Muy Alta", format)
+
+    format = workbook.add_format({'bg_color': "#d0d0d0", "top": 1, "bottom": 1, "left": 1, "right": 1})
+    worksheet2.write(1, 0, "Pilar", format)
+    worksheet2.write(1, 1, "Indicador", format)
+    worksheet2.write(1, 2, "Variable", format)
+    worksheet2.write(1, 3, "Unidad de medida", format)
+    worksheet2.write(1, 4, "Linea Base", format)
+    worksheet2.write(1, 5, "Situacion actual", format)
+    worksheet2.write(1, 6, "Institucion responsable", format)
+    worksheet2.write(1, 7, "Comparativo mensual", format)
+
+    worksheet3.merge_range("A1:H1", "Reporte Municipal de Situacion General de SAN con base a la Sala Situacional ",
+                           format)
+    worksheet3.write(1, 0, "Indice de Situacion General de SAN", format)
+    worksheet3.write(1, 1, "situacion actual", format)
+    worksheet3.write(1, 2, "Indice de afectacion por pilar", format)
+    worksheet3.write(1, 3, "Situacion actual ", format)
+    worksheet3.write(1, 4, "Indice de afectacion por indicador", format)
+    worksheet3.write(1, 5, "Situacion actual", format)
+    worksheet3.write(1, 6, "Afectacion por variable", format)
+    worksheet3.write(1, 7, "Situacion actual", format)
+
+    ##99CC66
+
+    row = 2
+    cont = 3
+
     for p in data.keys():
         if "_alert" not in p and "date" not in p and "signatures" not in p and p not in ["comunidades", "acciones",
-                                                                                         "coverage", "comunidades2"]:
-            format = workbook.add_format({'bg_color': data[p + "_alert"][2]})
-            worksheet.write(row, 0, "Pilar: " + str(p))
-            worksheet.write(row, 1, "Indice de afectacion: " + str(data[p + "_alert"][0]))
-            worksheet.write(row, 2, "Nivel de alerta: " + str(data[p + "_alert"][1]).decode("latin-1"), format)
-            row += 2
+                                                                                         "coverage", "comunidades2",
+                                                                                         "san"]:
+            init = row + 1
             for d in data[p]:
-                worksheet.write(row, 0, "Indicador: " + str(d).decode("latin-1"))
-                worksheet.write(row, 1, "Indice de la variable: " + str(data[p][d]["val"][0]))
-                row += 1
-                for c in data[p][d]["var"]:
-                    worksheet.write(row, 0, "Variable: " + str(c[0]).decode("latin-1"))
-                    worksheet.write(row, 1, "Unidad de Medida: " + str(c[1]).decode("latin-1"))
-                    worksheet.write(row, 2, "Linea Base: " + str(c[2]).decode("latin-1"))
-                    worksheet.write(row, 3, "Sitacion actual: " + str(c[3]))
-                    worksheet.write(row, 4, "Comparativo mensual: " + str(c[4]))
-                    format = workbook.add_format({'bg_color': c[5][0]})
-                    worksheet.write(row, 5, "Nivel de afectacion: " + str(c[5][1]).decode("latin-1"), format)
-                    row += 1
-                row += 2
+                init2 = row + 1
+                # print data[p][d]
+                for v in data[p][d]["var"]:
+                    cont = cont + 1
+                    format = workbook.add_format({'bg_color': "#99CC66", "top": 1, "bottom": 1, "left": 1, "right": 1})
+                    worksheet.write(row, 2, v[0].decode("utf-8").replace("_", " "), format)
+                    worksheet.write(row, 3, v[1].decode("utf-8").replace("_", " "), format)
+                    rang = getRanges(v[6], 1)
+                    for col, r in enumerate(rang):
+                        format = workbook.add_format({"top": 1, "bottom": 1, "left": 1, "right": 1})
+                        worksheet.write(row, col + 4, r, format)
 
-    o_vals = [["comunidades2", "Comunidades mas afectadas"]]
+                    format = workbook.add_format({'bg_color': "#99CC66", "top": 1, "bottom": 1, "left": 1, "right": 1})
+                    worksheet2.write(row, 2, v[0].decode("utf-8").replace("_", " "), format)
+                    worksheet2.write(row, 3, v[1].decode("utf-8").replace("_", " "), format)
+                    worksheet2.write(row, 4, v[2], format)
+                    worksheet2.write(row, 5, float(v[3].decode("utf-8").replace("_", " ")), format)
 
-    for o in o_vals:
-        worksheet.write(row, 0, o[1])
-        row += 1
-        for k in data[o[0]]:
-            worksheet.write(row, 0, k[0])
-            worksheet.write(row, 1, k[1])
-            row += 1
-        row += 1
+                    worksheet3.write(row, 6, v[0].decode("utf-8").replace("_", " "), format)
+                    worksheet3.write(row, 7, float(v[3].decode("utf-8").replace("_", " ")), format)
+
+                    state = ""
+                    if int(v[4]) == 1:
+                        state = "Aumento"
+                    elif int(v[4]) == 2:
+                        state = "Disminuyo"
+                    elif int(v[4]) == 3:
+                        state = "Se mantiene"
+                    elif int(v[4] == 4):
+                        state = "ND"
+                    format = workbook.add_format({"top": 1, "bottom": 1, "left": 1, "right": 1})
+                    worksheet2.write(row, 7, state, format)
+
+                    row = row + 1
+                format = workbook.add_format({'bg_color': "#99CC66", "top": 1, "bottom": 1, "left": 1, "right": 1})
+                if init2 != row:
+                    worksheet.merge_range('B%s:B%s' % (init2, row), d.decode("utf-8").replace("_", " "), format)
+                    worksheet2.merge_range('B%s:B%s' % (init2, row), d.decode("utf-8").replace("_", " "), format)
+                    worksheet3.merge_range('E%s:E%s' % (init2, row), d.decode("utf-8").replace("_", " "), format)
+                    worksheet3.merge_range('F%s:F%s' % (init2, row), data[p][d]["val"][0], format)
+
+                else:
+                    worksheet.write(row - 1, 1, d.decode("utf-8").replace("_", " "), format)
+                    worksheet2.write(row - 1, 1, d.decode("utf-8").replace("_", " "), format)
+                    worksheet3.write(row - 1, 4, d.decode("utf-8").replace("_", " "), format)
+                    worksheet3.write(row - 1, 5, data[p][d]["val"][0], format)
+
+            format = workbook.add_format({"top": 1, "bottom": 1, "left": 1, "right": 1})
+            worksheet.merge_range('A%s:A%s' % (init, row), p.decode("utf-8"), format)
+            worksheet2.merge_range('A%s:A%s' % (init, row), p.decode("utf-8"), format)
+            worksheet3.merge_range('C%s:C%s' % (init, row), p.decode("utf-8"), format)
+            worksheet3.merge_range('D%s:D%s' % (init, row), data[p + "_alert"][0], format)
+
+            worksheet2.merge_range('G%s:G%s' % (init, row), "SESAN", format)
+
+    format = workbook.add_format({"align": "center", "valign": "center"})
+    worksheet3.merge_range('A%s:A%s' % (3, cont - 1), data["san"][2], format)
+    worksheet3.merge_range('B%s:B%s' % (3, cont - 1), data["san"][0], format)
 
     workbook.close()
 
@@ -904,6 +1026,16 @@ def genXLS(self, data):
     headers['Content-Type'] = 'application/download'
     headers['Accept-Ranges'] = 'bite'
     headers['Content-Disposition'] = 'attachment;filename=' + "datos_reporte.xlsx"
+    return response
+
+
+def getFileResponse(request):
+    name = str(request.url).split("/")[-1:][0].replace("%20", " ")
+    response = FileResponse(request.registry.settings['user.repository'] + "help_files/" + name, request=request)
+    headers = response.headers
+    headers['Content-Type'] = 'application/download'
+    headers['Accept-Ranges'] = 'bite'
+    headers['Content-Disposition'] = 'attachment;filename=' + name.replace(" ", "_")
     return response
 
 
@@ -916,3 +1048,147 @@ def getUsersList(login):
     mySession.close()
 
     return data
+
+
+def getRanges(code, munic):
+    print "*-*-*-"
+    print code
+    print munic
+    print "*-*-*"
+    mySession = DBSession()
+
+    result = mySession.query()
+    rang = [0, 10, 11, 15, 16, 22, 23, 100]
+
+    return rang
+
+
+def getColName(id, db):
+    mySession = DBSession()
+
+    if db == "Pilares":
+        res = mySession.query(Pilare.name_pilares).filter(Pilare.id_pilares == id).first()
+        return res[0]
+    elif db == "Indicadores":
+        res = mySession.query(Indicadore.name_indicadores).filter(Indicadore.id_indicadores == id).first()
+        return res[0]
+    elif db == "Variables":
+        res = mySession.query(VariablesInd.name_variable_ind).filter(VariablesInd.id_variables_ind == id).first()
+        return res[0]
+    elif db == "SAN":
+        return "SAN"
+    else:
+        return ""
+
+
+def _finditem(obj, key):  # recursive function for find any key in python dict
+    if key in obj: return obj[key]
+    for k, v in obj.items():
+        if isinstance(v, dict):
+            return _finditem(v, key)  # added return statement
+
+
+def getData4Analize(self, vals):
+    print vals
+    mySession = DBSession()
+
+    if len(vals) > 1:
+        if vals[0] == "" and vals[1] != "SAN":
+            return 1, ["Precaucion", "Debe seleccionar algun subset de datos", "warning"]
+        else:
+
+            data = [[]]
+            data[0].append("Date")
+            for v in vals[0].split(","):
+                data[0].append(getColName(v, vals[1]))
+
+            my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
+
+            myDB = []
+            if not my_forms is None:
+                for row in my_forms:
+                    my_Pilars = mySession.query(Form).filter(Form.form_id == row.idforms).all()
+                    if not my_Pilars is None:
+                        for mp in my_Pilars:
+                            myDB.append(mp.form_db)
+            myDB = list(set(myDB))
+
+            datesF = []
+            for db in myDB:
+                dates = mySession.execute(
+                    "SELECT date_fecha_informe_6 FROM %s.maintable WHERE surveyid like binary '%s';" % (
+                    db, "%" + self.user.login + "_%"))
+                for d in dates:
+                    datesF.append(d[0])
+            datesF.sort()
+            datesF = list(set(datesF))
+
+            for d in datesF:
+                row = []
+                dt = str(d).split("-")
+                row.append(str(d))
+                rowM = getDashReportData(self, dt[1], dt[0])
+
+                if vals[1]=="SAN":
+                    rowM=dataReport(self, dt[1], dt[0])
+                    row.append(float(rowM["san"][0]))
+                    #print rowM["san"]
+                    #print "SAN"
+
+                if vals[1] == "Pilares":
+                    for v in vals[0].split(","):
+                        try:
+                            row.append(float(rowM[getColName(v, vals[1]) + "_alert"][0]))
+                        except:
+                            row.append(None)
+                if vals[1] == "Indicadores":
+                    for v in vals[0].split(","):
+                        try:
+                            row.append(float(_finditem(rowM, getColName(v, vals[1]))["val"][0]))
+                        except:
+                            row.append(None)
+                if vals[1] == "Variables":
+                    for vv in vals[0].split(","):
+                        flag = False
+                        try:
+                            for v in rowM:
+                                if "_alert" not in v and v not in ["date", "comunidades2", "coverage", "signatures"]:
+                                    for c in rowM[v]:
+                                        for w in rowM[v][c]["var"]:
+                                            if w[0] == getColName(vv, vals[1]):
+                                                row.append(float(w[3]))
+                                                flag = True
+
+
+                        except:
+                            row.append(None)
+                        if not flag:
+                            row.append(None)
+
+                data.append(row)
+
+            pprint(data)
+            return 2, data
+
+
+    else:
+        return 1, ["Precaucion", "Debe seleccionar algun subset de datos", "warning"]
+
+
+def getGToolData(self):
+    mySession = DBSession()
+
+    data = {"pilar": [], "ind": [], "var": []}
+
+    result = mySession.query(Pilare).filter(Pilare.user_name == self.user.parent).all()
+
+    for r in result:
+        data["pilar"].append([r.id_pilares, r.name_pilares])
+        inds = mySession.query(Indicadore).filter(Indicadore.Id_pilares == r.id_pilares).all()
+        for i in inds:
+            data["ind"].append([i.id_indicadores, i.name_indicadores.replace("_", " ")])
+            vars = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == i.id_indicadores).all()
+            for v in vars:
+                data["var"].append([v.id_variables_ind, v.name_variable_ind])
+    mySession.close()
+    return json.dumps(data)
