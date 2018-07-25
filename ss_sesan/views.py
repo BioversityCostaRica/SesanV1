@@ -7,7 +7,7 @@ from .auth import getUserData
 from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS, formsCSS_JS, gtoolCSS_JS
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
     valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser, getForm_By_User, \
-    getHelpFiles, getFileResponse, getGToolData, getData4Analize
+    getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
     getXMLForm, storeSubmission
 from datetime import datetime
@@ -85,6 +85,37 @@ class baseline_view(privateView):
         return {'activeUser': self.user, "lb_data": lb_data, "fill_reg": fill_regN, "msg": msg}
 
 
+@view_config(route_name='mails', renderer='templates/mails.jinja2')
+class mails_view(privateView):
+    def processView(self):
+        DashJS.need()
+        DashCSS.need()
+        baselineR.need()
+        regJS_CSS.need()
+        fill_regN = fill_reg()
+        msg = []
+        mail_list = []
+
+        if "delMail" in self.request.POST:
+            fill_regN["sel_name"] = self.request.POST.get("sel_name", "").title()
+            fill_regN["sel"] = getMunicId(self.request.POST.get("sel_name", ""))
+            msg = delMail(self.request.POST.get("delMail", ""))
+            mail_list = getMails(getMunicId(self.request.POST.get("sel_name")))
+
+        if "reg" in self.request.POST:
+            msg = addMail(self.request,self.request.POST.get("fullname"), self.request.POST.get("email"),
+                          self.request.POST.get("munic_name"))
+            fill_regN["sel_name"] = self.request.POST.get("munic_name")
+            fill_regN["sel"] = getMunicId(self.request.POST.get("munic_name"))
+            mail_list = getMails(getMunicId(self.request.POST.get("munic_name")))
+        if "munic" in self.request.POST:
+            fill_regN["sel"] = int(self.request.POST.get("munic", ""))
+            fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
+            mail_list = getMails(self.request.POST.get("munic", ""))
+
+        return {'activeUser': self.user, "msg": msg, "fill_reg": fill_regN, "mail_list": mail_list}
+
+
 @view_config(route_name='weighing', renderer='templates/weighing.jinja2')
 class weighing_view(privateView):
     def processView(self):
@@ -144,7 +175,7 @@ class pilares_view(privateView):
         regJS_CSS.need()
         pilarCSS_JS.need()
         msg = []
-        print self.request.POST
+        # print self.request.POST
         if "jsondata" in self.request.POST:
             msg = newPilar(self.request.POST.get("jsondata", ""), self.user.login)
         if "p_id" in self.request.POST:
@@ -240,14 +271,12 @@ class dashboard_view(privateView):
         DashJS.need()
         DashCSS.need()
 
-
         if 'dateP' in self.request.POST:
             date = self.request.POST.get('dateP', '').split(" ")
             dashData = getDashReportData(self, str(meses.index(date[0]) + 1), date[1])
 
         else:
             if "cur_date" in self.request.cookies:
-                print self.request.cookies["cur_date"].split("_")
                 date = self.request.cookies["cur_date"].split("_")
                 dashData = getDashReportData(self, str(meses.index(date[0]) + 1), date[1])
             else:
@@ -452,3 +481,6 @@ class munic_kml(publicView):
             return response
         except:
             return Response(status=404)
+
+
+

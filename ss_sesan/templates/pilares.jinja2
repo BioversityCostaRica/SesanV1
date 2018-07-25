@@ -150,8 +150,8 @@
 
                                         {% for v in i.vars %}
                                             <tr>
-                                                <td>{{ v.name_variable_ind.decode("utf-8") }}</td>
-                                                <td class="text-center">{{ v.unidad_variable_ind.decode("utf-8") }}</td>
+                                                <td>{{ v.name_variable_ind.decode("latin1") }}</td>
+                                                <td class="text-center">{{ v.unidad_variable_ind.decode("latin1") }}</td>
                                                 <td class="text-center">{{ v.v_pregunta.decode("latin1") }}</td>
                                                 <td class="text-center">
 
@@ -163,7 +163,7 @@
                                                             class="fa fa-edit"></i>
                                                     </button>
 
-                                                    {% snippet "snippets/edit_variables.jinja2", request=request, id_variables_ind=v.id_variables_ind, name_variable_ind=v.name_variable_ind.decode("utf-8"), v_pregunta=v.v_pregunta.decode("latin1"),unidad_variable_ind=v.unidad_variable_ind.decode("latin1"), min=v.var_min, max=v.var_max %}
+                                                    {% snippet "snippets/edit_variables.jinja2", request=request, id_variables_ind=v.id_variables_ind, name_variable_ind=v.name_variable_ind.decode("latin1"), v_pregunta=v.v_pregunta.decode("latin1"),unidad_variable_ind=v.unidad_variable_ind.decode("latin1"), min=v.var_min, max=v.var_max %}
 
 
                                                 </td>

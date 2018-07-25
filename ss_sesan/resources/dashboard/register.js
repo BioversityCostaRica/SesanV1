@@ -53,6 +53,44 @@ $(document).ready(function () {
     });
 
 
+
+    $(".submitM").submit(function (e) {
+
+        var form = this;
+        e.preventDefault();
+
+
+        swal({
+                title: "Se eliminara esta direccion!",
+                text: "Seguro que desea eliminar esta direccion de correo electronico?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Si, deseo eliminarlo!",
+                cancelButtonText: "No, deseo cancelar!",
+                closeOnConfirm: false,
+                closeOnCancel: false,
+                html:false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    form.submit();
+
+                } else {
+
+                    swal({
+                        title: "Cancelado",
+                        text: "No se eliminara este correo",
+                        type: "success"
+                    });
+                }
+            });
+    });
+
+
+
+
+
 });
 
 

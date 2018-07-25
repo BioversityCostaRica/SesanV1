@@ -62,6 +62,7 @@ def main(global_config, **settings):
     config.add_route('weighing', '/weighing')
     config.add_route('about', '/about')
     config.add_route('gtool', '/gtool')
+    config.add_route('mails', '/mails')
     # odk routes
     config.add_route('odkformlist', '{parent}/{user}/formList')
     config.add_route('odksubmission', '/{parent}/{user}/submission')
