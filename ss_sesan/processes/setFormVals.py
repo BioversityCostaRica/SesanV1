@@ -151,7 +151,7 @@ def getPilarData(user):
                 vars_id.append(str(v.id_variables_ind))
             data[res.name_pilares]["ind"].append({"name": ind.name_indicadores.replace("_", " "), "vars": vars})
         data[res.name_pilares]["indL"] = ",".join(calcIndL(data[res.name_pilares]["ind"]))
-    pprint(data)
+    #pprint(data)
     return data, vars_id
 
 
@@ -452,12 +452,12 @@ def genForm_Files(login, pilarId, request, fname):
     # odktools para crear la base de datos
 
     args = []
-    ODKtoMySQL = os.path.join(request.registry.settings['odktools.path'], *["ODKToMySQL", "odktomysql"])
+    ODKtoMySQL = os.path.join(request.registry.settings["odktools.path"], *["ODKToMySQL", "odktomysql"])
 
     args.append(ODKtoMySQL)
     args.append("-x " + path)  # xlsx file
     args.append("-t maintable")  # maintable name
-    args.append("-v device_id_3;")  # Main survey variable
+    args.append("-v device_id_3")  # Main survey variable
 
     args.append("-u " + os.path.join(outputDir, "uuid-triggers.sql"))
     args.append("-f " + os.path.join(outputDir, "manifest.xml"))
@@ -469,18 +469,25 @@ def genForm_Files(login, pilarId, request, fname):
     args.append("-c " + os.path.join(outputDir, "create.sql"))
 
     error = False
-    cnfFile = request.registry.settings['mysql.cnf']
+    cnfFile = request.registry.settings["mysql.cnf"]
 
     try:  # odktomysql
+        print"\n*-1-*\n"
+        print path
+        print args
         check_call(args)
+        print"\n*-11-*\n"
     except CalledProcessError as e:
         msg = "Error exporting files to database \n"
-        msg = msg + "Commang: " + " ".join(args) + "\n"
+        msg = msg + "Command: " + " ".join(args) + "\n"
         msg = msg + "Error: \n"
         msg = msg + e.message
         print msg
+        print e
+
+
         error = True
-        return e
+        return False
 
     if not error:  # drop database if exist
         args = []
@@ -488,7 +495,9 @@ def genForm_Files(login, pilarId, request, fname):
         args.append("--defaults-file=" + cnfFile)
         args.append('--execute=DROP DATABASE IF EXISTS ' + 'DATA_' + login + '_' + fname.title().replace(' ', '_'))
         try:
+            print"\n*-2-*\n"
             check_call(args)
+            print"\n*-21-*\n"
         except CalledProcessError as e:
             msg = "Error exporting files to database \n"
             msg = msg + "Commang: " + " ".join(args) + "\n"
@@ -503,7 +512,9 @@ def genForm_Files(login, pilarId, request, fname):
         args.append("--defaults-file=" + cnfFile)
         args.append('--execute=CREATE DATABASE ' + 'DATA_' + login + '_' + fname.title().replace(' ', '_'))
         try:
+            print"\n*-3-*\n"
             check_call(args)
+            print"\n*-31-*\n"
         except CalledProcessError as e:
             msg = "Error exporting files to database \n"
             msg = msg + "Commang: " + " ".join(args) + "\n"

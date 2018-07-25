@@ -12,8 +12,6 @@ from zope.sqlalchemy import ZopeTransactionExtension
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 
 
-
-
 Base = declarative_base()
 metadata = Base.metadata
 
@@ -91,6 +89,15 @@ class LineasBase(Base):
     lb_valor = Column(Integer)
 
 
+class MailList(Base):
+    __tablename__ = 'mail_list'
+
+    idmail_list = Column(Integer, primary_key=True)
+    munic_id = Column(Integer)
+    mail = Column(String(45))
+    mail_name = Column(String(45))
+
+
 class Munic(Base):
     __tablename__ = 'munic'
 
@@ -158,6 +165,6 @@ class VariablesInd(Base):
     lbase_variable_ind = Column(String(45))
     code_variable_ind = Column(String(45))
     coef_pond = Column(Integer)
-    v_pregunta = Column(String(200))
+    v_pregunta = Column(String(210))
     var_max = Column(Integer)
     var_min = Column(String(45))

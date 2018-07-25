@@ -50,7 +50,7 @@ $(document).ready(function () {
         $("#rang1_" + vId).html("Sin afectacion: " + $('#var_min_' + vId).val() + " - " + vals[0]);
         $("#rang2_" + vId).html("Afectacion Moderada: " + (Number(vals[0]) + 1).toString() + " - " + vals[1]);
         $("#rang3_" + vId).html("Afectacion Alta: " + (Number(vals[1]) + 1).toString() + " - " + vals[2]);
-        $("#rang4_" + vId).html("Afectacion muy alta: " + (Number(vals[2])).toString() + " - " + $('#var_max_' + vId).val());
+        $("#rang4_" + vId).html("Afectacion muy alta: " + (Number(vals[2]) + 1).toString() + " - " + $('#var_max_' + vId).val());
 
 
     }
@@ -88,151 +88,151 @@ $(document).ready(function () {
 
     var current;
 
-    if (vd[0]!=""){
+    if (vd[0] != "") {
         for (var v = 0; v < vd.length; v++) {
 
-        var vv = vd[v];
-        max = 100;
-        min = 0;
-        var slider = document.getElementById('slider_' + vd[v]);
-        obs.push([vd[v], slider]);
-        current = slider;
-        noUiSlider.create(current, {
-            start: [25, 50, 75],
-            connect: [true, true, true, true],
-            step: 1,
-            range: {
-                'min': [min],
-                'max': [max]
-            },
-            tooltips: false,
-            //format: "v",
+            var vv = vd[v];
+            max = 100;
+            min = 0;
+            var slider = document.getElementById('slider_' + vd[v]);
+            obs.push([vd[v], slider]);
+            current = slider;
+            noUiSlider.create(current, {
+                start: [25, 50, 75],
+                connect: [true, true, true, true],
+                step: 1,
+                range: {
+                    'min': [min],
+                    'max': [max]
+                },
+                tooltips: false,
+                //format: "v",
 
-        });
+            });
 
-
-        var connect = current.querySelectorAll('.noUi-connect');
-        var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
-
-        for (var i = 0; i < connect.length; i++) {
-            $(connect[i]).css({"background": color[i]});
-        }
-        $(".noUi-base, .noUi-connects").css({'position': 'initial'});
-
-        current.noUiSlider.on('update', function (values) {
-            vals = values;
-            update_text();
-
-        });
-
-        $("#rotate_" + vd[v]).click(function () {
 
             var connect = current.querySelectorAll('.noUi-connect');
-            if (!left_to_rigth) {
-
-                var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
-                left_to_rigth = true;
-            }
-            else {
-                var color = ["#ff1313", "#ffe132", "#ff9936", "#11c300"];
-                left_to_rigth = false;
-            }
-
+            var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
 
             for (var i = 0; i < connect.length; i++) {
                 $(connect[i]).css({"background": color[i]});
             }
             $(".noUi-base, .noUi-connects").css({'position': 'initial'});
-        });
 
-        $("#form_vars_" + vd[v]).submit(function (e) {
+            current.noUiSlider.on('update', function (values) {
+                vals = values;
+                update_text();
 
-            if (verify_max_min()) {
-                $("#vd1_" + vId).val($("#v1_" + vId).val());
-                $("#vd2_" + vId).val($("#v2_" + vId).val());
-                $("#vd3_" + vId).val($('#var_min_' + vId).val());
-                $("#vd4_" + vId).val($('#var_max_' + vId).val());
+            });
 
-                var r1, r2, r3, r4;
+            $("#rotate_" + vd[v]).click(function () {
 
-                if (left_to_rigth) {
-                    r1 = $('#var_min_' + vId).val() + "-" + vals[0];
-                    r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
-                    r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
-                    r4 = (Number(vals[2]) + 1).toString() + "-" + $('#var_max_' + vId).val();
+                var connect = current.querySelectorAll('.noUi-connect');
+                if (!left_to_rigth) {
+
+                    var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
+                    left_to_rigth = true;
                 }
                 else {
-                    r4 = (Number(vals[0]) - 1).toString() + "-" + $('#var_min_' + vId).val();
-                    r3 = (Number(vals[1]) - 1).toString() + "-" + (Number(vals[0])).toString();
-                    r2 = (Number(vals[2]) - 1).toString() + "-" + (Number(vals[1])).toString();
-                    r1 = $('#var_max_' + vId).val() + "-" + (Number(vals[2])).toString();
+                    var color = ["#ff1313", "#ffe132", "#ff9936", "#11c300"];
+                    left_to_rigth = false;
                 }
 
-                $("#vdR_" + vId).val(r1 + "|" + r2 + "|" + r3 + "|" + r4);
-            }
-            else {
-                $("#incon_msj_" + vd[v]).css({"color": "red"});
-                $("#rang1_" + vd[v]).css({"opacity": "0"});
-                $("#rang2_" + vd[v]).css({"opacity": "0"});
-                $("#rang3_" + vd[v]).css({"opacity": "0"});
-                $("#rang4_" + vd[v]).css({"opacity": "0"});
 
-                e.preventDefault();
-            }
+                for (var i = 0; i < connect.length; i++) {
+                    $(connect[i]).css({"background": color[i]});
+                }
+                $(".noUi-base, .noUi-connects").css({'position': 'initial'});
+            });
 
+            $("#form_vars_" + vd[v]).submit(function (e) {
 
-        });
+                if (verify_max_min()) {
+                    $("#vd1_" + vId).val($("#v1_" + vId).val());
+                    $("#vd2_" + vId).val($("#v2_" + vId).val());
+                    $("#vd3_" + vId).val($('#var_min_' + vId).val());
+                    $("#vd4_" + vId).val($('#var_max_' + vId).val());
 
+                    var r1, r2, r3, r4;
 
-        $('#var_max_' + vd[v]).bind('input', function () {
-
-            if (verify_max_min()) {
-                current.noUiSlider.updateOptions({
-                    range: {
-                        'min': Number($('#var_min_' + vId).val()),
-                        'max': Number($('#var_max_' + vId).val())
+                    if (left_to_rigth) {
+                        r1 = $('#var_min_' + vId).val() + "-" + vals[0];
+                        r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
+                        r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
+                        r4 = (Number(vals[2]) + 1).toString() + "-" + $('#var_max_' + vId).val();
                     }
-                });
-
-                var calc = Number($('#var_max_' + vId).val());
-                calc = (calc / 4);
-                current.noUiSlider.set([calc, calc * 2, calc * 3])
-
-            }
-            else {
-                $("#rang1_" + vd[v]).css({"opacity": "0"});
-                $("#rang2_" + vd[v]).css({"opacity": "0"});
-                $("#rang3_" + vd[v]).css({"opacity": "0"});
-                $("#rang4_" + vd[v]).css({"opacity": "0"});
-            }
-            update_text();
-
-        });
-
-        $('#var_min_' + vd[v]).bind('input', function () {
-            if (verify_max_min()) {
-
-                current.noUiSlider.updateOptions({
-                    range: {
-                        'min': Number($('#var_min_' + vd[v]).val()),
-                        'max': Number($('#var_max_' + vd[v]).val())
+                    else {
+                        r4 = (Number(vals[0]) - 1).toString() + "-" + $('#var_min_' + vId).val();
+                        r3 = (Number(vals[1]) - 1).toString() + "-" + (Number(vals[0])).toString();
+                        r2 = (Number(vals[2]) - 1).toString() + "-" + (Number(vals[1])).toString();
+                        r1 = $('#var_max_' + vId).val() + "-" + (Number(vals[2])).toString();
                     }
-                });
 
-                var calc = Number($('#var_max_' + vd[v]).val());
-                calc = (calc / 4);
-                current.noUiSlider.set([calc, calc * 2, calc * 3])
+                    $("#vdR_" + vId).val(r1 + "|" + r2 + "|" + r3 + "|" + r4);
+                }
+                else {
+                    $("#incon_msj_" + vd[v]).css({"color": "red"});
+                    $("#rang1_" + vd[v]).css({"opacity": "0"});
+                    $("#rang2_" + vd[v]).css({"opacity": "0"});
+                    $("#rang3_" + vd[v]).css({"opacity": "0"});
+                    $("#rang4_" + vd[v]).css({"opacity": "0"});
 
-            }
-            else {
-                $("#rang1_" + vd[v]).css({"opacity": "0"});
-                $("#rang2_" + vd[v]).css({"opacity": "0"});
-                $("#rang3_" + vd[v]).css({"opacity": "0"});
-                $("#rang4_" + vd[v]).css({"opacity": "0"});
-            }
-            update_text();
-        });
-    }
+                    e.preventDefault();
+                }
+
+
+            });
+
+
+            $('#var_max_' + vd[v]).bind('input', function () {
+
+                if (verify_max_min()) {
+                    current.noUiSlider.updateOptions({
+                        range: {
+                            'min': Number($('#var_min_' + vId).val()),
+                            'max': Number($('#var_max_' + vId).val())
+                        }
+                    });
+
+                    var calc = Number($('#var_max_' + vId).val());
+                    calc = (calc / 4);
+                    current.noUiSlider.set([calc, calc * 2, calc * 3])
+
+                }
+                else {
+                    $("#rang1_" + vd[v]).css({"opacity": "0"});
+                    $("#rang2_" + vd[v]).css({"opacity": "0"});
+                    $("#rang3_" + vd[v]).css({"opacity": "0"});
+                    $("#rang4_" + vd[v]).css({"opacity": "0"});
+                }
+                update_text();
+
+            });
+
+            $('#var_min_' + vd[v]).bind('input', function () {
+                if (verify_max_min()) {
+
+                    current.noUiSlider.updateOptions({
+                        range: {
+                            'min': Number($('#var_min_' + vd[v]).val()),
+                            'max': Number($('#var_max_' + vd[v]).val())
+                        }
+                    });
+
+                    var calc = Number($('#var_max_' + vd[v]).val());
+                    calc = (calc / 4);
+                    current.noUiSlider.set([calc, calc * 2, calc * 3])
+
+                }
+                else {
+                    $("#rang1_" + vd[v]).css({"opacity": "0"});
+                    $("#rang2_" + vd[v]).css({"opacity": "0"});
+                    $("#rang3_" + vd[v]).css({"opacity": "0"});
+                    $("#rang4_" + vd[v]).css({"opacity": "0"});
+                }
+                update_text();
+            });
+        }
 
     }
 
@@ -300,16 +300,16 @@ $(document).ready(function () {
         $(".noUi-base, .noUi-connects").css({'position': 'initial'});
         var vals;
         slider.noUiSlider.on('update', function (values) {
-            vals=values;
+            vals = values;
             $("#rang1_nf").html("Sin afectacion: 0 - " + values[0]);
             $("#rang2_nf").html("Afectacion Moderada: " + (Number(values[0]) + 1).toString() + " - " + values[1]);
             $("#rang3_nf").html("Afectacion Alta: " + (Number(values[1]) + 1).toString() + " - " + values[2]);
-            $("#rang4_nf").html("Afectacion muy alta: " + (Number(values[2])).toString() + " - 100");
+            $("#rang4_nf").html("Afectacion muy alta: " + (Number(values[2]) + 1).toString() + " - 100");
 
             var r1, r2, r3, r4;
 
             if (left_to_rigth_fn) {
-                r1 =  "0-" + values[0];
+                r1 = "0-" + values[0];
                 r2 = (Number(values[0]) + 1).toString() + "-" + values[1];
                 r3 = (Number(values[1]) + 1).toString() + "-" + values[2];
                 r4 = (Number(values[2]) + 1).toString() + "-100";
@@ -326,14 +326,14 @@ $(document).ready(function () {
         });
 
         $("#rotate_nf").click(function () {
-            var values=vals;
+            var values = vals;
             var connect = slider.querySelectorAll('.noUi-connect');
             if (!left_to_rigth_fn) {
 
                 var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
                 left_to_rigth_fn = true;
 
-                r1 =  "0-" + values[0];
+                r1 = "0-" + values[0];
                 r2 = (Number(values[0]) + 1).toString() + "-" + values[1];
                 r3 = (Number(values[1]) + 1).toString() + "-" + values[2];
                 r4 = (Number(values[2]) + 1).toString() + "-" + $('#var_max_' + vId).val();

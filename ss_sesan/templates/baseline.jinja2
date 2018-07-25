@@ -104,13 +104,13 @@
                                                                           t_id="{{ row.id }}">{{ row.id }}</span>
                                                                 </td>
                                                                 <td class="project-title">
-                                                                    <a>{{ row.var.decode("utf-8") }}</a>
+                                                                    <a>{{ row.var.decode("latin1") }}</a>
 
 
                                                                 </td>
                                                                 <td>
                                                                     <small>
-                                                                        Indicador: {{ row.ind.decode("utf-8") }} </small>
+                                                                        Indicador: {{ row.ind.decode("latin1") }} </small>
                                                                 </td>
 
                                                                 <td class="project-people">
@@ -187,13 +187,13 @@
                                                         <span class="label label-primary" t_id="{{ row }}">{{ row }}</span>
                                                     </td>
                                                     <td class="project-title">
-                                                        <a>{{ lb_data[row].var.decode("utf-8") }}</a>
+                                                        <a>{{ lb_data[row].var.decode("latin1") }}</a>
 
 
                                                     </td>
                                                     <td>
                                                         <small>
-                                                            Indicador: {{ lb_data[row].ind.decode("utf-8")  }} </small>
+                                                            Indicador: {{ lb_data[row].ind.decode("latin1")  }} </small>
                                                     </td>
 
                                                     <td class="project-people">

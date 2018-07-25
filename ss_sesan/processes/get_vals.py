@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from ..models import DBSession, Institucione, Munic, User, VariablesInd, Pilare, Indicadore, Grupo, RangosPilare, \
-    LineasBase, CentrosUrbano, CoefPond, FormsByUser, Form
+    LineasBase, CentrosUrbano, CoefPond, FormsByUser, Form, RangosGrupo, MailList
+from send_mail import mail2
 from sqlalchemy import func
 from datetime import datetime as t
 from ..encdecdata import encodeData
@@ -46,16 +48,10 @@ def dataReport(self, month, year):
     unames = []
 
     ###
-
-
-
     mySession = DBSession()
 
     if not valReport(self, month, year):
         return {}
-
-
-
 
     data = {}
 
@@ -506,9 +502,7 @@ def getCoefPond(idVar, munId):
     return res
 
 
-def calcValue(val, idVar,
-              type,
-              munId):  # if type = 2 calc Equivalent values elif type == 1 calc Weighting coefficient, if type =3 get pilar coeff
+def calcValue(val, idVar, type, munId):  # if type = 2 calc Equivalent values elif type == 1 calc Weighting coefficient, if type =3 get pilar coeff
     mySession = DBSession()
     res = ""
     if type == 1:
@@ -523,6 +517,7 @@ def calcValue(val, idVar,
         res = result.coef_pond
 
     mySession.close()
+
     return float(res)
 
 
@@ -644,6 +639,7 @@ def getDashReportData(self, month, year):
                 i_pi = mySession.query(Indicadore.Id_pilares).filter_by(id_indicadores=i).first()
 
                 if str(int(i_pi[0])) in pilares_ind_db:
+
                     p_name = mySession.query(Pilare.name_pilares, Pilare.id_pilares).filter_by(
                         id_pilares=int(i_pi[0])).first()
                     tot_alert = []
@@ -652,17 +648,17 @@ def getDashReportData(self, month, year):
                         Id_pilares=int(i_pi[0])).all()
 
                     for i_n in i_name:
+
                         # print i_n[0]
                         data[p_name[0]][i_n[0]] = {"var": [], "val": []}  # add indicadores
                         variables = mySession.query(VariablesInd).filter_by(id_indicadores=int(i_n[1])).all()
-                        valCP = 1
+                        valCP = 0
                         acum = []
                         for v in variables:
                             # print v.code_variable_ind
                             sa = getVarValue(db, v.code_variable_ind, month, year, self.user.login)
 
                             # add variables data
-
                             if sa != "ND":
                                 l_base = getLB(v.id_variables_ind, self.user.munic)
 
@@ -679,12 +675,6 @@ def getDashReportData(self, month, year):
                                                                                                               self.user.munic))
 
                         tot_alert.append([valCP, sum(acum)])
-                        # print "**-*-*-*-*-*\n\n\n\n\n\n\n"
-                        # print db
-                        # print valCP
-                        # print v.id_variables_ind
-                        # print "%.2f" % (sum(acum))
-                        # print "**-*-*-*-*-*\n\n\n\n\n\n\n"
                         data[p_name[0]][i_n[0]]["val"].append("%.2f" % (sum(acum) / valCP))
                         # data[p_name[0]][i_n[0]]["val"].append("CCCC")
                     pilares.append(int(i_pi[0]))
@@ -694,6 +684,7 @@ def getDashReportData(self, month, year):
                     for t in tot_alert:
                         t0 = t0 + t[0]
                         t1 = t1 + t[1]
+
                     alertP = getPilarAlert(p_name[1], "%.2f" % (t1 / t0))
 
                     data[p_name[0] + "_alert"] = ["%.2f" % (t1 / t0), alertP[1].title(), alertP[0]]
@@ -707,29 +698,18 @@ def getDashReportData(self, month, year):
 
             for id_cu in com:
                 data["comunidades2"].append(getPob4Map(id_cu, alertP[0]))
-            # data["acciones"] = getRepInfo(ruuid,db, "acc")
             data["coverage"] = calcDataCoverage(db, ruuid, getMunicId(self.user.munic))
 
-
-            # else:
-            #    data["error"] = True
 
     meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
              "Noviembre", "Diciembre"]
 
     data["date"] = [meses[int(month) - 1], year]
-    # import json
-    # r = json.dumps(unicode(data),ensure_ascii=False,encoding='utf8')
-    # with open("/home/acoto/pr_pptx/sort_db/data.json", 'wb') as f:
-    #    json.dump(r,f, ensure_ascii=False, encoding='utf8')
     mySession.close()
 
     for i, s in enumerate(data["comunidades2"]):
-        # if (s[0] not in data["comunidades2"]):
         data["comunidades2"][i] = s[0]
-    # print list(set(data["comunidades2"]))
 
-    #pprint(data["san"])
 
 
     return data
@@ -1050,15 +1030,22 @@ def getUsersList(login):
     return data
 
 
+def getVarIdByCode(code):
+    mySession = DBSession()
+    result = mySession.query(VariablesInd.id_variables_ind).filter(VariablesInd.code_variable_ind==code).scalar()
+    mySession.close()
+    return result
+
+
 def getRanges(code, munic):
-    print "*-*-*-"
-    print code
-    print munic
-    print "*-*-*"
     mySession = DBSession()
 
-    result = mySession.query()
-    rang = [0, 10, 11, 15, 16, 22, 23, 100]
+    result = mySession.query(RangosGrupo.r_min,RangosGrupo.r_max).filter(RangosGrupo.id_variables_ind==getVarIdByCode(code)).all()
+    vals=[]
+    for row in result:
+        vals.append(int(row[0]))
+        vals.append(int(row[1]))
+    rang = vals
 
     return rang
 
@@ -1191,4 +1178,58 @@ def getGToolData(self):
             for v in vars:
                 data["var"].append([v.id_variables_ind, v.name_variable_ind])
     mySession.close()
-    return json.dumps(data)
+    return json.dumps(data, ensure_ascii=False,encoding='latin1')
+
+
+
+def getMails(mun):
+    mySession =DBSession()
+
+    result=mySession.query(MailList).filter(MailList.munic_id==mun).all()
+
+    data=[]
+    for row in result:
+        data.append([row.idmail_list,row.mail,row.mail_name ])
+    mySession.close()
+
+    return data
+
+
+def addMail(request,fullname,mail,munic_name):
+    mySession = DBSession()
+    #try:
+
+    new_mail=MailList(munic_id=getMunicId((munic_name)),
+                  mail=mail,
+                  mail_name=fullname)
+
+    transaction.begin()
+    mySession.add(new_mail)
+    transaction.commit()
+    mySession.close()
+    body_message = ["Estimado "+fullname,
+                    "Este correo es para informar que ha sido agregado a la lista de distribucion de correos informativos para la SalaSituacional de "+munic_name,
+                    "Si tiene dudas o consultas puede hacerlas llegar al departamento de TI de SESAN o a traves de su oficina regional",
+                    "Gracias"]
+
+    mail2(request, body_message, mail)
+
+    return ["Correcto", "Correo registrado correctamente", "success"]
+    #except:
+    #    return ["Error", "Sucedio un error registrar este correo", "error"]
+
+
+
+def delMail(mailId):
+    try:
+
+        mySession =DBSession
+
+        transaction.begin()
+        mySession.query(MailList).filter(MailList.idmail_list==mailId).delete()
+        transaction.commit()
+        mySession.close()
+
+        return ["Correcto", "Correo eliminado correctamente", "success"]
+    except:
+        return ["Error", "Sucedio un error eliminar este correo", "error"]
