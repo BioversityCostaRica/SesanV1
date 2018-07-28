@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-from ..models import DBSession, Institucione, Munic, User, VariablesInd, Pilare, Indicadore, Grupo, RangosPilare, \
-    LineasBase, CentrosUrbano, CoefPond, FormsByUser, Form, RangosGrupo, MailList
+from ..models import DBSession, Institucione, Munic, User, VariablesInd, Pilare, Indicadore, Grupo, RangosPilare, LineasBase, CentrosUrbano, CoefPond, FormsByUser, Form, RangosGrupo, MailList
 from send_mail import mail2
 from sqlalchemy import func
 from datetime import datetime as t
