@@ -105,8 +105,6 @@
                                                     <thead>
                                                     <tr>
 
-
-                                                        <th></th>
                                                         <th>Nombre</th>
                                                         <th>Correo electronico</th>
                                                         <th>Actions</th>
@@ -116,7 +114,7 @@
 
                                                     {% for row in mail_list|sort %}
                                                         <tr>
-                                                            <td>{{ row[0] }}</td>
+
 
                                                             <td>{{ row[2].decode('latin-1') }}</td>
                                                             <td>{{ row[1] }}</td>
@@ -134,16 +132,6 @@
                                                                             class="fa fa-times"></i>
                                                                     </button>
 
-{#                                                                    <button class="btn btn-warning btn-circle btn-xs"#}
-{#                                                                            type="button"#}
-{#                                                                            data-toggle="modal" data-target="#mo"><i#}
-{#                                                                            class="fa fa-edit"></i>#}
-{#                                                                    </button>#}
-{#                                                                    <button class="btn btn-default btn-circle btn-xs"#}
-{#                                                                            type="button">#}
-{#                                                                        <i#}
-{#                                                                                class="fa fa-plus"></i>#}
-{#                                                                    </button>#}
                                                                 </form>
                                                             </td>
                                                         </tr>

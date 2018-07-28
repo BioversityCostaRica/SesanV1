@@ -8,7 +8,7 @@
     {% endblock meta %}
 
     {% block title %}
-        <title>SESAN | Dashboard</title>
+        <title>SESAN | Reporte</title>
     {% endblock title %}
 </head>
 
@@ -141,16 +141,22 @@
 
 
                     </div>
-                    <div class="col-sm-2 text-right">
+                    <div class="col-sm-2 text-right" style="padding-top: 0.5%">
 
 
-                        <button class="btn btn-default btn-sm " class="fa fa-check" type="button"
+                        <button  class="btn btn-primary btn-circle btn-lg btn-outline" class="fa fa-check" type="button" title="Guardar reporte"
                                 onclick="javascript:printReport();"
                                 name="linkRep"
                                 id="linkRep"><i
-                                class="fa fa-print"></i>
+                                class="fa fa-save" ></i>
                         </button>
-                        <input type="text" id="pptx_img" value="">
+                        <input type="hidden" id="pptx_img" value="">
+                        <input type="hidden" id="pptx_img2" value="">
+                        <input type="hidden" id="rep_mun" value="{{ dataReport.date[2].title() }}">
+                        <input type="hidden" id="rep_date" value="{{ dataReport.date[0] }},{{ dataReport.date[1] }}">
+
+
+
 
 
                     </div>
@@ -186,7 +192,10 @@
 
                         <div id="main_s" class="row wrapper wrapper-content animated fadeInRight">
 
-                            <div class="col-md-3" id="sit_san">
+
+
+                        <div id="sit_san2">
+                            <div class="col-md-3" id="sit_san" style="padding-left: 2%">
                                 <h2><strong>Situacion SAN</strong></h2>
                                 <strong>Fecha de emision: {{ dataReport.date[0] }},{{ dataReport.date[1] }} </strong>
                                 <br>
@@ -208,14 +217,14 @@
                                 <div class="row text-center" style="font-size:150%">
                                     <div class="col-lg-6">
                                         <p>
-                                            <i style="color: #9CC3DA" class="fa fa-circle"></i><span class="nav-label">Días con lluvia durante el mes</span>
+                                            <i style="color: #1AB394" class="fa fa-circle"></i><span class="nav-label">Días con lluvia durante el mes</span>
                                         </p>
                                         <canvas id="doughnutChart2" width="80" height="80"
                                                 style="margin: 18px auto 0"></canvas>
                                     </div>
                                     <div class="col-lg-6">
                                         <p>
-                                            <i style="color: #9CC3DA" class="fa fa-circle"></i><span class="nav-label">Niños con desnutricion</span>
+                                            <i style="color: #1AB394" class="fa fa-circle"></i><span class="nav-label">Niños con desnutricion</span>
                                         </p>
                                         <canvas id="doughnutChart" width="80" height="80"
                                                 style="margin: 18px auto 0"></canvas>
@@ -272,6 +281,7 @@
 
 
                             </div>
+                        </div>
                             <div class="col-md-6 ">
 
                             </div>
@@ -282,7 +292,7 @@
                             {% set stl2 = 'default' %}
                             {% set color = '#1c84c6'  %}<!-- 1c84c6 azul - 1ab394 verde  -->
                             <br><br><br>
-                            <div class="col-md-8 pull-right">
+                            <div class="col-md-8 pull-right" id="calendario">
 
                                 <table class="table" style="table-layout: fixed;">
                                     <tbody>
@@ -512,7 +522,7 @@
                         <!----------------->
                         <!-- ADD_PAGE -->
 
-                        <div class="row">
+                        <{#div class="row">
                             <script type="text/javascript"
                                     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDo13AUO2xL-UgyHvklmo6yVVvPT90mtyU&v=3.exp"></script>
                             <div class="col-md-6">
@@ -552,7 +562,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div>#}
 
                         <!--*-*-*-*-*-->
 

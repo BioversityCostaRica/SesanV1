@@ -35,7 +35,7 @@ $(document).ready(function () {
             }
 
         }
-        console.log(vars);
+
     });
 
 
@@ -406,7 +406,7 @@ $(document).ready(function () {
             labels: ["Lluvia", "No lluvia"],
             datasets: [{
                 data: [(100 / parseInt(pltData[0])) * parseInt(pltData[1]), 100 - (100 / parseInt(pltData[0]) ) * parseInt(pltData[1])],
-                backgroundColor: ["#9CC3DA", "#dedede"]
+                backgroundColor: ["#1AB394", "#dedede"]
             }]
         };
 
@@ -428,7 +428,7 @@ $(document).ready(function () {
             labels: ["% de Ninos", " "],
             datasets: [{
                 data: [parseInt(pltData2[0]), parseInt(pltData2[1])],
-                backgroundColor: ["#9CC3DA", "#dedede"]
+                backgroundColor: ["#1AB394", "#dedede"]
             }]
         };
 

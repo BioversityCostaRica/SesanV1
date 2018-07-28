@@ -2,23 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e854dd02-1a11-4d61-8d2f-eebb1bb83e49" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ss_sesan/processes/send_mail.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ss_sesan/templates/mails.jinja2" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/ranges_helps.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/ss_sesan/templates/ranges.jinja2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/development.ini" afterPath="$PROJECT_DIR$/development.ini" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/__init__.py" afterPath="$PROJECT_DIR$/ss_sesan/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/models.py" afterPath="$PROJECT_DIR$/ss_sesan/models.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/register.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/register.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/login.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/login.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/register.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/register.jinja2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/send_mail.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/send_mail.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/utilform.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/utilform.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources.py" afterPath="$PROJECT_DIR$/ss_sesan/resources.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/resources/dashboard/report.js" afterPath="$PROJECT_DIR$/ss_sesan/resources/dashboard/report.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/mails.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/mails.jinja2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/report.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/report.jinja2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2" afterPath="$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/views.py" afterPath="$PROJECT_DIR$/ss_sesan/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -43,8 +41,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ss_sesan/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1780">
-              <caret line="105" column="31" lean-forward="false" selection-start-line="105" selection-start-column="31" selection-end-line="105" selection-end-column="39" />
+            <state relative-caret-position="266">
+              <caret line="295" column="21" lean-forward="true" selection-start-line="295" selection-start-column="21" selection-end-line="295" selection-end-column="21" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -52,54 +50,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="send_mail.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/processes/send_mail.py">
+      <file leaf-file-name="ranges.jinja2" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/ranges.jinja2">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="358" column="7" lean-forward="true" selection-start-line="358" selection-start-column="7" selection-end-line="358" selection-end-column="7" />
+            <state relative-caret-position="700">
+              <caret line="133" column="95" lean-forward="true" selection-start-line="133" selection-start-column="95" selection-end-line="133" selection-end-column="105" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ranges_helps.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/ranges_helps.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="20">
+              <caret line="65" column="18" lean-forward="false" selection-start-line="65" selection-start-column="18" selection-end-line="65" selection-end-column="18" />
               <folding>
-                <element signature="e#24#38#0" expanded="true" />
+                <element signature="e#0#40#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="login.jinja2" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/login.jinja2">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1120">
-              <caret line="56" column="63" lean-forward="false" selection-start-line="56" selection-start-column="63" selection-end-line="56" selection-end-column="63" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="dashboard.jinja2" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10300">
-              <caret line="521" column="0" lean-forward="false" selection-start-line="521" selection-start-column="0" selection-end-line="521" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="report.jinja2" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/report.jinja2">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
-              <caret line="249" column="92" lean-forward="false" selection-start-line="249" selection-start-column="92" selection-end-line="249" selection-end-column="110" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="jinja_extensions.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/processes/jinja_extensions.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -107,8 +75,8 @@
       <file leaf-file-name="get_vals.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ss_sesan/processes/get_vals.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="23" lean-forward="false" selection-start-line="0" selection-start-column="23" selection-end-line="0" selection-end-column="23" />
+            <state relative-caret-position="493">
+              <caret line="692" column="22" lean-forward="true" selection-start-line="692" selection-start-column="22" selection-end-line="692" selection-end-column="22" />
               <folding>
                 <element signature="e#24#221#0" expanded="true" />
                 <element signature="e#847#1165#0" expanded="false" />
@@ -118,87 +86,119 @@
                 <element signature="e#9385#9589#0" expanded="false" />
                 <element signature="e#9623#9816#0" expanded="false" />
                 <element signature="e#9850#10039#0" expanded="false" />
-                <element signature="e#10086#10887#0" expanded="false" />
                 <element signature="e#10923#11146#0" expanded="false" />
                 <element signature="e#11181#11335#0" expanded="false" />
-                <element signature="e#17051#17434#0" expanded="false" />
-                <element signature="e#17488#17907#0" expanded="false" />
-                <element signature="e#17958#18372#0" expanded="false" />
-                <element signature="e#18410#18656#0" expanded="false" />
-                <element signature="e#18811#19277#0" expanded="false" />
-                <element signature="e#19376#20164#0" expanded="false" />
-                <element signature="e#20201#20453#0" expanded="false" />
-                <element signature="e#20493#21217#0" expanded="false" />
-                <element signature="e#21250#21562#0" expanded="false" />
-                <element signature="e#21611#27234#0" expanded="false" />
-                <element signature="e#27300#28046#0" expanded="false" />
-                <element signature="e#28094#28373#0" expanded="false" />
-                <element signature="e#28411#29295#0" expanded="false" />
-                <element signature="e#29326#29716#0" expanded="false" />
-                <element signature="e#29752#30554#0" expanded="false" />
-                <element signature="e#30586#30733#0" expanded="false" />
-                <element signature="e#30769#31728#0" expanded="false" />
-                <element signature="e#31771#32665#0" expanded="false" />
-                <element signature="e#32719#33094#0" expanded="false" />
-                <element signature="e#33132#40666#0" expanded="false" />
-                <element signature="e#40703#41106#0" expanded="false" />
-                <element signature="e#41138#41422#0" expanded="false" />
-                <element signature="e#41455#41632#0" expanded="false" />
-                <element signature="e#41667#41956#0" expanded="false" />
-                <element signature="e#41987#42542#0" expanded="false" />
-                <element signature="e#42628#42782#0" expanded="false" />
-                <element signature="e#42822#46054#0" expanded="false" />
-                <element signature="e#46085#46839#0" expanded="false" />
-                <marker date="1532551992721" expanded="true" signature="2612:2751" ph="SELECT COUNT... maintable" />
-                <marker date="1532551992721" expanded="true" signature="8521:8660" ph="SELECT COUNT... maintable" />
-                <marker date="1532551992721" expanded="true" signature="11060:11093" ph="SELECT COUNT... maintable" />
-                <marker date="1532551992721" expanded="true" signature="17578:17724" ph="SELECT missi... maintable" />
-                <marker date="1532551992721" expanded="true" signature="18048:18189" ph="SELECT missi... maintable" />
-                <marker date="1532551992721" expanded="true" signature="20584:20805" ph="SELECT @a:=@... " />
-                <marker date="1532551992721" expanded="true" signature="20877:20986" ph="SELECT repea... repeat_prop_acciones" />
-                <marker date="1532551992721" expanded="true" signature="22892:23031" ph="SELECT COUNT... maintable" />
-                <marker date="1532551992721" expanded="true" signature="27388:27562" ph="SELECT AVG(m... maintable" />
-                <marker date="1532551992721" expanded="true" signature="28491:28721" ph="select v.id_... variables_ind" />
-                <marker date="1532551992721" expanded="true" signature="28790:28860" ph="select v.id_... variables_ind" />
-                <marker date="1532551992721" expanded="true" signature="28790:29020" ph="select v.id_... variables_ind" />
-                <marker date="1532551992721" expanded="true" signature="29363:29505" ph="select v.id_... variables_ind" />
-                <marker date="1532551992721" expanded="true" signature="32756:32933" ph="SELECT (100/... centros_urbanos" />
-                <marker date="1532551992721" expanded="true" signature="32781:32885" ph="select count... maintable_msel_sem_comunidad_totales" />
-                <marker date="1532551992721" expanded="true" signature="43787:43864" ph="SELECT date_... maintable" />
+                <element signature="e#14712#15095#0" expanded="false" />
+                <element signature="e#15149#15568#0" expanded="false" />
+                <element signature="e#15619#16033#0" expanded="false" />
+                <element signature="e#16071#16317#0" expanded="false" />
+                <element signature="e#16472#16938#0" expanded="false" />
+                <element signature="e#17037#17825#0" expanded="false" />
+                <element signature="e#17862#18114#0" expanded="false" />
+                <element signature="e#18154#18878#0" expanded="false" />
+                <element signature="e#18911#19223#0" expanded="false" />
+                <element signature="e#19272#24895#0" expanded="false" />
+                <element signature="e#25755#26034#0" expanded="false" />
+                <element signature="e#26072#26956#0" expanded="false" />
+                <element signature="e#26987#27377#0" expanded="false" />
+                <element signature="e#27413#28215#0" expanded="false" />
+                <element signature="e#28247#28394#0" expanded="false" />
+                <element signature="e#28430#29389#0" expanded="false" />
+                <element signature="e#29432#30326#0" expanded="false" />
+                <element signature="e#30380#30755#0" expanded="false" />
+                <element signature="e#30793#38327#0" expanded="false" />
+                <element signature="e#38364#38767#0" expanded="false" />
+                <element signature="e#38799#39083#0" expanded="false" />
+                <element signature="e#39116#39293#0" expanded="false" />
+                <element signature="e#39647#40202#0" expanded="false" />
+                <element signature="e#40288#40442#0" expanded="false" />
+                <element signature="e#40482#43714#0" expanded="false" />
+                <element signature="e#43745#44499#0" expanded="false" />
+                <element signature="e#45715#46076#0" expanded="false" />
+                <marker date="1532706706829" expanded="true" signature="2612:2751" ph="SELECT COUNT... maintable" />
+                <marker date="1532706706829" expanded="true" signature="8521:8660" ph="SELECT COUNT... maintable" />
+                <marker date="1532706706829" expanded="true" signature="11060:11093" ph="SELECT COUNT... maintable" />
+                <marker date="1532706706829" expanded="true" signature="15239:15385" ph="SELECT missi... maintable" />
+                <marker date="1532706706829" expanded="true" signature="15709:15850" ph="SELECT missi... maintable" />
+                <marker date="1532706706829" expanded="true" signature="18245:18466" ph="SELECT @a:=@... " />
+                <marker date="1532706706829" expanded="true" signature="18538:18647" ph="SELECT repea... repeat_prop_acciones" />
+                <marker date="1532706706829" expanded="true" signature="20553:20692" ph="SELECT COUNT... maintable" />
+                <marker date="1532706706829" expanded="true" signature="25049:25223" ph="SELECT AVG(m... maintable" />
+                <marker date="1532706706829" expanded="true" signature="26152:26382" ph="select v.id_... variables_ind" />
+                <marker date="1532706706829" expanded="true" signature="26451:26521" ph="select v.id_... variables_ind" />
+                <marker date="1532706706829" expanded="true" signature="26451:26681" ph="select v.id_... variables_ind" />
+                <marker date="1532706706829" expanded="true" signature="27024:27166" ph="select v.id_... variables_ind" />
+                <marker date="1532706706829" expanded="true" signature="30417:30594" ph="SELECT (100/... centros_urbanos" />
+                <marker date="1532706706829" expanded="true" signature="30442:30546" ph="select count... maintable_msel_sem_comunidad_totales" />
+                <marker date="1532706706829" expanded="true" signature="41447:41524" ph="SELECT date_... maintable" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pilares.jinja2" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2">
+      <file leaf-file-name="report.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/report.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="883">
-              <caret line="124" column="32" lean-forward="false" selection-start-line="124" selection-start-column="32" selection-end-line="124" selection-end-column="32" />
+            <state relative-caret-position="140">
+              <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mails.jinja2" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/mails.jinja2">
+      <file leaf-file-name="dashboard.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="120" column="91" lean-forward="false" selection-start-line="120" selection-start-column="91" selection-end-line="120" selection-end-column="91" />
+            <state relative-caret-position="0">
+              <caret line="408" column="42" lean-forward="false" selection-start-line="408" selection-start-column="42" selection-end-line="408" selection-end-column="42" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="setFormVals.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
+      <file leaf-file-name="report.jinja2" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/report.jinja2">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3720">
-              <caret line="197" column="8" lean-forward="false" selection-start-line="197" selection-start-column="8" selection-end-line="197" selection-end-column="76" />
+            <state relative-caret-position="436">
+              <caret line="226" column="68" lean-forward="false" selection-start-line="226" selection-start-column="68" selection-end-line="226" selection-end-column="68" />
               <folding>
-                <marker date="1532454174808" expanded="true" signature="13512:13625" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
-                <marker date="1532454174808" expanded="true" signature="28056:28089" ph="SELECT COUNT... maintable" />
-                <marker date="1532454174808" expanded="true" signature="30889:30954" ph="SELECT COUNT... maintable" />
+                <element signature="n#style#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#i#0;n#p#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#canvas#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#i#0;n#p#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="gtool.jinja2" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/templates/gtool.jinja2">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="640">
+              <caret line="83" column="92" lean-forward="false" selection-start-line="83" selection-start-column="47" selection-end-line="83" selection-end-column="92" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="send_mail.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/processes/send_mail.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4750">
+              <caret line="295" column="0" lean-forward="true" selection-start-line="295" selection-start-column="0" selection-end-line="295" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="utilform.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ss_sesan/processes/utilform.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="637">
+              <caret line="239" column="0" lean-forward="true" selection-start-line="239" selection-start-column="0" selection-end-line="239" selection-end-column="0" />
+              <folding>
+                <element signature="e#0#19#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -209,30 +209,13 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="Python Script" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>rang1_nf</find>
-      <find>Pilar Nu</find>
-      <find>Afectacion muy alta</find>
-      <find>vd1</find>
-      <find>calcValue</find>
-      <find>getRanges</find>
-      <find>fa-pri</find>
-      <find>print</find>
-      <find>Regis</find>
-      <find>genForm_Files</find>
-      <find>getSubmissionCount</find>
-      <find>custom</find>
-      <find>slider_</find>
-      <find>delForm</find>
-      <find>El m</find>
-      <find>id_mun_sel</find>
-      <find>response</find>
       <find>modal</find>
       <find>regis</find>
       <find>msg</find>
@@ -246,6 +229,23 @@
       <find>mails</find>
       <find>del</find>
       <find>latin</find>
+      <find>RangosG</find>
+      <find>RangosGrupo</find>
+      <find>len</find>
+      <find>range</find>
+      <find>vars_id</find>
+      <find>current</find>
+      <find>vId</find>
+      <find>activeUser</find>
+      <find>dashbo</find>
+      <find>genIMG_64</find>
+      <find>text</find>
+      <find>alert_img</find>
+      <find>nive</find>
+      <find>alert</find>
+      <find>getSig</find>
+      <find>sit_san</find>
+      <find>pptx_img</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -255,7 +255,6 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/pyramid.wsgi" />
-        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/report.js" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/update_pilar_modal.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/jinja_extensions.py" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/getCoef.py" />
@@ -265,39 +264,43 @@
         <option value="$PROJECT_DIR$/ss_sesan/auth.py" />
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/baseline.js" />
         <option value="$PROJECT_DIR$/custom.js" />
-        <option value="$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2" />
         <option value="$PROJECT_DIR$/imported.log" />
         <option value="$PROJECT_DIR$/output.csv" />
-        <option value="$PROJECT_DIR$/ss_sesan/processes/utilform.py" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/newForm.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/forms.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/forms.js" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/Edit_FormByUser.jinja2" />
         <option value="$PROJECT_DIR$/setup.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/resources.py" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/about.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/gtool.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/profile.jinja2" />
-        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/edit_variables.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/gtool.js" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2" />
-        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js" />
-        <option value="$PROJECT_DIR$/ss_sesan/__init__.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
         <option value="$PROJECT_DIR$/ss_sesan/models.py" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/register.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/register.js" />
-        <option value="$PROJECT_DIR$/development.ini" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/login.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2" />
-        <option value="$PROJECT_DIR$/ss_sesan/templates/report.jinja2" />
-        <option value="$PROJECT_DIR$/ss_sesan/views.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/__init__.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2" />
+        <option value="$PROJECT_DIR$/development.ini" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/mails.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/resources/ranges_helps.js" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/ranges.jinja2" />
+        <option value="$PROJECT_DIR$/ss_sesan/resources.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js" />
+        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/ranges_helps.js" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/send_mail.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/views.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/processes/utilform.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/report.js" />
+        <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js" />
+        <option value="$PROJECT_DIR$/ss_sesan/templates/report.jinja2" />
       </list>
     </option>
   </component>
@@ -308,10 +311,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="47" />
-    <option name="y" value="25" />
-    <option name="width" value="1873" />
-    <option name="height" value="1055" />
+    <option name="x" value="1920" />
+    <option name="y" value="-2" />
+    <option name="width" value="1920" />
+    <option name="height" value="1082" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -411,6 +414,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SesanV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SesanV1" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ss_sesan" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="resources" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -457,8 +478,8 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -467,6 +488,10 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/ss_sesan/resources/dashboard" />
+      <recent name="$PROJECT_DIR$/ss_sesan/resources" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/ss_sesan/templates/snippets" />
@@ -714,27 +739,26 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="47" y="25" width="1873" height="1055" extended-state="6" />
-    <editor active="true" />
+    <frame x="1920" y="-2" width="1920" height="1082" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17298451" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16458334" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32753327" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32805908" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -752,33 +776,12 @@
           <option name="timeStamp" value="7" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="15" />
+      <option name="time" value="17" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../../climmob_env/local/lib/python2.7/site-packages/pyramid-1.9.1-py2.7.egg/pyramid/response.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="318">
-          <caret line="28" column="6" lean-forward="false" selection-start-line="28" selection-start-column="6" selection-end-line="28" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/scripts/insert_values.sql">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan.egg-info/dependency_links.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -865,24 +868,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1420">
-          <caret line="73" column="9" lean-forward="false" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/templates/about.jinja2">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="380">
           <caret line="19" column="132" lean-forward="false" selection-start-line="19" selection-start-column="132" selection-end-line="19" selection-end-column="132" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/gtool.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="19" column="133" lean-forward="false" selection-start-line="19" selection-start-column="133" selection-end-line="19" selection-end-column="133" />
         </state>
       </provider>
     </entry>
@@ -897,27 +886,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2339">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/edit_variables.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
-          <caret line="100" column="36" lean-forward="false" selection-start-line="100" selection-start-column="33" selection-end-line="100" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/report.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3300">
-          <caret line="165" column="35" lean-forward="false" selection-start-line="165" selection-start-column="35" selection-end-line="165" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/gtool.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3020">
-          <caret line="151" column="78" lean-forward="false" selection-start-line="151" selection-start-column="78" selection-end-line="151" selection-end-column="78" />
         </state>
       </provider>
     </entry>
@@ -942,46 +910,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="16" column="37" lean-forward="false" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4160">
-          <caret line="208" column="0" lean-forward="false" selection-start-line="208" selection-start-column="0" selection-end-line="208" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/auth.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="910">
-          <caret line="75" column="26" lean-forward="false" selection-start-line="75" selection-start-column="26" selection-end-line="75" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/templates/baseline.jinja2">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
           <caret line="14" column="10" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="232" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1840">
-          <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="111" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3340">
-          <caret line="167" column="40" lean-forward="false" selection-start-line="167" selection-start-column="40" selection-end-line="181" selection-end-column="50" />
         </state>
       </provider>
     </entry>
@@ -992,20 +924,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="74" column="35" lean-forward="true" selection-start-line="74" selection-start-column="35" selection-end-line="74" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
           <caret line="94" column="15" lean-forward="false" selection-start-line="94" selection-start-column="4" selection-end-line="94" selection-end-column="15" />
-          <folding>
-            <element signature="e#16#87#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1023,29 +945,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/utilform.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1240">
-          <caret line="72" column="72" lean-forward="false" selection-start-line="72" selection-start-column="28" selection-end-line="72" selection-end-column="72" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/development.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="9" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/processes/jinja_extensions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1053,44 +956,144 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1120">
           <caret line="56" column="63" lean-forward="false" selection-start-line="56" selection-start-column="63" selection-end-line="56" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/auth.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1440">
+          <caret line="75" column="26" lean-forward="false" selection-start-line="75" selection-start-column="26" selection-end-line="75" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1060">
+          <caret line="64" column="31" lean-forward="false" selection-start-line="64" selection-start-column="31" selection-end-line="64" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4100">
+          <caret line="216" column="35" lean-forward="false" selection-start-line="216" selection-start-column="28" selection-end-line="216" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/dashopt.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="274">
+          <caret line="72" column="44" lean-forward="false" selection-start-line="72" selection-start-column="44" selection-end-line="72" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/development.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="12" column="0" lean-forward="true" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/snippets/edit_variables.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="70" column="58" lean-forward="true" selection-start-line="62" selection-start-column="52" selection-end-line="70" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/mails.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="106" column="0" lean-forward="false" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2440">
+          <caret line="14" column="10" lean-forward="false" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2180">
+          <caret line="111" column="141" lean-forward="false" selection-start-line="111" selection-start-column="141" selection-end-line="111" selection-end-column="141" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3980">
+          <caret line="199" column="0" lean-forward="false" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/pilar_helps.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3100">
+          <caret line="155" column="19" lean-forward="false" selection-start-line="155" selection-start-column="19" selection-end-line="168" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/templates/dashboard.jinja2">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10300">
-          <caret line="521" column="0" lean-forward="false" selection-start-line="521" selection-start-column="0" selection-end-line="521" selection-end-column="0" />
+        <state relative-caret-position="296">
+          <caret line="29" column="48" lean-forward="false" selection-start-line="29" selection-start-column="38" selection-end-line="29" selection-end-column="48" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1780">
-          <caret line="105" column="31" lean-forward="false" selection-start-line="105" selection-start-column="31" selection-end-line="105" selection-end-column="39" />
+        <state relative-caret-position="266">
+          <caret line="295" column="21" lean-forward="true" selection-start-line="295" selection-start-column="21" selection-end-line="295" selection-end-column="21" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
+    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/utilform.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3720">
-          <caret line="197" column="8" lean-forward="false" selection-start-line="197" selection-start-column="8" selection-end-line="197" selection-end-column="76" />
+        <state relative-caret-position="637">
+          <caret line="239" column="0" lean-forward="true" selection-start-line="239" selection-start-column="0" selection-end-line="239" selection-end-column="0" />
           <folding>
-            <marker date="1532454174808" expanded="true" signature="13512:13625" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
-            <marker date="1532454174808" expanded="true" signature="28056:28089" ph="SELECT COUNT... maintable" />
-            <marker date="1532454174808" expanded="true" signature="30889:30954" ph="SELECT COUNT... maintable" />
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/gtool.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="350">
+          <caret line="162" column="44" lean-forward="true" selection-start-line="162" selection-start-column="44" selection-end-line="162" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/send_mail.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4750">
+          <caret line="295" column="0" lean-forward="true" selection-start-line="295" selection-start-column="0" selection-end-line="295" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/processes/get_vals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="23" lean-forward="false" selection-start-line="0" selection-start-column="23" selection-end-line="0" selection-end-column="23" />
+        <state relative-caret-position="493">
+          <caret line="692" column="22" lean-forward="true" selection-start-line="692" selection-start-column="22" selection-end-line="692" selection-end-column="22" />
           <folding>
             <element signature="e#24#221#0" expanded="true" />
             <element signature="e#847#1165#0" expanded="false" />
@@ -1100,87 +1103,107 @@
             <element signature="e#9385#9589#0" expanded="false" />
             <element signature="e#9623#9816#0" expanded="false" />
             <element signature="e#9850#10039#0" expanded="false" />
-            <element signature="e#10086#10887#0" expanded="false" />
             <element signature="e#10923#11146#0" expanded="false" />
             <element signature="e#11181#11335#0" expanded="false" />
-            <element signature="e#17051#17434#0" expanded="false" />
-            <element signature="e#17488#17907#0" expanded="false" />
-            <element signature="e#17958#18372#0" expanded="false" />
-            <element signature="e#18410#18656#0" expanded="false" />
-            <element signature="e#18811#19277#0" expanded="false" />
-            <element signature="e#19376#20164#0" expanded="false" />
-            <element signature="e#20201#20453#0" expanded="false" />
-            <element signature="e#20493#21217#0" expanded="false" />
-            <element signature="e#21250#21562#0" expanded="false" />
-            <element signature="e#21611#27234#0" expanded="false" />
-            <element signature="e#27300#28046#0" expanded="false" />
-            <element signature="e#28094#28373#0" expanded="false" />
-            <element signature="e#28411#29295#0" expanded="false" />
-            <element signature="e#29326#29716#0" expanded="false" />
-            <element signature="e#29752#30554#0" expanded="false" />
-            <element signature="e#30586#30733#0" expanded="false" />
-            <element signature="e#30769#31728#0" expanded="false" />
-            <element signature="e#31771#32665#0" expanded="false" />
-            <element signature="e#32719#33094#0" expanded="false" />
-            <element signature="e#33132#40666#0" expanded="false" />
-            <element signature="e#40703#41106#0" expanded="false" />
-            <element signature="e#41138#41422#0" expanded="false" />
-            <element signature="e#41455#41632#0" expanded="false" />
-            <element signature="e#41667#41956#0" expanded="false" />
-            <element signature="e#41987#42542#0" expanded="false" />
-            <element signature="e#42628#42782#0" expanded="false" />
-            <element signature="e#42822#46054#0" expanded="false" />
-            <element signature="e#46085#46839#0" expanded="false" />
-            <marker date="1532551992721" expanded="true" signature="2612:2751" ph="SELECT COUNT... maintable" />
-            <marker date="1532551992721" expanded="true" signature="8521:8660" ph="SELECT COUNT... maintable" />
-            <marker date="1532551992721" expanded="true" signature="11060:11093" ph="SELECT COUNT... maintable" />
-            <marker date="1532551992721" expanded="true" signature="17578:17724" ph="SELECT missi... maintable" />
-            <marker date="1532551992721" expanded="true" signature="18048:18189" ph="SELECT missi... maintable" />
-            <marker date="1532551992721" expanded="true" signature="20584:20805" ph="SELECT @a:=@... " />
-            <marker date="1532551992721" expanded="true" signature="20877:20986" ph="SELECT repea... repeat_prop_acciones" />
-            <marker date="1532551992721" expanded="true" signature="22892:23031" ph="SELECT COUNT... maintable" />
-            <marker date="1532551992721" expanded="true" signature="27388:27562" ph="SELECT AVG(m... maintable" />
-            <marker date="1532551992721" expanded="true" signature="28491:28721" ph="select v.id_... variables_ind" />
-            <marker date="1532551992721" expanded="true" signature="28790:28860" ph="select v.id_... variables_ind" />
-            <marker date="1532551992721" expanded="true" signature="28790:29020" ph="select v.id_... variables_ind" />
-            <marker date="1532551992721" expanded="true" signature="29363:29505" ph="select v.id_... variables_ind" />
-            <marker date="1532551992721" expanded="true" signature="32756:32933" ph="SELECT (100/... centros_urbanos" />
-            <marker date="1532551992721" expanded="true" signature="32781:32885" ph="select count... maintable_msel_sem_comunidad_totales" />
-            <marker date="1532551992721" expanded="true" signature="43787:43864" ph="SELECT date_... maintable" />
+            <element signature="e#14712#15095#0" expanded="false" />
+            <element signature="e#15149#15568#0" expanded="false" />
+            <element signature="e#15619#16033#0" expanded="false" />
+            <element signature="e#16071#16317#0" expanded="false" />
+            <element signature="e#16472#16938#0" expanded="false" />
+            <element signature="e#17037#17825#0" expanded="false" />
+            <element signature="e#17862#18114#0" expanded="false" />
+            <element signature="e#18154#18878#0" expanded="false" />
+            <element signature="e#18911#19223#0" expanded="false" />
+            <element signature="e#19272#24895#0" expanded="false" />
+            <element signature="e#25755#26034#0" expanded="false" />
+            <element signature="e#26072#26956#0" expanded="false" />
+            <element signature="e#26987#27377#0" expanded="false" />
+            <element signature="e#27413#28215#0" expanded="false" />
+            <element signature="e#28247#28394#0" expanded="false" />
+            <element signature="e#28430#29389#0" expanded="false" />
+            <element signature="e#29432#30326#0" expanded="false" />
+            <element signature="e#30380#30755#0" expanded="false" />
+            <element signature="e#30793#38327#0" expanded="false" />
+            <element signature="e#38364#38767#0" expanded="false" />
+            <element signature="e#38799#39083#0" expanded="false" />
+            <element signature="e#39116#39293#0" expanded="false" />
+            <element signature="e#39647#40202#0" expanded="false" />
+            <element signature="e#40288#40442#0" expanded="false" />
+            <element signature="e#40482#43714#0" expanded="false" />
+            <element signature="e#43745#44499#0" expanded="false" />
+            <element signature="e#45715#46076#0" expanded="false" />
+            <marker date="1532706706829" expanded="true" signature="2612:2751" ph="SELECT COUNT... maintable" />
+            <marker date="1532706706829" expanded="true" signature="8521:8660" ph="SELECT COUNT... maintable" />
+            <marker date="1532706706829" expanded="true" signature="11060:11093" ph="SELECT COUNT... maintable" />
+            <marker date="1532706706829" expanded="true" signature="15239:15385" ph="SELECT missi... maintable" />
+            <marker date="1532706706829" expanded="true" signature="15709:15850" ph="SELECT missi... maintable" />
+            <marker date="1532706706829" expanded="true" signature="18245:18466" ph="SELECT @a:=@... " />
+            <marker date="1532706706829" expanded="true" signature="18538:18647" ph="SELECT repea... repeat_prop_acciones" />
+            <marker date="1532706706829" expanded="true" signature="20553:20692" ph="SELECT COUNT... maintable" />
+            <marker date="1532706706829" expanded="true" signature="25049:25223" ph="SELECT AVG(m... maintable" />
+            <marker date="1532706706829" expanded="true" signature="26152:26382" ph="select v.id_... variables_ind" />
+            <marker date="1532706706829" expanded="true" signature="26451:26521" ph="select v.id_... variables_ind" />
+            <marker date="1532706706829" expanded="true" signature="26451:26681" ph="select v.id_... variables_ind" />
+            <marker date="1532706706829" expanded="true" signature="27024:27166" ph="select v.id_... variables_ind" />
+            <marker date="1532706706829" expanded="true" signature="30417:30594" ph="SELECT (100/... centros_urbanos" />
+            <marker date="1532706706829" expanded="true" signature="30442:30546" ph="select count... maintable_msel_sem_comunidad_totales" />
+            <marker date="1532706706829" expanded="true" signature="41447:41524" ph="SELECT date_... maintable" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2">
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/ranges_helps.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="883">
-          <caret line="124" column="32" lean-forward="false" selection-start-line="124" selection-start-column="32" selection-end-line="124" selection-end-column="32" />
+        <state relative-caret-position="20">
+          <caret line="65" column="18" lean-forward="false" selection-start-line="65" selection-start-column="18" selection-end-line="65" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#40#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/ranges.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="700">
+          <caret line="133" column="95" lean-forward="true" selection-start-line="133" selection-start-column="95" selection-end-line="133" selection-end-column="105" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/gtool.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="640">
+          <caret line="83" column="92" lean-forward="false" selection-start-line="83" selection-start-column="47" selection-end-line="83" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/dashboard.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="408" column="42" lean-forward="false" selection-start-line="408" selection-start-column="42" selection-end-line="408" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/resources/dashboard/report.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="140">
+          <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/templates/report.jinja2">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="249" column="92" lean-forward="false" selection-start-line="249" selection-start-column="92" selection-end-line="249" selection-end-column="110" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/mails.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="120" column="91" lean-forward="false" selection-start-line="120" selection-start-column="91" selection-end-line="120" selection-end-column="91" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/send_mail.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="358" column="7" lean-forward="true" selection-start-line="358" selection-start-column="7" selection-end-line="358" selection-end-column="7" />
+        <state relative-caret-position="436">
+          <caret line="226" column="68" lean-forward="false" selection-start-line="226" selection-start-column="68" selection-end-line="226" selection-end-column="68" />
           <folding>
-            <element signature="e#24#38#0" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#1;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#0;n#p#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#canvas#0;n#div#0;n#div#1;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#i#0;n#p#0;n#div#1;n#div#1;n#div#0;n#div#0;n#div#1;n#div#2;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>

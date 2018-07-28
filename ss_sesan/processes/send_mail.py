@@ -297,7 +297,7 @@ def mail2(request,body_message, to):
     </style>
 
 
-        <link href="styles.css" media="all" rel="stylesheet" type="text/css" />
+        
     </head>
 
     <body>

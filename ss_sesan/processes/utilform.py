@@ -6,7 +6,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from hashlib import md5
 from pyramid.response import FileResponse
 import mimetypes, shutil
-from get_vals import getIntName
+from get_vals import getIntName,sendGroup
 from uuid import uuid4
 from subprocess import check_call, CalledProcessError
 
@@ -232,11 +232,17 @@ def makeJSONToMySQL(uname,iniqueID,request,xformid):
 
             file2.close()
         except:
-            print "csacsacsacssss"
+            print ""
 
         args.append("-J " +os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",xformid, "custom2.js"]) )
         try:
             check_call(args)
+
+            sendGroup(request, uname)
+
+
+
+
             #print args
             #print "insert"
         except CalledProcessError as e:

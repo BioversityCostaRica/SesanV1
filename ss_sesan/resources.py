@@ -109,6 +109,9 @@ formsCSS_JS = Group([Resource(library, 'inspinia/js/plugins/dualListbox/jquery.b
 gtoolCSS_JS = Group([Resource(library, 'dashboard/gtool.js', depends=[JQuery], bottom=True),])
 
 
+rangCSS_JS = Group([Resource(library, 'dashboard/ranges_helps.js', depends=[JQuery], bottom=True) ,pilarArray[0] ,pilarArray[1],pilarArray[2] ,pilarArray[3]])
+
+
 # requiered files for profile
 # ProfJSArray = []
 # ProfJSArray.append(Resource(library, 'inspinia/js/inspinia.js',depends=[JQuery],bottom=True))

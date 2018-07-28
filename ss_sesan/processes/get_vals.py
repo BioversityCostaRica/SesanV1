@@ -377,42 +377,7 @@ def addNewUser(regDict, request, login):
                     path = os.path.join(request.registry.settings["user.repository"],
                                         *[login, "user", regDict["user_name"], "config"])
                     os.makedirs(path)
-                    #
-                    # paths = [getIntName(regDict["inst"]) + "_" + getMunicName(regDict["munic"]).replace(" ", "") + "_" +
-                    #          regDict[
-                    #              "user_name"] + '.xml']
 
-                    #
-                    # xmlFile = os.path.join(path, *paths)
-                    #
-                    # pngFile = os.path.join(path, getIntName(regDict["inst"]).lower() + ".png")
-                    #
-                    # os.system("cp %s %s" % (
-                    #     os.path.join(request.registry.settings["user.repository"], "forms", getIntName(regDict["inst"]),
-                    #                  getIntName(regDict["inst"]) + ".xml"), xmlFile))
-                    # os.system("cp %s %s" % (
-                    #     os.path.join(request.registry.settings["user.repository"], "forms", getIntName(regDict["inst"]),
-                    #                  getIntName(regDict["inst"]).lower() + ".png"), pngFile))
-                    #
-                    # paths = [getIntName(regDict["inst"]) + "_" + getMunicName(regDict["munic"]) + "_" + regDict[
-                    #     "user_name"] + '.json']
-                    # jsonFile = os.path.join(path, *paths)
-                    #
-                    # metadata = {}
-                    # metadata["formID"] = getIntName(regDict["inst"]) + "_" + getMunicName(regDict["munic"])
-                    # metadata["name"] = getIntName(regDict["inst"]) + "_" + getMunicName(regDict["munic"]) + "_" + \
-                    #                    regDict[
-                    #                        "user_name"]
-                    # metadata["majorMinorVersion"] = "1.0"
-                    # metadata["version"] = datetime.now().strftime("%Y%m%d")
-                    # metadata["hash"] = 'md5:' + md5(open(xmlFile, 'rb').read()).hexdigest()
-                    # metadata["descriptionText"] = getIntName(regDict["inst"]) + "_3" + getMunicName(
-                    #     regDict["munic"]) + "_" + regDict["fullname"] + "_" + datetime.now().strftime("%Y%m%d")
-                    #
-                    # with open(jsonFile, "w") as outfile:
-                    #     jsonString = json.dumps(metadata, indent=4, ensure_ascii=False).encode("utf8")
-                    #     outfile.write(jsonString)
-                    #
                     make_qr(request.registry.settings["user.repository"], login,
                             regDict["password"],
                             regDict["user_name"])
@@ -1046,7 +1011,6 @@ def getRanges(code, munic):
         vals.append(int(row[0]))
         vals.append(int(row[1]))
     rang = vals
-
     return rang
 
 
@@ -1208,11 +1172,14 @@ def addMail(request,fullname,mail,munic_name):
     transaction.commit()
     mySession.close()
     body_message = ["Estimado "+fullname,
-                    "Este correo es para informar que ha sido agregado a la lista de distribucion de correos informativos para la SalaSituacional de "+munic_name,
+                    "Este correo es para informar que ha sido agregado a la lista de distribucion de correos informativos para la Sala Situacional de "+munic_name,
                     "Si tiene dudas o consultas puede hacerlas llegar al departamento de TI de SESAN o a traves de su oficina regional",
                     "Gracias"]
 
-    mail2(request, body_message, mail)
+    try:
+        mail2(request, body_message, mail)
+    except:
+        pass
 
     return ["Correcto", "Correo registrado correctamente", "success"]
     #except:
@@ -1223,7 +1190,7 @@ def addMail(request,fullname,mail,munic_name):
 def delMail(mailId):
     try:
 
-        mySession =DBSession
+        mySession =DBSession()
 
         transaction.begin()
         mySession.query(MailList).filter(MailList.idmail_list==mailId).delete()
@@ -1233,3 +1200,39 @@ def delMail(mailId):
         return ["Correcto", "Correo eliminado correctamente", "success"]
     except:
         return ["Error", "Sucedio un error eliminar este correo", "error"]
+
+
+def getRangeList(munic):
+
+    mySession = DBSession()
+    result = mySession.query(VariablesInd.id_variables_ind,VariablesInd.code_variable_ind, VariablesInd.name_variable_ind).all()
+    data=[]
+    for row in result:
+        if getRanges(row.code_variable_ind, 1) !=[]:
+            data.append([row.id_variables_ind,row.name_variable_ind, getRanges(row.code_variable_ind, 1)])
+
+    #pprint(data)
+    return data
+
+
+
+def sendGroup(request,uname):
+    mySession = DBSession()
+    result = mySession.query(User.user_munic).filter(User.user_name == uname).first()
+
+
+    list=mySession.query(MailList).filter(MailList.munic_id==result[0]).all()
+
+
+    for row in list:
+        hour=str(datetime.now()).split(" ")[1].split(".")[0]
+        body_message = ["Estimado " + row.mail_name,
+                        "Este correo es para informar que el dia de hoy ha ingresado un nuevo registro a la base de datos de Salas Situacionales para el municipio de " + getMunicName(result[0]).title() +" a las "+hour,
+                        "Si tiene dudas o consultas puede hacerlas llegar al departamento de TI de SESAN o a traves de su oficina regional.",
+                        "Gracias"]
+
+        try:
+            mail2(request, body_message, row.mail)
+        except:
+            pass
+    mySession.close()

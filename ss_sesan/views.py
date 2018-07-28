@@ -4,10 +4,11 @@ from pyramid.httpexceptions import HTTPFound
 from pyramid.response import Response
 from .classes import publicView, privateView, odkView
 from .auth import getUserData
-from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS, formsCSS_JS, gtoolCSS_JS
+from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS, formsCSS_JS, gtoolCSS_JS, \
+    rangCSS_JS
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
     valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser, getForm_By_User, \
-    getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail
+    getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail, getRangeList,sendGroup
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
     getXMLForm, storeSubmission
 from datetime import datetime
@@ -103,7 +104,7 @@ class mails_view(privateView):
             mail_list = getMails(getMunicId(self.request.POST.get("sel_name")))
 
         if "reg" in self.request.POST:
-            msg = addMail(self.request,self.request.POST.get("fullname"), self.request.POST.get("email"),
+            msg = addMail(self.request, self.request.POST.get("fullname"), self.request.POST.get("email"),
                           self.request.POST.get("munic_name"))
             fill_regN["sel_name"] = self.request.POST.get("munic_name")
             fill_regN["sel"] = getMunicId(self.request.POST.get("munic_name"))
@@ -114,6 +115,30 @@ class mails_view(privateView):
             mail_list = getMails(self.request.POST.get("munic", ""))
 
         return {'activeUser': self.user, "msg": msg, "fill_reg": fill_regN, "mail_list": mail_list}
+
+
+@view_config(route_name='ranges', renderer='templates/ranges.jinja2')
+class ranges_view(privateView):
+    def processView(self):
+        DashJS.need()
+        DashCSS.need()
+        baselineR.need()
+        rangCSS_JS.need()
+        # pilarCSS_JS.need()
+        fill_regN = fill_reg()
+        range = []
+        varsR_id = []
+        if "munic" in self.request.POST:
+            fill_regN["sel"] = int(self.request.POST.get("munic", ""))
+            fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
+            range = getRangeList(self.request.POST.get("munic", ""))
+
+            for r in range:
+                varsR_id.append(str(r[0]))
+
+            varsR_id = ",".join(varsR_id)
+
+        return {'activeUser': self.user, "msg": [], "fill_reg": fill_regN, "range": range, "varsR_id": varsR_id}
 
 
 @view_config(route_name='weighing', renderer='templates/weighing.jinja2')
@@ -270,6 +295,7 @@ class dashboard_view(privateView):
                  "Noviembre", "Diciembre"]
         DashJS.need()
         DashCSS.need()
+
 
         if 'dateP' in self.request.POST:
             date = self.request.POST.get('dateP', '').split(" ")
@@ -438,7 +464,6 @@ class push_view(odkView):
                         response = Response(status=502)
                         return response
                 else:
-                    print "push"
                     return self.askForCredentials()
             else:
                 response = Response(status=401)
@@ -481,6 +506,3 @@ class munic_kml(publicView):
             return response
         except:
             return Response(status=404)
-
-
-
