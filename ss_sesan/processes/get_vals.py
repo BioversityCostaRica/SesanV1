@@ -318,12 +318,38 @@ def getForm_By_User(uname):
     result = mySession.query(func.count(FormsByUser.idforms)).filter(FormsByUser.id_user == uname).scalar()
     return int(result)
 
+def updateUser(login,request,post):
+
+    try:
+        mySession = DBSession()
+        transaction.begin()
+        if "up_user_pass" in post:
+            mySession.query(User).filter(User.user_name == post.get("up_user_pass")).update(
+                {User.user_password: encodeData(post.get("password_"))})
+
+            make_qr(request.registry.settings["user.repository"], login,
+                    post.get("password_"),
+                    post.get("up_user_pass"))
+
+
+        else:
+            mySession.query(User).filter(User.user_name==post.get("up_user_val")).update({User.user_email:post.get("email"), User.user_fullname:post.get("fullname")})
+
+
+        transaction.commit()
+        mySession.close()
+        return ["Correcto", "Datos de usuario actualizados exitosamente", "success"]
+    except:
+        return ["Error", "Sucedio un error al intentar modificar estos datos", "error"]
+
+
+
 
 def delUser(uname, login, request):
     mySession = DBSession()
     try:
         if getForm_By_User(uname) > 0:
-            return ["Precaucion", "Este usuario no se puede elimiar porque esta relacionado a uno o mass formularios",
+            return ["Precaucion", "Este usuario no se puede elimiar porque esta relacionado a uno o mas formularios",
                     "warning"]
 
         transaction.begin()

@@ -8,7 +8,7 @@ from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR
     rangCSS_JS
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
     valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser, getForm_By_User, \
-    getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail, getRangeList,sendGroup
+    getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail, getRangeList,sendGroup,updateUser
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
     getXMLForm, storeSubmission
 from datetime import datetime
@@ -370,7 +370,8 @@ class register_view(privateView):
         regJS_CSS.need()
         result = []
 
-        #
+        if "up_user_val" in self.request.POST or "up_user_pass" in self.request.POST:
+            result= updateUser(self.user.login,self.request,self.request.POST)
 
         if "uname_u" in self.request.POST:
             result = delUser(self.request.POST.get("uname_u", ""), self.user.login, self.request)

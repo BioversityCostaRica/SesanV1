@@ -371,6 +371,16 @@ $(document).ready(function () {
             $('#message').html('Las contraseñas no coinciden').css('color', 'red');
     });
 
+
+     $('#password2_').on('keyup', function () {
+        if ($('#password_').val() == $('#password2_').val()) {
+            $('#message_').html('Correcto').css('color', 'green');
+        } else
+            $('#message_').html('Las contraseñas no coinciden').css('color', 'red');
+    });
+
+
+
     $('#munic_list').on('change', function () {
         $('#m_munic').html('').css('color', 'red');
     });
@@ -381,7 +391,7 @@ $(document).ready(function () {
 
     $("#submit").submit(function (e) {
 
-        //console.log(document.activeElement.id); // name of submit button
+        console.log(document.activeElement.id); // name of submit button
         if ($('#munic_list option:selected').val() == '') {
             $('#m_munic').html('Seleccione un municipio').css('color', 'red');
             e.preventDefault();
@@ -392,6 +402,15 @@ $(document).ready(function () {
         }
         if ($('#password').val() != $('#password2').val()) {
             $('#message').html('Las contraseñas deben coincidir').css('color', 'red');
+            e.preventDefault();
+        }
+
+    });
+
+     $("#submit_pass").submit(function (e) {
+
+        if ($('#password_').val() != $('#password2_').val()) {
+            $('#message_').html('Las contraseñas deben coincidir').css('color', 'red');
             e.preventDefault();
         }
 
