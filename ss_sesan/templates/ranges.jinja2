@@ -130,6 +130,12 @@
                                                                   class="form-horizontal m-t submitR"
                                                                   action="{{ request.path }}"
                                                                   id="submitrange">
+
+
+                                                                <input name="mun_ran_{{ row[0] }}" id="mun_ran_{{ row[0] }}" type="hidden" value="">
+                                                                <input name="mun_id" id="mun_id" type="hidden" value="{{ fill_reg.sel }}">
+                                                                <input name="var_id" id="var_id" type="hidden" value="{{ row[0] }}">
+
                                                                 <button type="submit"
                                                                         class="btn btn-primary btn-circle btn-xs"
                                                                         name="saveRange" id="saveRange"><i

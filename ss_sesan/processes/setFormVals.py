@@ -1,6 +1,7 @@
 # coding=utf-8
 from ..models import DBSession, VariablesInd, Pilare, Indicadore, Grupo, RangosPilare, LineasBase, RangosGrupo, \
     CoefPond, User, Form, FormsByUser, CentrosUrbano
+from get_vals import getRanges
 from pprint import pprint
 import ast, transaction
 import sqlalchemy as sa
@@ -147,7 +148,8 @@ def getPilarData(user):
                              "unidad_variable_ind": v.unidad_variable_ind,
                              "v_pregunta": v.v_pregunta,
                              "var_max": v.var_max,
-                             "var_min": v.var_min})
+                             "var_min": v.var_min,
+                             "range":getRanges(v.code_variable_ind,"")})
                 vars_id.append(str(v.id_variables_ind))
             data[res.name_pilares]["ind"].append({"name": ind.name_indicadores.replace("_", " "), "vars": vars})
         data[res.name_pilares]["indL"] = ",".join(calcIndL(data[res.name_pilares]["ind"]))
@@ -313,9 +315,7 @@ def form_to_user(request, login, fname, users):
 def add_CU(db, request, login, users):
     mySession = DBSession()
     users=users.split(",")
-    print "*-*-*-*"
-    print users
-    print "*-*-*-*"
+
     munics = []
 
     result = mySession.query(User.user_munic).filter(User.user_munic != 1000).filter(User.user_parent == login).filter(User.user_name.in_(users)).all()

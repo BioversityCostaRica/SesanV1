@@ -77,6 +77,7 @@
                                                               action="{{ request.path }}" id="submit{{ "_"+row[1] }}">
                                                             <input type="hidden" value="{{ row[1] }}" name="uname_u">
                                                             <button type="submit"
+                                                                    title="Eliminar usuario"
                                                                     class="btn btn-danger btn-circle btn-xs"
                                                                     name="delUser" id="delUser"><i
                                                                     class="fa fa-times"></i>
@@ -85,7 +86,7 @@
 
                                                         </form>
 
-                                                        <button class="btn btn-warning btn-circle btn-xs" type="submit"
+                                                        <button class="btn btn-warning btn-circle btn-xs" type="submit" title="Editar usuario"
                                                                 data-toggle="modal" data-target="#up_{{ row[1] }}"><i
                                                                 class="fa fa-edit"></i>
                                                         </button>
@@ -93,9 +94,9 @@
                                                         {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], name=row[0],uname=row[1], mail=row[2],val=1  %}
 
 
-                                                        <button class="btn btn-default btn-circle btn-xs" type="submit"
+                                                        <button class="btn btn-default btn-circle btn-xs" type="submit" title="Cambiar password"
                                                                 data-toggle="modal" data-target="#pass_{{ row[1] }}"><i
-                                                                class="fa fa-edit"></i>
+                                                                class="fa fa-unlock-alt"></i>
                                                         </button>
 
                                                         {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], val=2  %}

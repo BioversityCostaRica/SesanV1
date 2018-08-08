@@ -243,11 +243,10 @@ $(document).ready(function () {
 
         vId = $(this).children().find("#vId").val();
 
-
-        $("#rang1_" + vId).css({"opacity": "0"});
-        $("#rang2_" + vId).css({"opacity": "0"});
-        $("#rang3_" + vId).css({"opacity": "0"});
-        $("#rang4_" + vId).css({"opacity": "0"});
+        $("#rang1_" + vId).css({"opacity": "1"});
+        $("#rang2_" + vId).css({"opacity": "1"});
+        $("#rang3_" + vId).css({"opacity": "1"});
+        $("#rang4_" + vId).css({"opacity": "1"});
 
         $("#vd1_" + vId).val("");
         $("#vd2_" + vId).val("");
@@ -258,22 +257,99 @@ $(document).ready(function () {
         //$("#var_min_"+ vId).val("");
         $("#incon_msj_" + vId).css({"color": "white"});
 
-
+        console.log(obs);
         for (var i = 0; i < obs.length; i++) {
             if (obs[i][0] == vId) {
                 current = obs[i][1];
             }
         }
 
-        // $('#var_min_'+ vId).trigger('input');
-        //$('#var_max_'+ vId).trigger('input');
-        update_text();
+
+        if (parseInt($("#p_lv1_" + vId).val()) < parseInt($("#p_lv3_" + vId).val())) {
+            var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
+            left_to_rigth = true;
+            min = parseInt($("#var_min_" + vId).val());
+            max = parseInt($("#var_max_" + vId).val());
+
+            lv1 = parseInt($("#p_lv1_" + vId).val());
+            lv2 = parseInt($("#p_lv2_" + vId).val());
+            lv3 = parseInt($("#p_lv3_" + vId).val());
+
+        }
+        else {
+            var color = ["#ff1313", "#ffe132", "#ff9936", "#11c300"];
+            left_to_rigth = false;
+            min = parseInt($("#var_min_" + vId).val());
+            max = parseInt($("#var_max_" + vId).val());
+
+            lv3 = parseInt($("#p_lv1_" + vId).val());
+            lv2 = parseInt($("#p_lv2_" + vId).val());
+            lv1 = parseInt($("#p_lv3_" + vId).val());
+
+        }
+
+
+
+        current.noUiSlider.updateOptions({
+            start: [lv1, lv2, lv3],
+
+            range: {
+                'min': [min],
+                'max': [max]
+            }
+        });
+
+
+        var connect = current.querySelectorAll('.noUi-connect');
+
+        for (var i = 0; i < connect.length; i++) {
+            $(connect[i]).css({"background": color[i]});
+        }
+        $(".noUi-base, .noUi-connects").css({'position': 'initial'});
+
+
+        current.noUiSlider.on('update', function (values) {
+
+
+                vals = values;
+
+
+                id = vId;
+
+
+                var r1, r2, r3, r4;
+                min = parseInt($("#var_min_" + id).val());
+                max = parseInt($("#var_max_" + id).val());
+                if (min < max) {
+
+
+                    r1 = min.toString() + "-" + vals[0];
+                    r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
+                    r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
+                    r4 = (Number(vals[2]) + 1).toString() + "-" + max.toString();
+                }
+                else {
+
+                   r1 = max.toString() + "-" + vals[0];
+                    r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
+                    r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
+                    r4 = (Number(vals[2]) + 1).toString() + "-" + min.toString();
+                }
+
+                $("#rang1_" + id).html("Sin afectacion:" + r1);
+                $("#rang2_" + id).html("Afectacion Moderada:" + r2);
+                $("#rang3_" + id).html("Afectacion Alta:" + r3);
+                $("#rang4_" + id).html("Afectacion muy alta:" + r4);
+
+            });
+
     });
 
 
     //modal_nf
 
     $('.modal_nf').on('shown.bs.modal', function () {
+
         var left_to_rigth_fn = true;
         max = 100;
         min = 0;

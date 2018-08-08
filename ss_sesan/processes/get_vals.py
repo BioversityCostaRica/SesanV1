@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from ..models import DBSession, Institucione, Munic, User, VariablesInd, Pilare, Indicadore, Grupo, RangosPilare, LineasBase, CentrosUrbano, CoefPond, FormsByUser, Form, RangosGrupo, MailList
+from ..models import DBSession, Institucione, Munic, User, VariablesInd, Pilare, Indicadore, Grupo, RangosPilare, \
+    LineasBase, CentrosUrbano, CoefPond, FormsByUser, Form, RangosGrupo, MailList
 from send_mail import mail2
 from sqlalchemy import func
 from datetime import datetime as t
@@ -318,8 +319,8 @@ def getForm_By_User(uname):
     result = mySession.query(func.count(FormsByUser.idforms)).filter(FormsByUser.id_user == uname).scalar()
     return int(result)
 
-def updateUser(login,request,post):
 
+def updateUser(login, request, post):
     try:
         mySession = DBSession()
         transaction.begin()
@@ -333,16 +334,14 @@ def updateUser(login,request,post):
 
 
         else:
-            mySession.query(User).filter(User.user_name==post.get("up_user_val")).update({User.user_email:post.get("email"), User.user_fullname:post.get("fullname")})
-
+            mySession.query(User).filter(User.user_name == post.get("up_user_val")).update(
+                {User.user_email: post.get("email"), User.user_fullname: post.get("fullname")})
 
         transaction.commit()
         mySession.close()
         return ["Correcto", "Datos de usuario actualizados exitosamente", "success"]
     except:
         return ["Error", "Sucedio un error al intentar modificar estos datos", "error"]
-
-
 
 
 def delUser(uname, login, request):
@@ -492,7 +491,8 @@ def getCoefPond(idVar, munId):
     return res
 
 
-def calcValue(val, idVar, type, munId):  # if type = 2 calc Equivalent values elif type == 1 calc Weighting coefficient, if type =3 get pilar coeff
+def calcValue(val, idVar, type,
+              munId):  # if type = 2 calc Equivalent values elif type == 1 calc Weighting coefficient, if type =3 get pilar coeff
     mySession = DBSession()
     res = ""
     if type == 1:
@@ -690,7 +690,6 @@ def getDashReportData(self, month, year):
                 data["comunidades2"].append(getPob4Map(id_cu, alertP[0]))
             data["coverage"] = calcDataCoverage(db, ruuid, getMunicId(self.user.munic))
 
-
     meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
              "Noviembre", "Diciembre"]
 
@@ -699,8 +698,6 @@ def getDashReportData(self, month, year):
 
     for i, s in enumerate(data["comunidades2"]):
         data["comunidades2"][i] = s[0]
-
-
 
     return data
 
@@ -1022,7 +1019,7 @@ def getUsersList(login):
 
 def getVarIdByCode(code):
     mySession = DBSession()
-    result = mySession.query(VariablesInd.id_variables_ind).filter(VariablesInd.code_variable_ind==code).scalar()
+    result = mySession.query(VariablesInd.id_variables_ind).filter(VariablesInd.code_variable_ind == code).scalar()
     mySession.close()
     return result
 
@@ -1030,11 +1027,22 @@ def getVarIdByCode(code):
 def getRanges(code, munic):
     mySession = DBSession()
 
-    result = mySession.query(RangosGrupo.r_min,RangosGrupo.r_max).filter(RangosGrupo.id_variables_ind==getVarIdByCode(code)).all()
-    vals=[]
-    for row in result:
-        vals.append(int(row[0]))
-        vals.append(int(row[1]))
+    result = mySession.query(RangosGrupo.r_min, RangosGrupo.r_max).filter(
+        RangosGrupo.id_variables_ind == getVarIdByCode(code)).filter(RangosGrupo.munic_code==munic).all()
+    vals = []
+
+    if result:
+        for row in result:
+            #print row
+            vals.append(int(row[0]))
+            vals.append(int(row[1]))
+    else:
+        result = mySession.query(RangosGrupo.r_min, RangosGrupo.r_max).filter(
+            RangosGrupo.id_variables_ind == getVarIdByCode(code)).all()
+        for row in result:
+            vals.append(int(row[0]))
+            vals.append(int(row[1]))
+
     rang = vals
     return rang
 
@@ -1093,7 +1101,7 @@ def getData4Analize(self, vals):
             for db in myDB:
                 dates = mySession.execute(
                     "SELECT date_fecha_informe_6 FROM %s.maintable WHERE surveyid like binary '%s';" % (
-                    db, "%" + self.user.login + "_%"))
+                        db, "%" + self.user.login + "_%"))
                 for d in dates:
                     datesF.append(d[0])
             datesF.sort()
@@ -1105,11 +1113,11 @@ def getData4Analize(self, vals):
                 row.append(str(d))
                 rowM = getDashReportData(self, dt[1], dt[0])
 
-                if vals[1]=="SAN":
-                    rowM=dataReport(self, dt[1], dt[0])
+                if vals[1] == "SAN":
+                    rowM = dataReport(self, dt[1], dt[0])
                     row.append(float(rowM["san"][0]))
-                    #print rowM["san"]
-                    #print "SAN"
+                    # print rowM["san"]
+                    # print "SAN"
 
                 if vals[1] == "Pilares":
                     for v in vals[0].split(","):
@@ -1167,37 +1175,36 @@ def getGToolData(self):
             for v in vars:
                 data["var"].append([v.id_variables_ind, v.name_variable_ind])
     mySession.close()
-    return json.dumps(data, ensure_ascii=False,encoding='latin1')
-
+    return json.dumps(data, ensure_ascii=False, encoding='latin1')
 
 
 def getMails(mun):
-    mySession =DBSession()
+    mySession = DBSession()
 
-    result=mySession.query(MailList).filter(MailList.munic_id==mun).all()
+    result = mySession.query(MailList).filter(MailList.munic_id == mun).all()
 
-    data=[]
+    data = []
     for row in result:
-        data.append([row.idmail_list,row.mail,row.mail_name ])
+        data.append([row.idmail_list, row.mail, row.mail_name])
     mySession.close()
 
     return data
 
 
-def addMail(request,fullname,mail,munic_name):
+def addMail(request, fullname, mail, munic_name):
     mySession = DBSession()
-    #try:
+    # try:
 
-    new_mail=MailList(munic_id=getMunicId((munic_name)),
-                  mail=mail,
-                  mail_name=fullname)
+    new_mail = MailList(munic_id=getMunicId((munic_name)),
+                        mail=mail,
+                        mail_name=fullname)
 
     transaction.begin()
     mySession.add(new_mail)
     transaction.commit()
     mySession.close()
-    body_message = ["Estimado "+fullname,
-                    "Este correo es para informar que ha sido agregado a la lista de distribucion de correos informativos para la Sala Situacional de "+munic_name,
+    body_message = ["Estimado " + fullname,
+                    "Este correo es para informar que ha sido agregado a la lista de distribucion de correos informativos para la Sala Situacional de " + munic_name,
                     "Si tiene dudas o consultas puede hacerlas llegar al departamento de TI de SESAN o a traves de su oficina regional",
                     "Gracias"]
 
@@ -1207,18 +1214,17 @@ def addMail(request,fullname,mail,munic_name):
         pass
 
     return ["Correcto", "Correo registrado correctamente", "success"]
-    #except:
+    # except:
     #    return ["Error", "Sucedio un error registrar este correo", "error"]
-
 
 
 def delMail(mailId):
     try:
 
-        mySession =DBSession()
+        mySession = DBSession()
 
         transaction.begin()
-        mySession.query(MailList).filter(MailList.idmail_list==mailId).delete()
+        mySession.query(MailList).filter(MailList.idmail_list == mailId).delete()
         transaction.commit()
         mySession.close()
 
@@ -1228,31 +1234,30 @@ def delMail(mailId):
 
 
 def getRangeList(munic):
-
+    print munic
     mySession = DBSession()
-    result = mySession.query(VariablesInd.id_variables_ind,VariablesInd.code_variable_ind, VariablesInd.name_variable_ind).all()
-    data=[]
+    result = mySession.query(VariablesInd.id_variables_ind, VariablesInd.code_variable_ind,
+                             VariablesInd.name_variable_ind).all()
+    data = []
     for row in result:
-        if getRanges(row.code_variable_ind, 1) !=[]:
-            data.append([row.id_variables_ind,row.name_variable_ind, getRanges(row.code_variable_ind, 1)])
+        if getRanges(row.code_variable_ind, int(munic)) != []:
+            data.append([row.id_variables_ind, row.name_variable_ind, getRanges(row.code_variable_ind,int(munic))])
 
-    #pprint(data)
+    # pprint(data)
     return data
 
 
-
-def sendGroup(request,uname):
+def sendGroup(request, uname):
     mySession = DBSession()
     result = mySession.query(User.user_munic).filter(User.user_name == uname).first()
 
-
-    list=mySession.query(MailList).filter(MailList.munic_id==result[0]).all()
-
+    list = mySession.query(MailList).filter(MailList.munic_id == result[0]).all()
 
     for row in list:
-        hour=str(datetime.now()).split(" ")[1].split(".")[0]
+        hour = str(datetime.now()).split(" ")[1].split(".")[0]
         body_message = ["Estimado " + row.mail_name,
-                        "Este correo es para informar que el dia de hoy ha ingresado un nuevo registro a la base de datos de Salas Situacionales para el municipio de " + getMunicName(result[0]).title() +" a las "+hour,
+                        "Este correo es para informar que el dia de hoy ha ingresado un nuevo registro a la base de datos de Salas Situacionales para el municipio de " + getMunicName(
+                            result[0]).title() + " a las " + hour,
                         "Si tiene dudas o consultas puede hacerlas llegar al departamento de TI de SESAN o a traves de su oficina regional.",
                         "Gracias"]
 
@@ -1261,3 +1266,72 @@ def sendGroup(request,uname):
         except:
             pass
     mySession.close()
+
+
+def UpdateOrInsertRange(post):
+    mySession = DBSession()
+
+    try:
+
+        result = mySession.query(RangosGrupo).filter(RangosGrupo.munic_code == post.get("mun_id")).filter(
+            RangosGrupo.id_variables_ind == post.get("var_id")).all()
+
+        if result:
+            rang = post.get("mun_ran_" + post.get("var_id")).split(";")
+
+            transaction.begin()
+            flag = True
+            if rang[-1] == "LR":
+                vals = rang[:-1]
+
+            else:
+                rang.reverse()
+                vals = rang[1:]
+                flag = False
+
+            for i, x in enumerate(vals):
+                x = x.split("-")
+                if flag:
+                    mySession.query(RangosGrupo).filter(RangosGrupo.munic_code == int(post.get("mun_id"))).filter(
+                        RangosGrupo.id_variables_ind == int(post.get("var_id"))).filter(
+                        RangosGrupo.id_grupos == i + 1).update({RangosGrupo.r_min: x[0], RangosGrupo.r_max: x[1]})
+                else:
+                    mySession.query(RangosGrupo).filter(RangosGrupo.munic_code == int(post.get("mun_id"))).filter(
+                        RangosGrupo.id_variables_ind == int(post.get("var_id"))).filter(
+                        RangosGrupo.id_grupos == i + 1).update(
+                        {RangosGrupo.r_min: x[1], RangosGrupo.r_max: x[0]})
+
+            transaction.commit()
+
+
+        else:
+
+            rang = post.get("mun_ran_" + post.get("var_id")).split(";")
+
+            transaction.begin()
+            print rang
+            flag = True
+            if rang[-1] == "LR":
+                vals = rang[:-1]
+
+            else:
+                rang.reverse()
+                vals = rang[1:]
+                flag = False
+
+            for i, x in enumerate(vals):
+                x = x.split("-")
+                if flag:
+                    newRang1 = RangosGrupo(id_variables_ind=int(post.get("var_id")), id_grupos=i + 1, r_min=x[0],
+                                           r_max=x[1], munic_code=post.get("mun_id"))
+                else:
+                    newRang1 = RangosGrupo(id_variables_ind=int(post.get("var_id")), id_grupos=i + 1, r_min=x[1],
+                                           r_max=x[0], munic_code=post.get("mun_id"))
+
+                mySession.add(newRang1)
+            transaction.commit()
+
+        mySession.close()
+        return ["Correcto", "Rango guardado correctamente", "success"]
+    except:
+        return ["Error", "Sucedio un error al guardar este rango", "error"]

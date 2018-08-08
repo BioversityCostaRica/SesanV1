@@ -11,7 +11,6 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 
-
 Base = declarative_base()
 metadata = Base.metadata
 
@@ -123,6 +122,7 @@ class RangosGrupo(Base):
     id_grupos = Column(Integer)
     r_min = Column(Numeric(10, 3))
     r_max = Column(Numeric(10, 3))
+    munic_code = Column(Integer)
 
 
 class RangosPilare(Base):

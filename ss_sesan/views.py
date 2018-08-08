@@ -8,7 +8,7 @@ from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR
     rangCSS_JS
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
     valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser, getForm_By_User, \
-    getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail, getRangeList,sendGroup,updateUser
+    getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail, getRangeList,sendGroup,updateUser,UpdateOrInsertRange
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
     getXMLForm, storeSubmission
 from datetime import datetime
@@ -122,13 +122,28 @@ class ranges_view(privateView):
     def processView(self):
         DashJS.need()
         DashCSS.need()
+        regJS_CSS.need()
         baselineR.need()
         rangCSS_JS.need()
         # pilarCSS_JS.need()
         fill_regN = fill_reg()
         range = []
         varsR_id = []
-        if "munic" in self.request.POST:
+        msg=[]
+
+        if "saveRange" in self.request.POST:
+            msg=UpdateOrInsertRange(self.request.POST);
+
+            fill_regN["sel"] = int(self.request.POST.get("mun_id", ""))
+            fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("mun_id", ""))).title()
+            range = getRangeList(self.request.POST.get("mun_id", ""))
+            for r in range:
+                varsR_id.append(str(r[0]))
+
+            varsR_id = ",".join(varsR_id)
+
+
+        if "munic" in self.request.POST :
             fill_regN["sel"] = int(self.request.POST.get("munic", ""))
             fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
             range = getRangeList(self.request.POST.get("munic", ""))
@@ -138,7 +153,7 @@ class ranges_view(privateView):
 
             varsR_id = ",".join(varsR_id)
 
-        return {'activeUser': self.user, "msg": [], "fill_reg": fill_regN, "range": range, "varsR_id": varsR_id}
+        return {'activeUser': self.user, "msg": msg, "fill_reg": fill_regN, "range": range, "varsR_id": varsR_id}
 
 
 @view_config(route_name='weighing', renderer='templates/weighing.jinja2')
@@ -211,6 +226,9 @@ class pilares_view(privateView):
         pilar_data, vars_id = getPilarData(self.user.login)
         # baselineR.need()
         # regJS_CSS.need()
+
+
+
         return {'activeUser': self.user, "pilar_data": pilar_data, "msg": msg, "vars_id": ",".join(vars_id)}
 
 

@@ -77,6 +77,8 @@ $(document).ready(function () {
 
             current.noUiSlider.on('update', function (values) {
 
+
+
                 vals = values;
 
 
@@ -84,16 +86,23 @@ $(document).ready(function () {
                 id = id.split("_")[1];
 
 
+
+
                 var r1, r2, r3, r4;
                 min = parseInt($("#minR_" + id).val());
                     max = parseInt($("#maxR_" + id).val());
                 if (min < max) {
+
+                    $("#mun_ran_"+id).val(min.toString() +";");
 
 
                     r1 = min.toString() + "-" + vals[0];
                     r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
                     r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
                     r4 = (Number(vals[2]) + 1).toString() + "-" + max.toString();
+
+                    $("#mun_ran_"+id).val(r1 +";"+r2 +";"+r3 +";"+r4 +";LR");
+
                 }
                 else {
 
@@ -101,7 +110,10 @@ $(document).ready(function () {
                     r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
                     r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
                     r4 = (Number(vals[2]) + 1).toString() + "-" + min.toString();
+
+                    $("#mun_ran_"+id).val(r1 +";"+r2 +";"+r3 +";"+r4 +";RL");
                 }
+
 
                 $("#rangR1_" + id).html("Sin afectacion:" + r1);
                 $("#rangR2_" + id).html("Afectacion Moderada:" + r2);

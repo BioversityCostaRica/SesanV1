@@ -163,7 +163,7 @@
                                                             class="fa fa-edit"></i>
                                                     </button>
 
-                                                    {% snippet "snippets/edit_variables.jinja2", request=request, id_variables_ind=v.id_variables_ind, name_variable_ind=v.name_variable_ind.decode("latin1"), v_pregunta=v.v_pregunta.decode("latin1"),unidad_variable_ind=v.unidad_variable_ind.decode("latin1"), min=v.var_min, max=v.var_max %}
+                                                    {% snippet "snippets/edit_variables.jinja2", request=request, id_variables_ind=v.id_variables_ind, name_variable_ind=v.name_variable_ind.decode("latin1"), v_pregunta=v.v_pregunta.decode("latin1"),unidad_variable_ind=v.unidad_variable_ind.decode("latin1"), min=v.var_min, max=v.var_max, range=v.range %}
 
 
                                                 </td>
