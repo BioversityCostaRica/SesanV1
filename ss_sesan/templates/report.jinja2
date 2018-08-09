@@ -152,9 +152,10 @@
                         </button>
                         <input type="hidden" id="pptx_img" value="">
                         <input type="hidden" id="pptx_img2" value="">
+                        {% if dataReport != {} %}
                         <input type="hidden" id="rep_mun" value="{{ dataReport.date[2].title() }}">
                         <input type="hidden" id="rep_date" value="{{ dataReport.date[0] }},{{ dataReport.date[1] }}">
-
+                        {% endif %}
 
 
 

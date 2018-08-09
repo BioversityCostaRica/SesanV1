@@ -2,6 +2,7 @@
 from sqlalchemy import Column, DateTime, Integer, Numeric, String, text
 from sqlalchemy.ext.declarative import declarative_base
 
+
 from sqlalchemy.orm import (
     scoped_session,
     sessionmaker,
@@ -10,6 +11,7 @@ from sqlalchemy.orm import (
 from zope.sqlalchemy import ZopeTransactionExtension
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
+
 
 Base = declarative_base()
 metadata = Base.metadata
@@ -86,6 +88,17 @@ class LineasBase(Base):
     id_variables_ind = Column(Integer)
     munic_id = Column(Integer)
     lb_valor = Column(Integer)
+
+
+class Log(Base):
+    __tablename__ = 'log'
+
+    id = Column(Integer, primary_key=True)
+    log_date = Column(DateTime)
+    user = Column(String(45))
+    action = Column(String(45))
+    comment = Column(String(45))
+    status = Column(String(45))
 
 
 class MailList(Base):

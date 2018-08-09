@@ -168,7 +168,7 @@ def dataReport(self, month, year):
     # for o in unames:
     #    for x in getVarValue(o[0], "sem_af_comunidad", month, year, o[1]).split((" ")):
     #        data["points"].append(getPob4Map(x, o[2]))
-
+    pprint(data)
 
     return data
 
@@ -494,11 +494,12 @@ def getCoefPond(idVar, munId):
 def calcValue(val, idVar, type,
               munId):  # if type = 2 calc Equivalent values elif type == 1 calc Weighting coefficient, if type =3 get pilar coeff
     mySession = DBSession()
+    print munId
     res = ""
     if type == 1:
         res = getCoefPond(idVar, munId)
     elif type == 2:
-        sql = "CALL sesan_v2.getValueGroup(%s, %s);" % (idVar, val)
+        sql = "CALL sesan_v2.getValueGroup(%s, %s, %s);" % (idVar, val, int(getMunicId(munId)))
         result = mySession.execute(sql)
         for res in result:
             res = str(res[0])
@@ -934,7 +935,7 @@ def genXLS(self, data, month):
                     format = workbook.add_format({'bg_color': "#99CC66", "top": 1, "bottom": 1, "left": 1, "right": 1})
                     worksheet.write(row, 2, v[0].decode("utf-8").replace("_", " "), format)
                     worksheet.write(row, 3, v[1].decode("utf-8").replace("_", " "), format)
-                    rang = getRanges(v[6], 1)
+                    rang = getRanges(v[6], int(getMunicId(self.user.munic)))
                     for col, r in enumerate(rang):
                         format = workbook.add_format({"top": 1, "bottom": 1, "left": 1, "right": 1})
                         worksheet.write(row, col + 4, r, format)
@@ -1234,7 +1235,6 @@ def delMail(mailId):
 
 
 def getRangeList(munic):
-    print munic
     mySession = DBSession()
     result = mySession.query(VariablesInd.id_variables_ind, VariablesInd.code_variable_ind,
                              VariablesInd.name_variable_ind).all()
@@ -1331,7 +1331,8 @@ def UpdateOrInsertRange(post):
                 mySession.add(newRang1)
             transaction.commit()
 
-        mySession.close()
+
+
         return ["Correcto", "Rango guardado correctamente", "success"]
     except:
         return ["Error", "Sucedio un error al guardar este rango", "error"]
