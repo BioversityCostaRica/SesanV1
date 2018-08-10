@@ -290,7 +290,7 @@ def make_qr(repo, login, passw, uname):
         ip = s.getsockname()[0]
 
         config_data = {u'admin': {}, u'general': {u'username': uname, u'password': passw,
-                                                  u'server_url': u'http://%s:6542/%s/%s' % (ip, login, uname),
+                                                  u'server_url': u'http://%s/%s/%s' % (ip, login, uname),
                                                   u'metadata_username': uname}}
         qr_json = json.dumps(config_data)
         serialization = qr_json.encode('zlib_codec').encode('base64_codec')
