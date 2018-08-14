@@ -97,19 +97,25 @@ pilarArray.append(Resource(library, 'dashboard/pilar_helps.js', depends=[JQuery]
 
 pilarCSS_JS = Group(pilarArray)
 
-
+# <link href="css/plugins/switchery/switchery.css" rel="stylesheet">
+# <script src="js/plugins/switchery/switchery.js"></script>
 formsCSS_JS = Group([Resource(library, 'inspinia/js/plugins/dualListbox/jquery.bootstrap-duallistbox.js',
                               depends=[JQuery], bottom=True),
                      Resource(library, 'dashboard/forms.js',
                               depends=[JQuery], bottom=True),
                      Resource(library, 'inspinia/css/plugins/dualListbox/bootstrap-duallistbox.min.css',
+                              depends=[JQuery], bottom=True),
+                     Resource(library, 'bootstrap-toggle-master/js/bootstrap-toggle.js',
+                              depends=[JQuery], bottom=True),
+                     Resource(library, 'bootstrap-toggle-master/css/bootstrap-toggle.css',
                               depends=[JQuery], bottom=True)
                      ])
 
-gtoolCSS_JS = Group([Resource(library, 'dashboard/gtool.js', depends=[JQuery], bottom=True),])
+gtoolCSS_JS = Group([Resource(library, 'dashboard/gtool.js', depends=[JQuery], bottom=True), ])
 
-
-rangCSS_JS = Group([Resource(library, 'dashboard/ranges_helps.js', depends=[JQuery], bottom=True) ,pilarArray[0] ,pilarArray[1],pilarArray[2] ,pilarArray[3]])
+rangCSS_JS = Group(
+    [Resource(library, 'dashboard/ranges_helps.js', depends=[JQuery], bottom=True), pilarArray[0], pilarArray[1],
+     pilarArray[2], pilarArray[3]])
 
 
 # requiered files for profile

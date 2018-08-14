@@ -168,7 +168,7 @@ def dataReport(self, month, year):
     # for o in unames:
     #    for x in getVarValue(o[0], "sem_af_comunidad", month, year, o[1]).split((" ")):
     #        data["points"].append(getPob4Map(x, o[2]))
-    pprint(data)
+    #pprint(data)
 
     return data
 
@@ -199,7 +199,7 @@ def getHelpFiles(request):
             fa = "fa-file"
 
         data.append([f, fa, os.path.basename(f)])
-    print data
+    #print data
     return data
 
 
@@ -331,6 +331,8 @@ def updateUser(login, request, post):
             make_qr(request.registry.settings["user.repository"], login,
                     post.get("password_"),
                     post.get("up_user_pass"))
+
+
 
 
         else:
@@ -494,7 +496,7 @@ def getCoefPond(idVar, munId):
 def calcValue(val, idVar, type,
               munId):  # if type = 2 calc Equivalent values elif type == 1 calc Weighting coefficient, if type =3 get pilar coeff
     mySession = DBSession()
-    print munId
+    #print munId
     res = ""
     if type == 1:
         res = getCoefPond(idVar, munId)
@@ -1029,9 +1031,8 @@ def getRanges(code, munic):
     mySession = DBSession()
 
     result = mySession.query(RangosGrupo.r_min, RangosGrupo.r_max).filter(
-        RangosGrupo.id_variables_ind == getVarIdByCode(code)).filter(RangosGrupo.munic_code==munic).all()
+        RangosGrupo.id_variables_ind == getVarIdByCode(code)).filter(RangosGrupo.munic_code==2).all()
     vals = []
-
     if result:
         for row in result:
             #print row
@@ -1039,11 +1040,10 @@ def getRanges(code, munic):
             vals.append(int(row[1]))
     else:
         result = mySession.query(RangosGrupo.r_min, RangosGrupo.r_max).filter(
-            RangosGrupo.id_variables_ind == getVarIdByCode(code)).all()
+            RangosGrupo.id_variables_ind == getVarIdByCode(code)).filter(RangosGrupo.munic_code==None).all()
         for row in result:
             vals.append(int(row[0]))
             vals.append(int(row[1]))
-
     rang = vals
     return rang
 
@@ -1074,7 +1074,7 @@ def _finditem(obj, key):  # recursive function for find any key in python dict
 
 
 def getData4Analize(self, vals):
-    print vals
+    #print vals
     mySession = DBSession()
 
     if len(vals) > 1:
@@ -1152,7 +1152,7 @@ def getData4Analize(self, vals):
 
                 data.append(row)
 
-            pprint(data)
+            #pprint(data)
             return 2, data
 
 
@@ -1309,7 +1309,7 @@ def UpdateOrInsertRange(post):
             rang = post.get("mun_ran_" + post.get("var_id")).split(";")
 
             transaction.begin()
-            print rang
+            #print rang
             flag = True
             if rang[-1] == "LR":
                 vals = rang[:-1]

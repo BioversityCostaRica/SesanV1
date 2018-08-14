@@ -32,8 +32,9 @@
                                 <input type="text" class="form-control col-lg-12" id="f_name" value="">
                                 <br><br>
                                 <p>
-                                    Selecciones los pilares que quiere incluir en este formulario<span style="color: red; opacity :0"
-                                                                              id="alertF2">* Debe incluir al menos un pilar</span>
+                                    Selecciones los pilares que quiere incluir en este formulario<span
+                                        style="color: red; opacity :0"
+                                        id="alertF2">* Debe incluir al menos un pilar</span>
 
                                 </p>
 
@@ -50,7 +51,14 @@
                                     </select>
                                 {% endif %}
 
-                                <br><br><br>
+                                <br>
+                            <div class="row">
+                                <p class="col-lg-6">
+                                    Habilitar seleccion multiple de comunidades
+
+                                   </p> <input  type="checkbox" class="js-switch" checked id="multiple" data-toggle="toggle" data-on="Si" data-off="No"/>
+                            </div>
+                                <br>
                                 <p>
                                     Selecciones los usuarios que utilizaran este formulario
 
@@ -82,6 +90,7 @@
                 <div class="modal-footer">
 
                     <input name="fn" id="fn" type="hidden" value="">
+                    <input name="val_multi" id="val_multi" type="hidden" value="multiple">
 
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" name="btn_save_form" id="btn_save_var">Guardar

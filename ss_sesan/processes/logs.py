@@ -1,4 +1,6 @@
 from ..models import DBSession, Log
+from datetime import datetime as dt
+import transaction
 
 #id = Column(Integer, primary_key=True)
 #log_date = Column(DateTime)
@@ -9,8 +11,15 @@ from ..models import DBSession, Log
 
 
 
-def log():
-    mySession = DBSession()
+def log(user,action,comment,status):
 
-    #try:
-    #    newLog=Log(log_date)
+
+    try:
+        mySession = DBSession()
+        newLog=Log(log_date=dt.now(),user=user,action=action,comment=comment, status=status)
+        transaction.begin()
+        mySession.add(newLog)
+        transaction.commit()
+        mySession.close()
+    except:
+        pass

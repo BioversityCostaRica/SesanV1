@@ -13,10 +13,11 @@ from processes.utilform import isUserActive, getUserPassword, getFormList, getPa
     getXMLForm, storeSubmission
 from datetime import datetime
 from pyramid.response import FileResponse
-import os
+import os,ast
 from .processes.setFormVals import newPilar, getPilarData, delPilar, updateVar, getListPU, newForm, getForms, delForm, \
     forms_id, updateFU
 
+from processes.logs import log
 
 @view_config(route_name='profile', renderer='templates/profile.jinja2')
 class profile_view(privateView):
@@ -54,6 +55,9 @@ class baseline_view(privateView):
             fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
             fill_regN["lb_m"] = getBaselinesName()
             lb_data = getBaselines(int(self.request.POST.get("munic", "")), "lb")
+            log(self.user.login, "get baselines from "+getMunicName(int(self.request.POST.get("munic", ""))).title(), "normal", "4")
+
+
         else:
             if "id_mun_sel" in self.request.POST and not "update_data" in self.request.POST and not "submit_lb" in self.request.POST:
                 msg = delete_lb(self.request.POST.get("id_mun_sel", ""), "lb")
@@ -61,6 +65,8 @@ class baseline_view(privateView):
                 fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                 fill_regN["lb_m"] = getBaselinesName()
                 lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "lb")
+                log(self.user.login,
+                    "delete baselines from " + getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title(), "normal", "1")
             else:
                 if "update_data" in self.request.POST:
                     msg = updateData(self.request.POST.get("id_mun_sel", ""),
@@ -69,6 +75,9 @@ class baseline_view(privateView):
                     fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                     fill_regN["lb_m"] = getBaselinesName()
                     lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "lb")
+                    log(self.user.login,
+                        "updates baselines from " + getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title(), "normal",
+                        "2")
                 else:
                     if "submit_lb" in self.request.POST:
                         save_data = self.request.POST.get("mun_sel_data", "")
@@ -77,6 +86,10 @@ class baseline_view(privateView):
                         fill_regN["lb_m"] = getBaselinesName()
                         msg = newBaseline(save_data, "lb")
                         lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "lb")
+                        log(self.user.login,
+                            "new baselines from " + getMunicName(
+                                int(self.request.POST.get("id_mun_sel", ""))).title(), "normal",
+                            "1")
                     else:
                         fill_regN["sel"] = 0
                         fill_regN["sel_name"] = ""
@@ -102,6 +115,10 @@ class mails_view(privateView):
             fill_regN["sel"] = getMunicId(self.request.POST.get("sel_name", ""))
             msg = delMail(self.request.POST.get("delMail", ""))
             mail_list = getMails(getMunicId(self.request.POST.get("sel_name")))
+            log(self.user.login,
+                "mail deleted in " + self.request.POST.get("sel_name") + " for " + self.request.POST.get(
+                    "delMail"),
+                "normal", "3")
 
         if "reg" in self.request.POST:
             msg = addMail(self.request, self.request.POST.get("fullname"), self.request.POST.get("email"),
@@ -109,6 +126,8 @@ class mails_view(privateView):
             fill_regN["sel_name"] = self.request.POST.get("munic_name")
             fill_regN["sel"] = getMunicId(self.request.POST.get("munic_name"))
             mail_list = getMails(getMunicId(self.request.POST.get("munic_name")))
+            log(self.user.login, "new mail added in " + self.request.POST.get("munic_name") + " for "+self.request.POST.get("fullname"),
+                "normal", "1")
         if "munic" in self.request.POST:
             fill_regN["sel"] = int(self.request.POST.get("munic", ""))
             fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
@@ -141,6 +160,9 @@ class ranges_view(privateView):
                 varsR_id.append(str(r[0]))
 
             varsR_id = ",".join(varsR_id)
+
+            log(self.user.login, "range updated in " + getMunicName(int(self.request.POST.get("mun_id", ""))).title() +" for var "+str(self.request.POST.get("var_id")),
+                "normal", "2")
 
 
         if "munic" in self.request.POST :
@@ -179,6 +201,9 @@ class weighing_view(privateView):
                 fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                 fill_regN["lb_m"] = getBaselinesName()
                 lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
+                log(self.user.login, "weighing deleted in " + getMunicName(
+                    int(self.request.POST.get("id_mun_sel", ""))).title(),
+                    "normal", "3")
             else:
                 if "update_data" in self.request.POST:
                     msg = updateData(self.request.POST.get("id_mun_sel", ""),
@@ -187,6 +212,8 @@ class weighing_view(privateView):
                     fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                     fill_regN["lb_m"] = getBaselinesName()
                     lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
+                    log(self.user.login, "weighing updated in " + getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title() ,
+                        "normal", "2")
                 else:
                     if "submit_lb" in self.request.POST:
                         save_data = self.request.POST.get("mun_sel_data", "")
@@ -195,6 +222,10 @@ class weighing_view(privateView):
                         fill_regN["lb_m"] = getBaselinesName()
                         msg = newBaseline(save_data, "cf")
                         lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
+                        log(self.user.login, "new weighing in " + getMunicName(
+                            int(self.request.POST.get("id_mun_sel", ""))).title() + " for var " + self.request.POST.get(
+                            "id_mun_sel", ""),
+                            "normal", "1")
                     else:
                         fill_regN["sel"] = 0
                         fill_regN["sel_name"] = ""
@@ -214,15 +245,22 @@ class pilares_view(privateView):
         DashCSS.need()
         regJS_CSS.need()
         pilarCSS_JS.need()
+
+
         msg = []
         # print self.request.POST
         if "jsondata" in self.request.POST:
             msg = newPilar(self.request.POST.get("jsondata", ""), self.user.login)
+            data = ast.literal_eval(self.request.POST.get("jsondata", ""))
+            log(self.user.login, "new pilar "+ data["pilarName"]+ " in "+self.user.login , "normal", "1")
         if "p_id" in self.request.POST:
             msg = delPilar(self.request.POST.get("p_id"))
+            log(self.user.login, "pilar deleted " + self.request.POST.get("p_id") + " for " + self.user.login, "normal", "3")
         if "btn_save_var" in self.request.POST:
             msg = updateVar(self.request.POST.get("vd1"), self.request.POST.get("vd2"), self.request.POST.get("vd3"),
                             self.request.POST.get("vd4"), self.request.POST.get("vId"), self.request.POST.get("vdR"))
+            log(self.user.login, "var"+ self.request.POST.get("vId")+" updated " , "normal",
+                "2")
         pilar_data, vars_id = getPilarData(self.user.login)
         # baselineR.need()
         # regJS_CSS.need()
@@ -240,17 +278,27 @@ class forms_view(privateView):
         regJS_CSS.need()
         formsCSS_JS.need()
         msg = []
-
         print self.request.POST
+
 
         for f in self.request.POST:
             if "fu_" in f:
                 msg = updateFU(self.request.POST.get(f), self.request, self.user.login)
+                log(self.user.login, "form updated " + self.request.POST.get(f),
+                    "normal",
+                    "2")
         if "form_id" in self.request.POST:
             msg = delForm(self.request, self.request.POST.get("form_id"), self.user.login)
+            log(self.user.login, "form "+self.request, self.request.POST.get("form_id")+" deleted",
+                "normal",
+                "3")
 
         if "fn" in self.request.POST:
             msg = newForm(self.request, self.request.POST.get("fn"), self.user.login)
+            log(self.user.login, "new form " + self.request.POST.get("fn"),
+                "normal",
+                "1")
+
         formList = getForms(self.user.login)
 
         return {'activeUser': self.user, "msg": msg, "lists": getListPU(self.user.login), "formList": formList,
@@ -266,10 +314,16 @@ class report_view(privateView):
         reportJS.need()
         # date = self.request.matchdict["date"]
 
+
+
+
+
         date = self.request.url.split("/")[-1].split("_")
         # date = date.split("_")
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
+
+        log(self.user.login, "report generated for " +"_".join(date), "normal", "4")
         return {'activeUser': self.user, "date": int(meses.index(date[0])) + 1,
                 "dataReport": dataReport(self, str(int(meses.index(date[0])) + 1), str(date[1])), "dates": date, }
 
@@ -297,6 +351,9 @@ class gtool_view(privateView):
             if val == 1:
                 msg = data4plot
                 data4plot = []
+            log(self.user.login, "request data for gtool: " +self.request.POST.get('getData4Analize', ''),
+                "normal",
+                "4")
 
         return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
                 "dates": self.request.cookies["cur_date"].split("_")}
@@ -314,18 +371,26 @@ class dashboard_view(privateView):
         DashJS.need()
         DashCSS.need()
 
-
         if 'dateP' in self.request.POST:
             date = self.request.POST.get('dateP', '').split(" ")
             dashData = getDashReportData(self, str(meses.index(date[0]) + 1), date[1])
+            log(self.user.login, "request data for dashboard for " + "_".join(date),
+                "normal",
+                "4")
+
+
 
         else:
+
             if "cur_date" in self.request.cookies:
                 date = self.request.cookies["cur_date"].split("_")
                 dashData = getDashReportData(self, str(meses.index(date[0]) + 1), date[1])
             else:
                 date = datetime.now().strftime("%m %Y").split(" ")
                 dashData = getDashReportData(self, date[0], date[1])
+            log(self.user.login, "request data for dashboard for " + "_".join(date),
+                "normal",
+                "4")
 
         return {'activeUser': self.user, "dashData": dashData, "report": True}
 
@@ -340,6 +405,9 @@ class download_xls(privateView):
             date = self.request.POST.get('genXLS', '').split(" ")
             date[0] = str(meses.index(date[0]) + 1)
             response = genXLS(self, getDashReportData(self, date[0], date[1]), date[0])
+            log(self.user.login, "download xls for %s-%s"%(str(date[0]), str(date[1])),
+                "normal",
+                "4")
 
         return response
 
@@ -368,6 +436,7 @@ class login_view(publicView):
 
             if not user == None and user.check_password(passwd):
                 headers = remember(self.request, login)
+                log(login, "login" , "normal", "4")
                 if user.user_role == 1:
                     response = HTTPFound(location=self.request.route_url('pilares'), headers=headers)
                 else:
@@ -390,9 +459,15 @@ class register_view(privateView):
 
         if "up_user_val" in self.request.POST or "up_user_pass" in self.request.POST:
             result= updateUser(self.user.login,self.request,self.request.POST)
+            if "up_user_pass" in self.request.POST:
+                log(self.user.login, "update user pass " + self.request.POST.get("up_user_pass"), "normal", "2")
+            else:
+                log(self.user.login, "update user " + self.request.POST.get("up_user_val"), "normal", "2")
+
 
         if "uname_u" in self.request.POST:
             result = delUser(self.request.POST.get("uname_u", ""), self.user.login, self.request)
+            log(self.user.login, "del user" + self.request.POST.get("uname_u", ""), "normal", "3")
 
         if "reg" in self.request.POST:
             user_val = addNewUser(self.request.POST, self.request, self.user.login)
@@ -405,6 +480,7 @@ class register_view(privateView):
                 result.append("Correcto")
                 result.append("Usuario creado correctamente")
                 result.append("success")
+                log(self.user.login, "new user" + self.request.POST.get("user_name", ""), "normal", "1")
             if user_val == 2:
                 result.append("Error")
                 result.append("Ya existe ese nombre de usuario")
@@ -428,8 +504,9 @@ class formList_view(odkView):
             if isUserActive(self.user):
 
                 if self.authorize(getUserPassword(self.user, self.request)):
-
+                    log(self.user, "formlist", "normal", "4")
                     return self.createXMLResponse(getFormList(self.user, self.request))
+
                 else:
 
                     return self.askForCredentials()
@@ -477,6 +554,7 @@ class push_view(odkView):
 
                     if storeSubmission(self.user, self.request):
                         response = Response(status=201)
+                        log(self.user, "store submission", "normal", "4")
                         return response
                     else:
 

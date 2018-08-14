@@ -275,6 +275,12 @@ def getListPU(login):
     return [pilares, users]
 
 
+def getUserMunic(user):
+    mySession = DBSession()
+
+    result = mySession.query(User.user_munic)
+
+
 def form_to_user(request, login, fname, users):
     users = users.split(",")
     for user in users:
@@ -397,6 +403,7 @@ def genForm_Files(login, pilarId, request, fname):
     sheet3.write(0, 2, 'instance_name')
 
     now = datetime.datetime.now()
+
     questions = [
         ["start", "start_time_survey_1", "", "", "", "", "", "", ""],
         ["today", "day_of_survey", "", "", "", "", "", "", ""],
@@ -406,7 +413,7 @@ def genForm_Files(login, pilarId, request, fname):
         ["text", "txt_rep_muni_comusan_4", u"Nombre de la persona que recopila la información", "", "", "", "yes", "",
          u"Debe ingresar el nombre de la persona que recopila la información"],
         ["date", "date_fecha_informe_6", "Fecha a la que corresponde el informe", "", "", "", "yes", "", "month-year"],
-        ["select_multiple lista_curb", "sem_comunidad_totales",
+        ["select_%s lista_curb"%str(request.POST.get("val_multi")), "sem_comunidad_totales",
          u"Seleccione la o las comunidades incluidas en este reporte",
          "", "", "", "", "", "search('curbanos') minimal"],
         ["end group", "grpx", "", "", "", "", "", "", ""],

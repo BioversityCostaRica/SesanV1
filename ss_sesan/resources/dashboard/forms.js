@@ -11,6 +11,8 @@ $(document).ready(function () {
     }
 
 
+
+
     $('.dual_select').bootstrapDualListbox({
         selectorMinimalHeight: 75,
         filterTextClear: "Mostrar todo",
@@ -20,7 +22,20 @@ $(document).ready(function () {
     });
 
 
+    $('#multiple').change(function() {
+
+      if ($(this).prop('checked')) {
+            $("#val_multi").val("multiple");
+        }
+        else {
+            $("#val_multi").val("one");
+        }
+    });
+
+
+
     $("#form_newForm").submit(function (e) {
+
 
         if ($("#f_name").val() != "" && $('#dl1').val().length > 0) {
             $("#fn").val($("#f_name").val() + "++" + $('#dl1').val() + "++" + $('#dl2').val())
@@ -58,7 +73,7 @@ $(document).ready(function () {
                 cancelButtonText: "No, deseo cancelar!",
                 closeOnConfirm: false,
                 closeOnCancel: false,
-                html:false
+                html: false
             },
             function (isConfirm) {
                 if (isConfirm) {
@@ -81,10 +96,8 @@ $(document).ready(function () {
 
     //form_fu
     $(".form_fu").submit(function (e) {
-        $("#fu_"+$(this).attr("id")).val($('#fu_l_'+$(this).attr("id")).val()+"*"+$(this).attr("id"))
+        $("#fu_" + $(this).attr("id")).val($('#fu_l_' + $(this).attr("id")).val() + "*" + $(this).attr("id"))
     });
-
-
 
 
     $('#f_name').bind('input', function () {
