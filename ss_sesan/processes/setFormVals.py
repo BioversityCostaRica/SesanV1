@@ -661,8 +661,9 @@ def newForm(request, vals, login):
             delForm(request, id_F, login)
             raise
         else:
-            form_to_user(request, login, vals[0], vals[2])
-            add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login, vals[2])
+            if vals[2]!="":
+                form_to_user(request, login, vals[0], vals[2])
+                add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login, vals[2])
 
         transaction.commit()
         mySession.close()
@@ -824,7 +825,7 @@ def updateFU(vals, request, login):
             ulist=vals[0].split(",")
 
             for u in ulist:
-                if u not in result:
+                if u not in result and u != "":
                     #add
                     form_to_user(request, login, getFormName(fid), u)
                     add_CU('DATA_' +login+"_"+getFormName(fid).title().replace(" ", "_"), request, login, u)

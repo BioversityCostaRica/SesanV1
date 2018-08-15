@@ -278,7 +278,6 @@ class forms_view(privateView):
         regJS_CSS.need()
         formsCSS_JS.need()
         msg = []
-        print self.request.POST
 
 
         for f in self.request.POST:
@@ -294,6 +293,7 @@ class forms_view(privateView):
                 "3")
 
         if "fn" in self.request.POST:
+
             msg = newForm(self.request, self.request.POST.get("fn"), self.user.login)
             log(self.user.login, "new form " + self.request.POST.get("fn"),
                 "normal",

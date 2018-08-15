@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e854dd02-1a11-4d61-8d2f-eebb1bb83e49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/models.py" afterPath="$PROJECT_DIR$/ss_sesan/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/views.py" afterPath="$PROJECT_DIR$/ss_sesan/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,8 +27,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ss_sesan/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="427">
-              <caret line="268" column="0" lean-forward="true" selection-start-line="268" selection-start-column="0" selection-end-line="268" selection-end-column="0" />
+            <state relative-caret-position="140">
+              <caret line="280" column="0" lean-forward="false" selection-start-line="280" selection-start-column="0" selection-end-line="280" selection-end-column="0" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -40,7 +40,7 @@
         <entry file="file://$PROJECT_DIR$/ss_sesan/models.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="240">
-              <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+              <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
               <folding>
                 <element signature="e#16#87#0" expanded="true" />
               </folding>
@@ -51,14 +51,14 @@
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ss_sesan/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="534">
-              <caret line="103" column="0" lean-forward="true" selection-start-line="103" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
+            <state relative-caret-position="1840">
+              <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="development.ini" pinned="false" current-in-tab="true">
+      <file leaf-file-name="development.ini" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/development.ini">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="280">
@@ -81,8 +81,8 @@
       <file leaf-file-name="get_vals.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ss_sesan/processes/get_vals.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="308" column="26" lean-forward="true" selection-start-line="308" selection-start-column="26" selection-end-line="308" selection-end-column="26" />
+            <state relative-caret-position="60">
+              <caret line="308" column="26" lean-forward="false" selection-start-line="308" selection-start-column="26" selection-end-line="308" selection-end-column="26" />
               <folding>
                 <element signature="e#24#221#0" expanded="true" />
                 <element signature="e#847#1165#0" expanded="false" />
@@ -150,25 +150,24 @@
       <file leaf-file-name="pilares.jinja2" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="287">
+            <state relative-caret-position="3960">
               <caret line="198" column="13" lean-forward="false" selection-start-line="198" selection-start-column="12" selection-end-line="198" selection-end-column="13" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="setFormVals.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="setFormVals.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="5440">
-              <caret line="284" column="28" lean-forward="false" selection-start-line="284" selection-start-column="28" selection-end-line="284" selection-end-column="28" />
+            <state relative-caret-position="347">
+              <caret line="832" column="39" lean-forward="false" selection-start-line="832" selection-start-column="39" selection-end-line="832" selection-end-column="39" />
               <folding>
                 <element signature="e#15#181#0" expanded="true" />
                 <element signature="e#13111#14536#0" expanded="false" />
-                <element signature="e#14594#25873#0" expanded="false" />
-                <marker date="1534260477471" expanded="true" signature="13661:13774" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
-                <marker date="1534260477471" expanded="true" signature="28235:28268" ph="SELECT COUNT... maintable" />
-                <marker date="1534260477471" expanded="true" signature="31068:31133" ph="SELECT COUNT... maintable" />
+                <marker date="1534329657112" expanded="true" signature="13661:13774" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
+                <marker date="1534329657112" expanded="true" signature="28271:28304" ph="SELECT COUNT... maintable" />
+                <marker date="1534329657112" expanded="true" signature="31104:31169" ph="SELECT COUNT... maintable" />
               </folding>
             </state>
           </provider>
@@ -206,8 +205,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>edit_v</find>
-      <find>msg</find>
       <find>swe</find>
       <find>print &quot;else&quot;</find>
       <find>worksheet</find>
@@ -229,13 +226,15 @@
       <find>map</find>
       <find>getRanges</find>
       <find>Bas</find>
-      <find>genForm_Files</find>
       <find>forms</find>
-      <find>form_to_user</find>
       <find>&lt;a&gt;</find>
       <find>utf</find>
       <find>qr</find>
       <find>&quot;var&quot;</find>
+      <find>genForm_Files</find>
+      <find>getUserMunic</find>
+      <find>cp</find>
+      <find>form_to_user</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -287,12 +286,12 @@
         <option value="$PROJECT_DIR$/ss_sesan/resources.py" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/snippets/newForm.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/forms.js" />
-        <option value="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
         <option value="$PROJECT_DIR$/ss_sesan/templates/weighing.jinja2" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" />
         <option value="$PROJECT_DIR$/development.ini" />
-        <option value="$PROJECT_DIR$/ss_sesan/views.py" />
         <option value="$PROJECT_DIR$/ss_sesan/models.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/views.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
       </list>
     </option>
   </component>
@@ -326,6 +325,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -431,7 +431,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1002,7 +1001,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1700">
           <caret line="85" column="47" lean-forward="false" selection-start-line="85" selection-start-column="47" selection-end-line="85" selection-end-column="67" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1020,7 +1018,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1840">
           <caret line="92" column="80" lean-forward="false" selection-start-line="92" selection-start-column="80" selection-end-line="92" selection-end-column="88" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1028,7 +1025,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="12" column="26" lean-forward="false" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1036,29 +1032,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1220">
           <caret line="61" column="24" lean-forward="false" selection-start-line="61" selection-start-column="24" selection-end-line="61" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5440">
-          <caret line="284" column="28" lean-forward="false" selection-start-line="284" selection-start-column="28" selection-end-line="284" selection-end-column="28" />
-          <folding>
-            <element signature="e#15#181#0" expanded="true" />
-            <element signature="e#13111#14536#0" expanded="false" />
-            <element signature="e#14594#25873#0" expanded="false" />
-            <marker date="1534260477471" expanded="true" signature="13661:13774" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
-            <marker date="1534260477471" expanded="true" signature="28235:28268" ph="SELECT COUNT... maintable" />
-            <marker date="1534260477471" expanded="true" signature="31068:31133" ph="SELECT COUNT... maintable" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/forms.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1960">
-          <caret line="98" column="51" lean-forward="false" selection-start-line="98" selection-start-column="51" selection-end-line="98" selection-end-column="61" />
           <folding />
         </state>
       </provider>
@@ -1071,10 +1044,42 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3960">
+          <caret line="198" column="13" lean-forward="false" selection-start-line="198" selection-start-column="12" selection-end-line="198" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1840">
+          <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/forms.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1960">
+          <caret line="98" column="51" lean-forward="false" selection-start-line="98" selection-start-column="51" selection-end-line="98" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/development.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="62" column="52" lean-forward="false" selection-start-line="62" selection-start-column="52" selection-end-line="62" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/processes/get_vals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="308" column="26" lean-forward="true" selection-start-line="308" selection-start-column="26" selection-end-line="308" selection-end-column="26" />
+        <state relative-caret-position="60">
+          <caret line="308" column="26" lean-forward="false" selection-start-line="308" selection-start-column="26" selection-end-line="308" selection-end-column="26" />
           <folding>
             <element signature="e#24#221#0" expanded="true" />
             <element signature="e#847#1165#0" expanded="false" />
@@ -1138,47 +1143,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/templates/pilares.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="287">
-          <caret line="198" column="13" lean-forward="false" selection-start-line="198" selection-start-column="12" selection-end-line="198" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="427">
-          <caret line="268" column="0" lean-forward="true" selection-start-line="268" selection-start-column="0" selection-end-line="268" selection-end-column="0" />
+        <state relative-caret-position="140">
+          <caret line="280" column="0" lean-forward="false" selection-start-line="280" selection-start-column="0" selection-end-line="280" selection-end-column="0" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="103" column="0" lean-forward="true" selection-start-line="103" selection-start-column="0" selection-end-line="112" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ss_sesan/models.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
-          <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
+          <caret line="13" column="0" lean-forward="false" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
           <folding>
             <element signature="e#16#87#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/development.ini">
+    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="62" column="52" lean-forward="false" selection-start-line="62" selection-start-column="52" selection-end-line="62" selection-end-column="52" />
-          <folding />
+        <state relative-caret-position="347">
+          <caret line="832" column="39" lean-forward="false" selection-start-line="832" selection-start-column="39" selection-end-line="832" selection-end-column="39" />
+          <folding>
+            <element signature="e#15#181#0" expanded="true" />
+            <element signature="e#13111#14536#0" expanded="false" />
+            <marker date="1534329657112" expanded="true" signature="13661:13774" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
+            <marker date="1534329657112" expanded="true" signature="28271:28304" ph="SELECT COUNT... maintable" />
+            <marker date="1534329657112" expanded="true" signature="31104:31169" ph="SELECT COUNT... maintable" />
+          </folding>
         </state>
       </provider>
     </entry>
