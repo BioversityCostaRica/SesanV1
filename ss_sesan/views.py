@@ -289,7 +289,7 @@ class forms_view(privateView):
                     "2")
         if "form_id" in self.request.POST:
             msg = delForm(self.request, self.request.POST.get("form_id"), self.user.login)
-            log(self.user.login, "form "+self.request.POST.get("form_id")+" deleted",
+            log(self.user.login, "form "+str(self.request.POST.get("form_id"))+" deleted",
                 "normal",
                 "3")
 
