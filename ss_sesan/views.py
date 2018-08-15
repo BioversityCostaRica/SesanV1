@@ -259,7 +259,7 @@ class pilares_view(privateView):
         if "btn_save_var" in self.request.POST:
             msg = updateVar(self.request.POST.get("vd1"), self.request.POST.get("vd2"), self.request.POST.get("vd3"),
                             self.request.POST.get("vd4"), self.request.POST.get("vId"), self.request.POST.get("vdR"))
-            log(self.user.login, "var"+ self.request.POST.get("vId")+" updated " , "normal",
+            log(self.user.login, "var "+ self.request.POST.get("vId")+" updated " , "normal",
                 "2")
         pilar_data, vars_id = getPilarData(self.user.login)
         # baselineR.need()

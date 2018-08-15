@@ -12,7 +12,6 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 
-
 Base = declarative_base()
 metadata = Base.metadata
 
@@ -96,7 +95,7 @@ class Log(Base):
     id = Column(Integer, primary_key=True)
     log_date = Column(DateTime)
     user = Column(String(45))
-    action = Column(String(45))
+    action = Column(String(450))
     comment = Column(String(45))
     status = Column(String(45))
 
