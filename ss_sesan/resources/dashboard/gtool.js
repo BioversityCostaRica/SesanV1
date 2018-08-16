@@ -142,10 +142,10 @@ $(document).ready(function () {
 
         google.visualization.events.addListener(chartEditor, 'ok', function redrawChart() {
 
-            wrapper2 = chartEditor.getChartWrapper();
-            wrapper2.setOption('height', "100%");
-            wrapper2.setOption('width', "500px");
-            wrapper2.draw(document.getElementById('chart'));
+            wrapper = chartEditor.getChartWrapper();
+            wrapper.setOption('height', "100%");
+            wrapper.setOption('width', "500px");
+            wrapper.draw(document.getElementById('chart'));
         });
         $("#editchart").click(function (e) {
             chartEditor.openDialog(wrapper);

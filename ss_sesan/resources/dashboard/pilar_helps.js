@@ -112,7 +112,7 @@ $(document).ready(function () {
 
 
             var connect = current.querySelectorAll('.noUi-connect');
-            var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
+            var color = ["#11c300", "#ffe132","#ff9936",  "#ff1313"];
 
             for (var i = 0; i < connect.length; i++) {
                 $(connect[i]).css({"background": color[i]});
@@ -130,11 +130,11 @@ $(document).ready(function () {
                 var connect = current.querySelectorAll('.noUi-connect');
                 if (!left_to_rigth) {
 
-                    var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
+                    var color = ["#11c300","#ffe132", "#ff9936",  "#ff1313"];
                     left_to_rigth = true;
                 }
                 else {
-                    var color = ["#ff1313", "#ffe132", "#ff9936", "#11c300"];
+                    var color = ["#ff1313","#ff9936", "#ffe132",  "#11c300"];
                     left_to_rigth = false;
                 }
 
@@ -241,6 +241,7 @@ $(document).ready(function () {
 
     $('.modalV').on('shown.bs.modal', function () {
 
+
         vId = $(this).children().find("#vId").val();
 
         $("#rang1_" + vId).css({"opacity": "1"});
@@ -266,7 +267,7 @@ $(document).ready(function () {
 
 
         if (parseInt($("#p_lv1_" + vId).val()) < parseInt($("#p_lv3_" + vId).val())) {
-            var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
+            var color =["#11c300",  "#ffe132","#ff9936", "#ff1313"];
             left_to_rigth = true;
             min = parseInt($("#var_min_" + vId).val());
             max = parseInt($("#var_max_" + vId).val());
@@ -277,7 +278,7 @@ $(document).ready(function () {
 
         }
         else {
-            var color = ["#ff1313", "#ffe132", "#ff9936", "#11c300"];
+            var color = ["#ff1313",  "#ff9936","#ffe132", "#11c300"];
             left_to_rigth = false;
             min = parseInt($("#var_min_" + vId).val());
             max = parseInt($("#var_max_" + vId).val());
@@ -368,7 +369,7 @@ $(document).ready(function () {
 
 
         var connect = slider.querySelectorAll('.noUi-connect');
-        var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
+        var color = ["#11c300",  "#ffe132","#ff9936", "#ff1313"];
 
         for (var i = 0; i < connect.length; i++) {
             $(connect[i]).css({"background": color[i]});
@@ -404,9 +405,11 @@ $(document).ready(function () {
         $("#rotate_nf").click(function () {
             var values = vals;
             var connect = slider.querySelectorAll('.noUi-connect');
+                            console.log("csa");
+
             if (!left_to_rigth_fn) {
 
-                var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
+                var color = ["#11c300", "#ffe132", "#ff9936", "#ff1313"];
                 left_to_rigth_fn = true;
 
                 r1 = "0-" + values[0];
@@ -415,7 +418,7 @@ $(document).ready(function () {
                 r4 = (Number(values[2]) + 1).toString() + "-" + $('#var_max_' + vId).val();
             }
             else {
-                var color = ["#ff1313", "#ffe132", "#ff9936", "#11c300"];
+                var color = ["#ff1313", "#ff9936",  "#ffe132","#11c300"];
                 left_to_rigth_fn = false;
                 r4 = (Number(values[0]) - 1).toString() + "-0";
                 r3 = (Number(values[1]) - 1).toString() + "-" + (Number(values[0])).toString();

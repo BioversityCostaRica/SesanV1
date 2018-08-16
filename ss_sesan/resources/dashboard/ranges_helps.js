@@ -30,7 +30,7 @@ $(document).ready(function () {
             obs.push([vd[v], slider]);
 
             if (parseInt($("#lv1_" + vd[v]).val()) < parseInt($("#lv3_" + vd[v]).val())) {
-                var color = ["#11c300", "#ff9936", "#ffe132", "#ff1313"];
+                var color = ["#11c300",  "#ffe132","#ff9936", "#ff1313"];
                 left_to_rigth = true;
                 min = parseInt($("#minR_" + vd[v]).val());
                 max = parseInt($("#maxR_" + vd[v]).val());
@@ -41,7 +41,7 @@ $(document).ready(function () {
 
             }
             else {
-                var color = ["#ff1313", "#ffe132", "#ff9936", "#11c300"];
+                var color = ["#ff1313",  "#ff9936","#ffe132", "#11c300"];
                 left_to_rigth = false;
                 max = parseInt($("#minR_" + vd[v]).val());
                 min = parseInt($("#maxR_" + vd[v]).val());
