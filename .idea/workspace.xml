@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e854dd02-1a11-4d61-8d2f-eebb1bb83e49" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" afterPath="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ss_sesan/views.py" afterPath="$PROJECT_DIR$/ss_sesan/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -88,7 +85,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="get_vals.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="get_vals.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/ss_sesan/processes/get_vals.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="567">
@@ -156,17 +153,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="setFormVals.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="setFormVals.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="547">
-              <caret line="331" column="42" lean-forward="false" selection-start-line="331" selection-start-column="42" selection-end-line="331" selection-end-column="42" />
+            <state relative-caret-position="207">
+              <caret line="314" column="73" lean-forward="false" selection-start-line="314" selection-start-column="73" selection-end-line="314" selection-end-column="73" />
               <folding>
                 <element signature="e#15#188#0" expanded="true" />
-                <element signature="e#13888#15328#0" expanded="false" />
-                <marker date="1534461848141" expanded="true" signature="14451:14564" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
-                <marker date="1534461848141" expanded="true" signature="29103:29136" ph="SELECT COUNT... maintable" />
-                <marker date="1534461848141" expanded="true" signature="31950:32015" ph="SELECT COUNT... maintable" />
+                <element signature="e#13973#15413#0" expanded="false" />
+                <marker date="1534463292833" expanded="true" signature="14536:14649" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
+                <marker date="1534463292833" expanded="true" signature="29188:29221" ph="SELECT COUNT... maintable" />
+                <marker date="1534463292833" expanded="true" signature="32035:32100" ph="SELECT COUNT... maintable" />
               </folding>
             </state>
           </provider>
@@ -204,7 +201,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>upda</find>
       <find>update</find>
       <find>range</find>
       <find>make_qr</find>
@@ -234,6 +230,7 @@
       <find>print &quot;</find>
       <find>formlist</find>
       <find>form_to_user</find>
+      <find>make_</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -289,8 +286,8 @@
         <option value="$PROJECT_DIR$/ss_sesan/resources/dashboard/gtool.js" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/utilform.py" />
         <option value="$PROJECT_DIR$/ss_sesan/views.py" />
-        <option value="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
         <option value="$PROJECT_DIR$/ss_sesan/processes/get_vals.py" />
+        <option value="$PROJECT_DIR$/ss_sesan/processes/setFormVals.py" />
       </list>
     </option>
   </component>
@@ -1107,20 +1104,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
-          <caret line="331" column="42" lean-forward="false" selection-start-line="331" selection-start-column="42" selection-end-line="331" selection-end-column="42" />
-          <folding>
-            <element signature="e#15#188#0" expanded="true" />
-            <element signature="e#13888#15328#0" expanded="false" />
-            <marker date="1534461848141" expanded="true" signature="14451:14564" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
-            <marker date="1534461848141" expanded="true" signature="29103:29136" ph="SELECT COUNT... maintable" />
-            <marker date="1534461848141" expanded="true" signature="31950:32015" ph="SELECT COUNT... maintable" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/development.ini">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="883">
@@ -1191,6 +1174,20 @@
             <marker date="1534462328790" expanded="true" signature="31869:32046" ph="SELECT (100/... centros_urbanos" />
             <marker date="1534462328790" expanded="true" signature="31894:31998" ph="select count... maintable_msel_sem_comunidad_totales" />
             <marker date="1534462328790" expanded="true" signature="43330:43407" ph="SELECT date_... maintable" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ss_sesan/processes/setFormVals.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="207">
+          <caret line="314" column="73" lean-forward="false" selection-start-line="314" selection-start-column="73" selection-end-line="314" selection-end-column="73" />
+          <folding>
+            <element signature="e#15#188#0" expanded="true" />
+            <element signature="e#13973#15413#0" expanded="false" />
+            <marker date="1534463292833" expanded="true" signature="14536:14649" ph="INSERT INTO missing_value.lkpsem_comunidad_totales... " />
+            <marker date="1534463292833" expanded="true" signature="29188:29221" ph="SELECT COUNT... maintable" />
+            <marker date="1534463292833" expanded="true" signature="32035:32100" ph="SELECT COUNT... maintable" />
           </folding>
         </state>
       </provider>
