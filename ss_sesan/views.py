@@ -504,7 +504,8 @@ class formList_view(odkView):
             if isUserActive(self.user):
 
                 if self.authorize(getUserPassword(self.user, self.request)):
-                    log(self.user, "formlist", "normal", "4")
+                    #log(self.user, "formlist", "normal", "4")
+
                     return self.createXMLResponse(getFormList(self.user, self.request))
 
                 else:
@@ -519,6 +520,7 @@ class formList_view(odkView):
 class manifest_view(odkView):
     def processView(self):
         if self.authorize(getUserPassword(self.user, self.request)):
+
             return self.createXMLResponse(getManifest(self.user, self.request))
         else:
             return self.askForCredentials()

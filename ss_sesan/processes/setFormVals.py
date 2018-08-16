@@ -1,6 +1,6 @@
 # coding=utf-8
 from ..models import DBSession, VariablesInd, Pilare, Indicadore, Grupo, RangosPilare, LineasBase, RangosGrupo, \
-    CoefPond, User, Form, FormsByUser, CentrosUrbano
+    CoefPond, User, Form, FormsByUser, CentrosUrbano, Munic
 from get_vals import getRanges
 from pprint import pprint
 import ast, transaction
@@ -12,6 +12,7 @@ from glob import glob
 from subprocess import check_call, CalledProcessError, Popen, PIPE
 from random import randint
 import string
+from xml.dom import minidom
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -48,7 +49,7 @@ def verifyCode(code):
 
     chars = set(string.printable)
     code = filter(lambda x: x in chars, code)
-    return code.replace(".","")
+    return code.replace(".", "")
 
 
 def newPilar(jsondata, user):
@@ -149,11 +150,11 @@ def getPilarData(user):
                              "v_pregunta": v.v_pregunta,
                              "var_max": v.var_max,
                              "var_min": v.var_min,
-                             "range":getRanges(v.code_variable_ind,"")})
+                             "range": getRanges(v.code_variable_ind, "")})
                 vars_id.append(str(v.id_variables_ind))
             data[res.name_pilares]["ind"].append({"name": ind.name_indicadores.replace("_", " "), "vars": vars})
         data[res.name_pilares]["indL"] = ",".join(calcIndL(data[res.name_pilares]["ind"]))
-    #pprint(data)
+    # pprint(data)
     return data, vars_id
 
 
@@ -276,13 +277,22 @@ def getListPU(login):
 
 
 def getUserMunic(user):
-    mySession = DBSession()
+    try:
 
-    result = mySession.query(User.user_munic)
+        mySession = DBSession()
+
+        result = mySession.query(User.user_munic).filter(User.user_name == user).first()
+
+        result2 = mySession.query(Munic.munic_nombre).filter(Munic.munic_id == result[0]).first()
+        mySession.close()
+        return result2[0]
+    except:
+        return ""
 
 
 def form_to_user(request, login, fname, users):
     users = users.split(",")
+
     for user in users:
         outdir = os.path.join(request.registry.settings["user.repository"], login, "user", user,
                               fname.title().replace(" ", "_"))
@@ -299,12 +309,12 @@ def form_to_user(request, login, fname, users):
                           login + "_" + fname.title().replace(" ", "_") + "_" + user + ".xml")
 
         metadata = {}
-        metadata["formID"] = login + "_" + fname.title().replace(" ", "_") + "_" + user
-        metadata["name"] = login + "_" + fname.title().replace(" ", "_") + "_" + user
+        metadata["formID"] = login + "_" + fname.title().replace(" ", "_") + "_" + user + "_" + getUserMunic(user)
+        metadata["name"] = login + "_" + fname.title().replace(" ", "_") + "_" + user + "_" + getUserMunic(user)
         metadata["majorMinorVersion"] = ""
         metadata["version"] = datetime.datetime.now().strftime("%Y%m%d")
         metadata["hash"] = 'md5:' + md5(login + "_" + fname.title().replace(" ", "_") + "_" + user).hexdigest()
-        metadata["descriptionText"] = login + "_" + fname.title().replace(" ", "_") + "_" + user
+        metadata["descriptionText"] = login + "_" + fname.title().replace(" ", "_") + "_" + user+ "_" + getUserMunic(user)
         with open(jsonFile, "w") as outfile:
             jsonString = json.dumps(metadata, indent=4, ensure_ascii=False).encode("utf8")
             outfile.write(jsonString)
@@ -315,22 +325,39 @@ def form_to_user(request, login, fname, users):
         os.system("cp %s %s" % (f1, f2))
         os.system("cp %s %s" % (cu1, cu2))
 
+        # modify name of form
+
+        dom = minidom.parse(f2)  # or parse(filename_or_file)
+        for i in dom.getElementsByTagName("h:title"):
+            i.firstChild.replaceWholeText(getUserMunic(user) + "-"+fname.title() )
+
+        data = dom.toxml()
+
+        file = open(f2, "w")
+        file.write(data.encode("utf-8"))
+        file.close()
+
+        print "*-*-*-*-"
+        print f2
+        print "*-*-*-*-"
+
     return
 
 
 def add_CU(db, request, login, users):
     mySession = DBSession()
-    users=users.split(",")
+    users = users.split(",")
 
     munics = []
 
-    result = mySession.query(User.user_munic).filter(User.user_munic != 1000).filter(User.user_parent == login).filter(User.user_name.in_(users)).all()
+    result = mySession.query(User.user_munic).filter(User.user_munic != 1000).filter(User.user_parent == login).filter(
+        User.user_name.in_(users)).all()
     for row in result:
         munics.append(row.user_munic)
 
     result = mySession.query(CentrosUrbano.id_cu, CentrosUrbano.cu_name).filter(
         CentrosUrbano.munic_id.in_(munics)).all()
-    file = open(request.registry.settings["user.repository"]+"/cen_u.sql", "w")
+    file = open(request.registry.settings["user.repository"] + "/cen_u.sql", "w")
     for row in result:
         file.write(
             "INSERT INTO %s.lkpsem_comunidad_totales (sem_comunidad_totales_cod,sem_comunidad_totales_des)  VALUES ('%s','%s');" % (
@@ -343,7 +370,7 @@ def add_CU(db, request, login, users):
     args.append("--defaults-file=" + request.registry.settings['mysql.cnf'])
     args.append(db)
 
-    with open(request.registry.settings["user.repository"]+"/cen_u.sql") as input_file:
+    with open(request.registry.settings["user.repository"] + "/cen_u.sql") as input_file:
         proc = Popen(args, stdin=input_file, stderr=PIPE, stdout=PIPE)
         output, error = proc.communicate()
         if output != "" or error != "":
@@ -367,7 +394,7 @@ def genForm_Files(login, pilarId, request, fname):
 
     # oldmask = os.umask(000)
     if not os.path.exists(outputDir):
-        os.makedirs(outputDir,0777)
+        os.makedirs(outputDir, 0777)
 
     book = xlsxwriter.Workbook(path)
 
@@ -403,8 +430,8 @@ def genForm_Files(login, pilarId, request, fname):
     sheet3.write(0, 2, 'instance_name')
 
     now = datetime.datetime.now()
-    opt=str(request.POST.get("val_multi"))
-    opt="multiple"
+    opt = str(request.POST.get("val_multi"))
+    opt = "multiple"
     questions = [
         ["start", "start_time_survey_1", "", "", "", "", "", "", ""],
         ["today", "day_of_survey", "", "", "", "", "", "", ""],
@@ -414,7 +441,7 @@ def genForm_Files(login, pilarId, request, fname):
         ["text", "txt_rep_muni_comusan_4", u"Nombre de la persona que recopila la información", "", "", "", "yes", "",
          u"Debe ingresar el nombre de la persona que recopila la información"],
         ["date", "date_fecha_informe_6", "Fecha a la que corresponde el informe", "", "", "", "yes", "", "month-year"],
-        ["select_%s lista_curb"%opt, "sem_comunidad_totales",
+        ["select_%s lista_curb" % opt, "sem_comunidad_totales",
          u"Seleccione la o las comunidades incluidas en este reporte",
          "", "", "", "", "", "search('curbanos') minimal"],
         ["end group", "grpx", "", "", "", "", "", "", ""],
@@ -492,7 +519,6 @@ def genForm_Files(login, pilarId, request, fname):
         msg = msg + e.message
         print msg
         print e
-
 
         error = True
         return False
@@ -589,7 +615,7 @@ def genForm_Files(login, pilarId, request, fname):
                 error = True
 
     # ALTER TABLE '%s'.`lkpsem_comunidad_totales`;CHANGE COLUMN `sem_comunidad_totales_des` `sem_comunidad_totales_des` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Description' ;
-    #sem_comunidad_totales
+    # sem_comunidad_totales
     if not error:  # create database
         args = []
         args.append("mysql")
@@ -627,9 +653,8 @@ def genForm_Files(login, pilarId, request, fname):
             return e
 
     if not error:
-
         xls2xform.xls2xform_convert(path, path.replace(".xlsx", ".xml"))
-        os.system("cp "+request.registry.settings["user.repository"]+"/custom.js %s" % outputDir + "/custom.js")
+        os.system("cp " + request.registry.settings["user.repository"] + "/custom.js %s" % outputDir + "/custom.js")
 
     return True
 
@@ -656,13 +681,11 @@ def newForm(request, vals, login):
                 newF_U = FormsByUser(idforms=id_F, id_user=u)
                 mySession.add(newF_U)
 
-
-
         if not genForm_Files(login, vals[1], request, vals[0]):
             delForm(request, id_F, login)
             raise
         else:
-            if vals[2]!="":
+            if vals[2] != "":
                 form_to_user(request, login, vals[0], vals[2])
                 add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login, vals[2])
 
@@ -801,35 +824,37 @@ def delForm(request, formid, login):
 
 def getFormName(fid):
     mySession = DBSession()
-    result = mySession.query(Form.form_name).filter(Form.form_id==fid).first()
+    result = mySession.query(Form.form_name).filter(Form.form_id == fid).first()
     mySession.close()
     return result[0]
 
 
-def verifyUserData(db,uname):
-    mySession= DBSession()
-    result =mySession.execute("SELECT COUNT(*) FROM %s.maintable WHERE surveyid like binary '%s' ;" % (db, "% " + uname + "_%")).scalar()
+def verifyUserData(db, uname):
+    mySession = DBSession()
+    result = mySession.execute(
+        "SELECT COUNT(*) FROM %s.maintable WHERE surveyid like binary '%s' ;" % (db, "% " + uname + "_%")).scalar()
 
     return result
 
+
 def updateFU(vals, request, login):
-    vals=vals.split("*")
+    vals = vals.split("*")
     fid = vals[1]
 
-    mySession =DBSession()
+    mySession = DBSession()
 
-    result= mySession.query(FormsByUser.id_user).filter(FormsByUser.idforms==fid).all()
+    result = mySession.query(FormsByUser.id_user).filter(FormsByUser.idforms == fid).all()
     result = [r[0] for r in result]
-    cont=0
+    cont = 0
     try:
-        if vals[0]!= "":
-            ulist=vals[0].split(",")
+        if vals[0] != "":
+            ulist = vals[0].split(",")
 
             for u in ulist:
                 if u not in result and u != "":
-                    #add
+                    # add
                     form_to_user(request, login, getFormName(fid), u)
-                    add_CU('DATA_' +login+"_"+getFormName(fid).title().replace(" ", "_"), request, login, u)
+                    add_CU('DATA_' + login + "_" + getFormName(fid).title().replace(" ", "_"), request, login, u)
                     result.append(u)
                     transaction.begin()
                     newF_U = FormsByUser(idforms=fid, id_user=u)
@@ -837,33 +862,37 @@ def updateFU(vals, request, login):
                     transaction.commit()
             for r in result:
                 if r not in ulist:
-                    if verifyUserData('DATA_' +login+"_"+getFormName(fid).title().replace(" ", "_"), r)==0:
-                        files = os.path.join(request.registry.settings["user.repository"], login, "user", r, getFormName(fid).title().replace(" ", "_"))
+                    if verifyUserData('DATA_' + login + "_" + getFormName(fid).title().replace(" ", "_"), r) == 0:
+                        files = os.path.join(request.registry.settings["user.repository"], login, "user", r,
+                                             getFormName(fid).title().replace(" ", "_"))
                         try:
                             shutil.rmtree(files)
                         except:
                             pass
                         transaction.begin()
-                        mySession.query(FormsByUser).filter(FormsByUser.id_user == r).filter(FormsByUser.idforms == fid).delete(
+                        mySession.query(FormsByUser).filter(FormsByUser.id_user == r).filter(
+                            FormsByUser.idforms == fid).delete(
                             synchronize_session='fetch')
                         transaction.commit()
                 else:
-                    cont=cont+1
+                    cont = cont + 1
         else:
             for r in result:
-                if verifyUserData('DATA_' +login+"_"+ getFormName(fid).title().replace(" ", "_"), r) == 0:
-                    files = os.path.join(request.registry.settings["user.repository"], login, "user",r,getFormName(fid).title().replace(" ", "_"))
+                if verifyUserData('DATA_' + login + "_" + getFormName(fid).title().replace(" ", "_"), r) == 0:
+                    files = os.path.join(request.registry.settings["user.repository"], login, "user", r,
+                                         getFormName(fid).title().replace(" ", "_"))
                     try:
                         shutil.rmtree(files)
                     except:
                         pass
                     transaction.begin()
-                    mySession.query(FormsByUser).filter(FormsByUser.id_user == r).filter(FormsByUser.idforms==fid).delete(synchronize_session='fetch')
+                    mySession.query(FormsByUser).filter(FormsByUser.id_user == r).filter(
+                        FormsByUser.idforms == fid).delete(synchronize_session='fetch')
                     transaction.commit()
                 else:
-                    cont=cont+1
+                    cont = cont + 1
 
-            #new = list(set(ulist) - set(result))
+                    # new = list(set(ulist) - set(result))
 
         return ["Correcto", "Formulario modificado correctamente", "success"]
     except:
