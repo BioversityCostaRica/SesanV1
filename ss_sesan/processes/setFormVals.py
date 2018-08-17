@@ -312,7 +312,7 @@ def form_to_user(request, login, fname, users):
         metadata["formID"] = login + "_" + fname.title().replace(" ", "_") + "_" + user + "_" + getUserMunic(user)
         metadata["name"] = login + "_" + fname.title().replace(" ", "_") + "_" + user + "_" + getUserMunic(user)
         metadata["majorMinorVersion"] = ""
-        metadata["version"] = datetime.datetime.now().strftime("%Y%m%d")+login + "_" + fname.title().replace(" ", "_") + "_" + user+ "_" + getUserMunic(user)
+        metadata["version"] = datetime.datetime.now().strftime("%Y%m%d")
         metadata["hash"] = 'md5:' + md5(login + "_" + fname.title().replace(" ", "_") + "_" + user).hexdigest()
         metadata["descriptionText"] = login + "_" + fname.title().replace(" ", "_") + "_" + user+ "_" + getUserMunic(user)
         with open(jsonFile, "w") as outfile:
@@ -337,9 +337,6 @@ def form_to_user(request, login, fname, users):
         file.write(data.encode("utf-8"))
         file.close()
 
-        print "*-*-*-*-"
-        print f2
-        print "*-*-*-*-"
 
     return
 

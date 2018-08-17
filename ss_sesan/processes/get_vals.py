@@ -293,11 +293,12 @@ def make_qr(repo, login, passw, uname):
                                                   u'server_url': u'http://%s/%s/%s' % (ip, login, uname),
                                                   u'metadata_username': uname}}
         """
-        config_data = {u'admin': {u"admin_pw": "SalasSituacionales", "change_server": False, "change_form_metadata": False},
+        config_data = {u'admin': {u"admin_pw": "", "change_server": False, "change_form_metadata": False},
              u'general': {u"change_server": False, u"navigation": "buttons", u'username': uname,
                           u'password': passw, u'server_url': u'http://%s/%s/%s' % (ip, login, uname),
                           u'metadata_username': uname,
-                          u'hide_old_form_versions': False}}
+                          u'hide_old_form_versions': True
+                          }}
 
         qr_json = json.dumps(config_data)
         serialization = qr_json.encode('zlib_codec').encode('base64_codec')
