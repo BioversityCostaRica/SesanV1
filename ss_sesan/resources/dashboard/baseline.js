@@ -64,7 +64,6 @@ $(document).ready(function () {
                 }
 
 
-
             });
             $("#mun_sel_data2").val(data);
         }
@@ -106,6 +105,57 @@ $(document).ready(function () {
         }
 
     });
+
+
+    $('#depto_list').on('change', function (e) {
+
+        var mun = $("#depto_list").val();
+        $('#munic_list').empty();
+
+
+        $.each($(".mlist"), function (key, value) {
+
+            if ($(this).attr("coded") == mun.toString()) {
+
+                if ($(this).attr("sel") != "") {
+                    console.log($(this).attr("sel"));
+                    var option = new Option($(this).attr("value"), $(this).attr("codem"), "selected");
+                    console.log(option);
+                }
+                else {
+                    var option = new Option($(this).attr("value"), $(this).attr("codem"));
+                }
+
+                $('#munic_list').append($(option));
+
+            }
+        });
+        $("#munic_list").trigger("chosen:updated");
+
+
+    });
+
+    var mun = $("#depto_list").val();
+    if (mun != "") {
+        $.each($(".mlist"), function (key, value) {
+
+
+            if ($(this).attr("coded") == mun.toString()) {
+
+                if ($(this).attr("sel") != "") {
+                    var option = new Option($(this).attr("value"), $(this).attr("codem"));
+                    $(option).attr("selected", "selected");
+                }
+                else {
+                    var option = new Option($(this).attr("value"), $(this).attr("codem"));
+                }
+
+                $('#munic_list').append($(option));
+
+            }
+        });
+        $("#munic_list").trigger("chosen:updated");
+    }
 
 
 });

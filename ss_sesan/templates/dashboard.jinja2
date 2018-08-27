@@ -39,11 +39,11 @@
 
                                 <span class="clear"> <span class="block m-t-xs">
                                     <strong class="font-bold"
-                                            id="insti">{{ activeUser.fullName }}
+                                            id="insti">{{ activeUser.fullName.decode("latin1") }}
 
 
                                         {% if activeUser.user_role!=1 %}
-                                            | {{ activeUser.munic.title() }}{% endif %}</strong>
+                                            | {{ activeUser.munic.decode("latin1").title() }}{% endif %}</strong>
 
                                 </span>
                                     <span>
@@ -246,7 +246,7 @@
                                                     <tbody>
                                                     {% for ind in dashData[p].keys() %}
                                                         <tr>
-                                                            <td>{{ ind.encode("utf8")  | replace("_", " ") }}</td>
+                                                            <td>{{ ind.encode("latin1")  | replace("_", " ") }}</td>
                                                             {#                                            #ff1313 rojo#}
                                                             {#                                            #ff9936 naranja#}
                                                             {#                                            #ffe132 amarillo#}
@@ -486,7 +486,7 @@
                                         <!---->
                                         <p>
                                             <strong>
-                                                {{ s[1].encode("utf8") }}
+                                                {{ s[1].encode("latin1") }}
                                             </strong>
                                         </p>
                                         <img src="{{ s[0] }}" alt="person" style="width: 100%;"/>

@@ -72,7 +72,7 @@
                                     <select class="form-control dual_select" multiple id="dl2">
 
                                         {% for row in lists[1] %}
-                                            <option value="{{ row[1] }}">{{ row[0] }}</option>
+                                            <option value="{{ row[1] }}">{{ row[0].decode("latin1") }}</option>
                                         {% endfor %}
                                     </select>
                                 {% endif %}

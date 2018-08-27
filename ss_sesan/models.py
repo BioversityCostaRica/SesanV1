@@ -12,6 +12,8 @@ from zope.sqlalchemy import ZopeTransactionExtension
 
 DBSession = scoped_session(sessionmaker(extension=ZopeTransactionExtension()))
 
+
+
 Base = declarative_base()
 metadata = Base.metadata
 
@@ -39,14 +41,21 @@ class CoefPond(Base):
     coef_valor = Column(Numeric(10, 0))
 
 
+class Departamento(Base):
+    __tablename__ = 'departamentos'
+
+    cod_depto = Column(Integer, primary_key=True)
+    name_depto = Column(String(45))
+
+
 class Form(Base):
     __tablename__ = 'forms'
 
     form_id = Column(Integer, primary_key=True)
     form_user = Column(String(45))
-    form_name = Column(String(45))
+    form_name = Column(String(100))
     pilar_id = Column(String(45))
-    form_db = Column(String(45))
+    form_db = Column(String(100))
 
 
 class FormsByUser(Base):
@@ -114,6 +123,7 @@ class Munic(Base):
 
     munic_id = Column(Integer, primary_key=True)
     munic_nombre = Column(String(45))
+    cod_depto = Column(Integer)
 
 
 class Pilare(Base):

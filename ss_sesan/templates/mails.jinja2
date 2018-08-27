@@ -41,7 +41,9 @@
                                 <div class="form-group">
                                     <form method="POST" role="form" class="form-horizontal m-t"
                                           action="{{ request.path }}" id="submit">
-                                        <div class="col-sm-6">
+
+
+                                        {#<div class="col-sm-6">
                                             <select id="munic_list" name="munic"
                                                     data-placeholder="Seleccione un municipio..."
                                                     class="chosen-select form-control m-b" tabindex="2">
@@ -52,7 +54,7 @@
 
                                                     <option value="{{ row[0] }}"
                                                             id="i_{{ row[0] }}" {% if fill_reg.sel ==  row[0] %}
-                                                            selected {% endif %}> {{ row[1].decode("utf").title() }}
+                                                            selected {% endif %}> {{ row[1].decode("latin1").title() }}
 
 
                                                     </option>
@@ -60,7 +62,63 @@
 
                                             </select>
 
+                                        </div>#}
+
+                                        <div class="col-sm-4">
+
+
+                                            <select id="depto_list" name="depto"
+                                                    data-placeholder="Seleccione un departamento..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.depto %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="{{ row[0] }}" {% if fill_reg.s_depto ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}
+
+                                            </select>
+
+
                                         </div>
+                                        <div class="col-sm-4">
+
+
+                                            <select id="munic_list" name="munic"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+
+                                                {% for row in fill_reg.munic %}
+
+                                                    {% if fill_reg.sel ==  row[0] %}
+
+                                                        <input type="hidden" sel="selected" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    {% else %}
+                                                        <input type="hidden" sel="" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    {% endif %}
+                                                {% endfor %}
+
+
+
+
+                                            </select>
+
+                                        </div>
+
+
+
+
                                         <button type="submit" name="submit" id="loading-example-btn"
                                                 class="btn btn-white btn-sm"><i
                                                 class="fa fa-search"></i> Buscar
@@ -89,9 +147,9 @@
 
 
                                                 <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                        data-target="#myModal_{{ fill_reg.sel_name|replace(" ", "_") }}">
+                                                        data-target="#myModal_{{ fill_reg.sel }}">
                                                     Agregar los direccion de correo electronico
-                                                    a {{ fill_reg.sel_name }}
+                                                    a {{ fill_reg.sel_name.decode("latin1") }}
                                                 </button>
 
                                                 <!------------------------->
@@ -125,7 +183,8 @@
                                                                       id="submitmail">
                                                                     <input type="hidden" value="{{ row[0] }}"
                                                                            name="delMail">
-                                                                    <input type="hidden" value="{{ fill_reg.sel_name }}" name="sel_name">
+                                                                    <input type="hidden" value="{{ fill_reg.sel }}" name="sel_name">
+                                                                    <input type="hidden" value="{{ fill_reg.s_depto }}" name="depto">
                                                                     <button type="submit"
                                                                             class="btn btn-danger btn-circle btn-xs"
                                                                             name="delMail" id="delMail"><i
@@ -141,14 +200,14 @@
                                                 </table>
                                             </div>
                                             <button type="button" class="btn btn-primary" data-toggle="modal"
-                                                        data-target="#myModal_{{ fill_reg.sel_name|replace(" ", "_") }}">
+                                                        data-target="#myModal_{{ fill_reg.sel }}">
                                                     Agregar los direccion de correo electronico
-                                                    a {{ fill_reg.sel_name }}
+                                                    a {{ fill_reg.sel_name.decode("latin1") }}
                                                 </button>
                                         {% endif %}
 
                                         <!--------------------->
-                                        <div class="modal inmodal " id="myModal_{{ fill_reg.sel_name |replace(" ", "_") }}"
+                                        <div class="modal inmodal " id="myModal_{{ fill_reg.sel }}"
                                                      tabindex="-1" role="dialog" aria-hidden="true">
 
 
@@ -183,8 +242,8 @@
                                                                               action="{{ request.path }}"
                                                                               id="submit">
 
-                                                                            <input type="hidden" name="munic_name" value="{{ fill_reg.sel_name}}">
-
+                                                                            <input type="hidden" name="munic_id" value="{{ fill_reg.sel}}">
+                                                                            <input type="hidden" value="{{ fill_reg.s_depto }}" id="depto" name="depto">
                                                                             <div class="form-group"><label
                                                                                     class="col-sm-2 control-label">Nombre
                                                                                 completo</label>

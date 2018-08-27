@@ -62,47 +62,48 @@
 
                                 {% for row in ulist %}
                                     <tr>
-                                        <td>{{ row[0] }}</td>
+                                        <td>{{ row[0].decode("latin1") }}</td>
                                         <td>{{ row[1] }}</td>
                                         <td>{{ row[2] }}</td>
-                                        <td>{{ row[3] }}</td>
+                                        <td>{{ row[3].decode("latin1") }}</td>
                                         <td class="text-center">
 
 
+                                            <div class="" style="display: ruby">
 
-                                                <div class="" style="display: ruby">
-
-                                                        <form method="POST" role="form"
-                                                              class="form-horizontal m-t submitU"
-                                                              action="{{ request.path }}" id="submit{{ "_"+row[1] }}">
-                                                            <input type="hidden" value="{{ row[1] }}" name="uname_u">
-                                                            <button type="submit"
-                                                                    title="Eliminar usuario"
-                                                                    class="btn btn-danger btn-circle btn-xs"
-                                                                    name="delUser" id="delUser"><i
-                                                                    class="fa fa-times"></i>
-                                                            </button>
-
-
-                                                        </form>
-
-                                                        <button class="btn btn-warning btn-circle btn-xs" type="submit" title="Editar usuario"
-                                                                data-toggle="modal" data-target="#up_{{ row[1] }}"><i
-                                                                class="fa fa-edit"></i>
-                                                        </button>
-
-                                                        {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], name=row[0],uname=row[1], mail=row[2],val=1  %}
+                                                <form method="POST" role="form"
+                                                      class="form-horizontal m-t submitU"
+                                                      action="{{ request.path }}" id="submit{{ "_"+row[1] }}">
+                                                    <input type="hidden" value="{{ row[1] }}" name="uname_u">
+                                                    <button type="submit"
+                                                            title="Eliminar usuario"
+                                                            class="btn btn-danger btn-circle btn-xs"
+                                                            name="delUser" id="delUser"><i
+                                                            class="fa fa-times"></i>
+                                                    </button>
 
 
-                                                        <button class="btn btn-default btn-circle btn-xs" type="submit" title="Cambiar password"
-                                                                data-toggle="modal" data-target="#pass_{{ row[1] }}"><i
-                                                                class="fa fa-unlock-alt"></i>
-                                                        </button>
+                                                </form>
 
-                                                        {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], val=2  %}
+                                                <button class="btn btn-warning btn-circle btn-xs" type="submit"
+                                                        title="Editar usuario"
+                                                        data-toggle="modal" data-target="#up_{{ row[1] }}"><i
+                                                        class="fa fa-edit"></i>
+                                                </button>
+
+                                                {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], name=row[0],uname=row[1], mail=row[2],val=1 %}
 
 
-                                                </div>
+                                                <button class="btn btn-default btn-circle btn-xs" type="submit"
+                                                        title="Cambiar password"
+                                                        data-toggle="modal" data-target="#pass_{{ row[1] }}"><i
+                                                        class="fa fa-unlock-alt"></i>
+                                                </button>
+
+                                                {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], val=2 %}
+
+
+                                            </div>
 
 
                                         </td>
@@ -183,8 +184,9 @@
 
                                     <div class="hr-line-dashed"></div>
 
-                                    <div class="hr-line-dashed"></div>
-                                    <div class="form-group"><label class="col-sm-2 control-label">Municipio</label>
+
+
+                                    {#<div class="form-group"><label class="col-sm-2 control-label">Municipio</label>
 
                                         <div class="col-sm-10">
                                             <select id="munic_list" name="munic"
@@ -194,12 +196,60 @@
                                                 {% for row in fill_reg["munic"] %}
 
                                                     <option value="{{ row[0] }}"
-                                                            id="i_{{ row[0] }}"> {{ row[1].decode("utf").title() }}</option>
+                                                            id="i_{{ row[0] }}"> {{ row[1].decode("latin1").title() }}</option>
                                                 {% endfor %}
                                             </select>
                                             <span id='m_munic'></span>
                                         </div>
+                                    </div>#}
+                                    <div class="form-group"><label class="col-sm-2 control-label">Municipio</label>
+
+                                        <div class="col-sm-5">
+
+
+                                            <select id="depto_list" name="depto"
+                                                    data-placeholder="Seleccione un departamento..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.depto %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="{{ row[0] }}" {% if fill_reg.s_depto ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}
+
+                                            </select>
+
+
+                                        </div>
+                                        <div class="col-sm-5">
+
+
+                                            <select id="munic_list" name="munic"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.munic %}
+                                                        <input type="hidden" sel="" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+
+                                                {% endfor %}
+
+
+
+                                            </select>
+                                        <span id='m_munic'></span>
+
+                                        </div>
                                     </div>
+
+
                                     <div class="hr-line-dashed"></div>
 
                                     <div class="form-group">
@@ -215,6 +265,7 @@
 
                                         </div>
                                     </div>
+
                                 </form>
                             </div>
                         </div>

@@ -32,7 +32,7 @@
                                 <div class="form-group"><label class="col-sm-2 control-label">Nombre
                                     completo</label>
                                     <div class="col-sm-10"><input required="" type="text" class="form-control"
-                                                                  name="fullname" value="{{ name }}">
+                                                                  name="fullname" value="{{ name.decode("latin1") }}">
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>

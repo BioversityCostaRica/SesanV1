@@ -41,6 +41,79 @@
                                 <div class="form-group">
                                     <form method="POST" role="form" class="form-horizontal m-t"
                                           action="{{ request.path }}" id="submit">
+                                        <div class="col-sm-4">
+
+
+                                            <select id="depto_list" name="depto"
+                                                    data-placeholder="Seleccione un departamento..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.depto %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="{{ row[0] }}" {% if fill_reg.s_depto ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}
+
+                                            </select>
+
+
+                                        </div>
+                                        <div class="col-sm-4">
+
+
+                                            <select id="munic_list" name="munic"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+
+                                                {% for row in fill_reg.munic %}
+
+                                                    {% if fill_reg.sel ==  row[0] %}
+
+                                                        <input type="hidden" sel="selected" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    {% else %}
+                                                        <input type="hidden" sel="" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    {% endif %}
+                                                {% endfor %}
+
+
+                                                {#{% for row in fill_reg.munic %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="i_{{ row[0] }}" depto="{{ row[2] }}" {% if fill_reg.sel ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}#}
+
+                                            </select>
+
+                                        </div>
+                                        <button type="submit" name="submit" id="loading-example-btn"
+                                                class="btn btn-white btn-sm"><i
+                                                class="fa fa-search"></i> Buscar
+                                        </button>
+
+
+                                        <input type="hidden" value="{{ fill_reg.sel }}" id="id_mun_sel">
+                                    </form>
+                                </div>
+                            </div>
+                            {#<div class="row m-b-sm m-t-sm">
+                                <div class="form-group">
+                                    <form method="POST" role="form" class="form-horizontal m-t"
+                                          action="{{ request.path }}" id="submit">
                                         <div class="col-sm-6">
                                             <select id="munic_list" name="munic"
                                                     data-placeholder="Seleccione un municipio..."
@@ -52,7 +125,7 @@
 
                                                     <option value="{{ row[0] }}"
                                                             id="i_{{ row[0] }}" {% if fill_reg.sel ==  row[0] %}
-                                                            selected {% endif %}> {{ row[1].decode("utf").title() }}
+                                                            selected {% endif %}> {{ row[1].decode("latin1").title() }}
 
 
                                                     </option>
@@ -71,8 +144,8 @@
 
 
                                 </div>
-                            </div>
-                        <input type="hidden" value="{{ varsR_id }}" id="varsR_id">
+                            </div>#}
+                            <input type="hidden" value="{{ varsR_id }}" id="varsR_id">
                             {% if range | length != 0 %}
 
                                 <div class="row">
@@ -96,12 +169,17 @@
                                                         <td>
                                                             <!--this-is-the-slider------->
 
-                                                            <input type="hidden" value="{{ row[2][0] }}" id="minR_{{ row[0] }}">
-                                                            <input type="hidden" value="{{ row[2][7] }}" id="maxR_{{ row[0] }}">
+                                                            <input type="hidden" value="{{ row[2][0] }}"
+                                                                   id="minR_{{ row[0] }}">
+                                                            <input type="hidden" value="{{ row[2][7] }}"
+                                                                   id="maxR_{{ row[0] }}">
 
-                                                            <input type="hidden" value="{{ row[2][1] }}" id="lv1_{{ row[0] }}">
-                                                            <input type="hidden" value="{{ row[2][3] }}" id="lv2_{{ row[0] }}">
-                                                            <input type="hidden" value="{{ row[2][5] }}" id="lv3_{{ row[0] }}">
+                                                            <input type="hidden" value="{{ row[2][1] }}"
+                                                                   id="lv1_{{ row[0] }}">
+                                                            <input type="hidden" value="{{ row[2][3] }}"
+                                                                   id="lv2_{{ row[0] }}">
+                                                            <input type="hidden" value="{{ row[2][5] }}"
+                                                                   id="lv3_{{ row[0] }}">
 
 
                                                             <div class="col-sm-8 form-control input-sm sliderR"
@@ -109,16 +187,20 @@
                                                             <br><br>
                                                             <div class="row">
                                                                 <small class="col-lg-3 "
-                                                                       id="rangR1_{{ row[0] }}">Sin afectacion:{{ row[2][0]|string +"-"+ row[2][1]|string }}
+                                                                       id="rangR1_{{ row[0] }}">Sin
+                                                                    afectacion:{{ row[2][0]|string +"-"+ row[2][1]|string }}
                                                                 </small>
                                                                 <small class="col-lg-3 "
-                                                                       id="rangR2_{{ row[0] }}">Afectacion Moderada:{{ row[2][2]|string +"-"+ row[2][3]|string }}
+                                                                       id="rangR2_{{ row[0] }}">Afectacion
+                                                                    Moderada:{{ row[2][2]|string +"-"+ row[2][3]|string }}
                                                                 </small>
                                                                 <small class="col-lg-3 "
-                                                                       id="rangR3_{{ row[0] }}">Afectacion Alta:{{ row[2][4]|string +"-"+ row[2][5]|string }}
+                                                                       id="rangR3_{{ row[0] }}">Afectacion
+                                                                    Alta:{{ row[2][4]|string +"-"+ row[2][5]|string }}
                                                                 </small>
                                                                 <small class="col-lg-3 "
-                                                                       id="rangR4_{{ row[0] }}">Afectacion muy alta:{{ row[2][6]|string +"-"+ row[2][7]|string }}
+                                                                       id="rangR4_{{ row[0] }}">Afectacion muy
+                                                                    alta:{{ row[2][6]|string +"-"+ row[2][7]|string }}
                                                                 </small>
                                                             </div>
 
@@ -132,9 +214,14 @@
                                                                   id="submitrange">
 
 
-                                                                <input name="mun_ran_{{ row[0] }}" id="mun_ran_{{ row[0] }}" type="hidden" value="">
-                                                                <input name="mun_id" id="mun_id" type="hidden" value="{{ fill_reg.sel }}">
-                                                                <input name="var_id" id="var_id" type="hidden" value="{{ row[0] }}">
+                                                                <input name="mun_ran_{{ row[0] }}"
+                                                                       id="mun_ran_{{ row[0] }}" type="hidden" value="">
+                                                                <input name="mun_id" id="mun_id" type="hidden"
+                                                                       value="{{ fill_reg.sel }}">
+                                                                <input name="dep_id" id="dep_id" type="hidden"
+                                                                       value="{{ fill_reg.s_depto }}">
+                                                                <input name="var_id" id="var_id" type="hidden"
+                                                                       value="{{ row[0] }}">
 
                                                                 <button type="submit"
                                                                         class="btn btn-primary btn-circle btn-xs"

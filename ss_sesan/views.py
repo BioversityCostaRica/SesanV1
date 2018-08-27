@@ -48,10 +48,12 @@ class baseline_view(privateView):
         regJS_CSS.need()
         fill_regN = fill_reg()
         msg = []
+
         if "submit" in self.request.POST:
             # if "update_data" in self.request.POST:
 
             fill_regN["sel"] = int(self.request.POST.get("munic", ""))
+            fill_regN["s_depto"] = int(self.request.POST.get("depto", ""))
             fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
             fill_regN["lb_m"] = getBaselinesName()
             lb_data = getBaselines(int(self.request.POST.get("munic", "")), "lb")
@@ -62,6 +64,7 @@ class baseline_view(privateView):
             if "id_mun_sel" in self.request.POST and not "update_data" in self.request.POST and not "submit_lb" in self.request.POST:
                 msg = delete_lb(self.request.POST.get("id_mun_sel", ""), "lb")
                 fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
+                fill_regN["s_depto"] = int(self.request.POST.get("id_depto_sel", ""))
                 fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                 fill_regN["lb_m"] = getBaselinesName()
                 lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "lb")
@@ -73,6 +76,7 @@ class baseline_view(privateView):
                                      self.request.POST.get("mun_sel_data2", ""), "lb")
                     fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
                     fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
+                    fill_regN["s_depto"] = int(self.request.POST.get("id_depto_sel", ""))
                     fill_regN["lb_m"] = getBaselinesName()
                     lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "lb")
                     log(self.user.login,
@@ -82,6 +86,7 @@ class baseline_view(privateView):
                     if "submit_lb" in self.request.POST:
                         save_data = self.request.POST.get("mun_sel_data", "")
                         fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
+                        fill_regN["s_depto"] = int(self.request.POST.get("id_depto_sel", ""))
                         fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                         fill_regN["lb_m"] = getBaselinesName()
                         msg = newBaseline(save_data, "lb")
@@ -110,27 +115,32 @@ class mails_view(privateView):
         msg = []
         mail_list = []
 
+
         if "delMail" in self.request.POST:
-            fill_regN["sel_name"] = self.request.POST.get("sel_name", "").title()
-            fill_regN["sel"] = getMunicId(self.request.POST.get("sel_name", ""))
+            fill_regN["sel_name"] = getMunicName(self.request.POST.get("sel_name", "").title())
+            fill_regN["sel"] = self.request.POST.get("sel_name", "")
+
+            fill_regN["s_depto"] = int(self.request.POST.get("depto", ""))
             msg = delMail(self.request.POST.get("delMail", ""))
-            mail_list = getMails(getMunicId(self.request.POST.get("sel_name")))
+            mail_list = getMails(self.request.POST.get("sel_name"))
             log(self.user.login,
-                "mail deleted in " + self.request.POST.get("sel_name") + " for " + self.request.POST.get(
+                "mail deleted in munic" + self.request.POST.get("sel_name") + " for " + self.request.POST.get(
                     "delMail"),
                 "normal", "3")
 
         if "reg" in self.request.POST:
             msg = addMail(self.request, self.request.POST.get("fullname"), self.request.POST.get("email"),
-                          self.request.POST.get("munic_name"))
-            fill_regN["sel_name"] = self.request.POST.get("munic_name")
-            fill_regN["sel"] = getMunicId(self.request.POST.get("munic_name"))
-            mail_list = getMails(getMunicId(self.request.POST.get("munic_name")))
-            log(self.user.login, "new mail added in " + self.request.POST.get("munic_name") + " for "+self.request.POST.get("fullname"),
+                          self.request.POST.get("munic_id"))
+            fill_regN["sel_name"] = getMunicName(self.request.POST.get("munic_id"))
+            fill_regN["s_depto"] = int(self.request.POST.get("depto", ""))
+            fill_regN["sel"] = self.request.POST.get("munic_id")
+            mail_list = getMails(self.request.POST.get("munic_id"))
+            log(self.user.login, "new mail added in munic s" +self.request.POST.get("munic_id") + " for "+self.request.POST.get("fullname"),
                 "normal", "1")
         if "munic" in self.request.POST:
             fill_regN["sel"] = int(self.request.POST.get("munic", ""))
             fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
+            fill_regN["s_depto"] = int(self.request.POST.get("depto", ""))
             mail_list = getMails(self.request.POST.get("munic", ""))
 
         return {'activeUser': self.user, "msg": msg, "fill_reg": fill_regN, "mail_list": mail_list}
@@ -150,10 +160,13 @@ class ranges_view(privateView):
         varsR_id = []
         msg=[]
 
+
+
         if "saveRange" in self.request.POST:
             msg=UpdateOrInsertRange(self.request.POST);
 
             fill_regN["sel"] = int(self.request.POST.get("mun_id", ""))
+            fill_regN["s_depto"] = int(self.request.POST.get("dep_id", ""))
             fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("mun_id", ""))).title()
             range = getRangeList(self.request.POST.get("mun_id", ""))
             for r in range:
@@ -167,6 +180,7 @@ class ranges_view(privateView):
 
         if "munic" in self.request.POST :
             fill_regN["sel"] = int(self.request.POST.get("munic", ""))
+            fill_regN["s_depto"] = int(self.request.POST.get("depto", ""))
             fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
             range = getRangeList(self.request.POST.get("munic", ""))
 
@@ -191,6 +205,7 @@ class weighing_view(privateView):
             # if "update_data" in self.request.POST:
 
             fill_regN["sel"] = int(self.request.POST.get("munic", ""))
+            fill_regN["s_depto"] = int(self.request.POST.get("depto", ""))
             fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
             fill_regN["lb_m"] = getBaselinesName()
             lb_data = getBaselines(int(self.request.POST.get("munic", "")), "cf")
@@ -200,6 +215,7 @@ class weighing_view(privateView):
                 fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
                 fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                 fill_regN["lb_m"] = getBaselinesName()
+                fill_regN["s_depto"] = int(self.request.POST.get("id_depto_sel", ""))
                 lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
                 log(self.user.login, "weighing deleted in " + getMunicName(
                     int(self.request.POST.get("id_mun_sel", ""))).title(),
@@ -209,6 +225,7 @@ class weighing_view(privateView):
                     msg = updateData(self.request.POST.get("id_mun_sel", ""),
                                      self.request.POST.get("mun_sel_data2", ""), "cf")
                     fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
+                    fill_regN["s_depto"] = int(self.request.POST.get("id_depto_sel", ""))
                     fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                     fill_regN["lb_m"] = getBaselinesName()
                     lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
@@ -217,15 +234,16 @@ class weighing_view(privateView):
                 else:
                     if "submit_lb" in self.request.POST:
                         save_data = self.request.POST.get("mun_sel_data", "")
+                        fill_regN["s_depto"] = int(self.request.POST.get("id_depto_sel", ""))
                         fill_regN["sel"] = int(self.request.POST.get("id_mun_sel", ""))
                         fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                         fill_regN["lb_m"] = getBaselinesName()
                         msg = newBaseline(save_data, "cf")
                         lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
-                        log(self.user.login, "new weighing in " + getMunicName(
-                            int(self.request.POST.get("id_mun_sel", ""))).title() + " for var " + self.request.POST.get(
-                            "id_mun_sel", ""),
-                            "normal", "1")
+                        #log(self.user.login, "new weighing in " + getMunicName(
+                        #    int(self.request.POST.get("id_mun_sel", ""))).title() + " for var " + self.request.POST.get(
+                        #    "id_mun_sel", ""),
+                        #    "normal", "1")
                     else:
                         fill_regN["sel"] = 0
                         fill_regN["sel_name"] = ""

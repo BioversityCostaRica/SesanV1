@@ -835,6 +835,8 @@ def verifyUserData(db, uname):
 
 
 def updateFU(vals, request, login):
+
+    print "*-*-*-*-"
     vals = vals.split("*")
     fid = vals[1]
 
