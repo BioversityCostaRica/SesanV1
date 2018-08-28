@@ -153,7 +153,7 @@
                         <input type="hidden" id="pptx_img" value="">
                         <input type="hidden" id="pptx_img2" value="">
                         {% if dataReport != {} %}
-                        <input type="hidden" id="rep_mun" value="{{ dataReport.date[2].title() }}">
+                        <input type="hidden" id="rep_mun" value="{{ dataReport.date[2].title().decode("latin1") }}">
                         <input type="hidden" id="rep_date" value="{{ dataReport.date[0] }},{{ dataReport.date[1] }}">
                         {% endif %}
 
@@ -194,14 +194,13 @@
                         <div id="main_s" class="row wrapper wrapper-content animated fadeInRight">
 
 
-
                         <div id="sit_san2">
                             <div class="col-md-3" id="sit_san" style="padding-left: 2%">
                                 <h2><strong>Situacion SAN</strong></h2>
                                 <strong>Fecha de emision: {{ dataReport.date[0] }},{{ dataReport.date[1] }} </strong>
                                 <br>
                                 <strong>Comisión Municipal de Seguridad Alimentaria y Nutricional
-                                    de {{ dataReport.date[2].title() }}</strong>
+                                    de {{ dataReport.date[2].title().decode("latin1") }}</strong>
                                 <div class="widget yellow-bg p-lg text-center"
                                      style="background-color:{{ dataReport.san[1] }} !important; " id="alert_img">
                                     <div class="m-b-md">
@@ -255,7 +254,7 @@
                                                                             class="fa fa-warning"></i></button>
                                                             </td>
                                                             <td class="project-title">
-                                                                <a href="project_detail.html">{{ row.replace("_alert", "").title() }}</a>
+                                                                <a href="project_detail.html">{{ row.replace("_alert", "").decode("latin1") }}</a>
                                                                 <br/>
                                                                 <small>{{ dataReport[row][1].decode('latin-1') }}</small>
                                                             </td>

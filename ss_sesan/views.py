@@ -575,6 +575,7 @@ class push_view(odkView):
                     if storeSubmission(self.user, self.request):
                         response = Response(status=201)
                         log(self.user, "store submission", "normal", "4")
+                        sendGroup(self.request, self.user)
                         return response
                     else:
 

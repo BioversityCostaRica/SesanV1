@@ -377,5 +377,6 @@ def mail2(request,body_message, to):
     mail.login(me, request.registry.settings['mail.password'])
     mail.sendmail(me, to, msg.as_string())
     mail.quit()
+    print ">>>>>>>>>>>>>>>>>>send"
 
 

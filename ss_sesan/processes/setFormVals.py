@@ -292,7 +292,6 @@ def getUserMunic(user):
 
 def form_to_user(request, login, fname, users):
     users = users.split(",")
-
     for user in users:
         outdir = os.path.join(request.registry.settings["user.repository"], login, "user", user,
                               fname.title().replace(" ", "_"))
@@ -309,12 +308,12 @@ def form_to_user(request, login, fname, users):
                           login + "_" + fname.title().replace(" ", "_") + "_" + user + ".xml")
 
         metadata = {}
-        metadata["formID"] = login + "_" + fname.title().replace(" ", "_") + "_" + user + "_" + getUserMunic(user)
-        metadata["name"] = login + "_" + fname.title().replace(" ", "_") + "_" + user + "_" + getUserMunic(user)
+        metadata["formID"] = login + "_" + fname.title().replace(" ", "_") + "_" + user + "_" + getUserMunic(user).decode("latin1")
+        metadata["name"] = login + "_" + fname.title().replace(" ", "_") + "_" + user + "_" + getUserMunic(user).decode("latin1")
         metadata["majorMinorVersion"] = ""
         metadata["version"] = datetime.datetime.now().strftime("%Y%m%d")
         metadata["hash"] = 'md5:' + md5(login + "_" + fname.title().replace(" ", "_") + "_" + user).hexdigest()
-        metadata["descriptionText"] = login + "_" + fname.title().replace(" ", "_") + "_" + user+ "_" + getUserMunic(user)
+        metadata["descriptionText"] = login + "_" + fname.title().replace(" ", "_") + "_" + user+ "_" + getUserMunic(user).decode("latin1")
         with open(jsonFile, "w") as outfile:
             jsonString = json.dumps(metadata, indent=4, ensure_ascii=False).encode("utf8")
             outfile.write(jsonString)
@@ -329,7 +328,7 @@ def form_to_user(request, login, fname, users):
 
         dom = minidom.parse(f2)  # or parse(filename_or_file)
         for i in dom.getElementsByTagName("h:title"):
-            i.firstChild.replaceWholeText(getUserMunic(user) + "-"+fname.title() )
+            i.firstChild.replaceWholeText(getUserMunic(user).decode("latin1") + "-"+fname.title() )
 
         data = dom.toxml()
 

@@ -189,10 +189,10 @@
                                         <div class="ibox float-e-margins">
 
                                             <div class="ibox-title" style="font-size: 125% ">
-                                                <h5>Pilar : {{ p.title() }}, indice de afectacion </h5>
+                                                <h5>Pilar : {{ p.decode("latin1") }}, indice de afectacion </h5>
                                                 <h5 style="color: {{ dashData[p+"_alert"][2] }}">&nbsp;
                                                     {{ dashData[p+"_alert"][0] }}
-                                                    ({{ dashData[p+"_alert"][1].decode('latin-1') }})</h5>
+                                                    ({{ dashData[p+"_alert"][1].decode('latin-1').upper() }})</h5>
 
 
                                                 <div class="ibox-tools">
@@ -246,7 +246,7 @@
                                                     <tbody>
                                                     {% for ind in dashData[p].keys() %}
                                                         <tr>
-                                                            <td>{{ ind.encode("latin1")  | replace("_", " ") }}</td>
+                                                            <td>{{ ind.decode("latin1")  | replace("_", " ") }}</td>
                                                             {#                                            #ff1313 rojo#}
                                                             {#                                            #ff9936 naranja#}
                                                             {#                                            #ffe132 amarillo#}
@@ -286,7 +286,7 @@
                                                                             {% elif row[4]==3 %}
                                                                                 <td class="text-center text-info">{{ "" }}<i
                                                                                         class="fa fa-ellipsis-h"></i>
-                                                                                </td>s
+                                                                                </td>
                                                                             {% elif row[4]==0 %}
                                                                                 <td class="text-center"
                                                                                     style="color: red">{{ "" }}<i
@@ -455,7 +455,7 @@
                                         </div>
 
                                         <input type="hidden" id="map_points" value="{{ dashData.comunidades2 }}">
-                                        <input type="hidden" id="map_name" value="{{ activeUser.munic }}">
+                                        <input type="hidden" id="map_name" value="{{ activeUser.munic.decode("latin1") }}">
 
                                     </div>
 
@@ -486,7 +486,7 @@
                                         <!---->
                                         <p>
                                             <strong>
-                                                {{ s[1].encode("latin1") }}
+                                                {{ s[1].decode("latin1") }}
                                             </strong>
                                         </p>
                                         <img src="{{ s[0] }}" alt="person" style="width: 100%;"/>

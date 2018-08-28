@@ -208,13 +208,13 @@ def getHelpFiles(request):
 
 
 def getSAN(value):
-    if float(value) <= 11.9:
+    if float(value) <= 6.4:
         return "#11c300", "Situacion Normal"
     else:
-        if float(value) <= 47.5:
+        if float(value) <= 39.8:
             return "#ffe132", "Alerta Temprana"
         else:
-            if float(value) <= 83.6:
+            if float(value) <= 76.9:
                 return "#ff9936", "Crisis"
             else:
                 if float(value) <= 100:
@@ -1264,19 +1264,19 @@ def getRangeList(munic):
 
 
 def sendGroup(request, uname):
+
     mySession = DBSession()
     result = mySession.query(User.user_munic).filter(User.user_name == uname).first()
-
+    print result[0]
     list = mySession.query(MailList).filter(MailList.munic_id == result[0]).all()
 
     for row in list:
         hour = str(datetime.now()).split(" ")[1].split(".")[0]
-        body_message = ["Estimado " + row.mail_name,
+        body_message = ["Estimado " + row.mail_name.decode("latin1"),
                         "Este correo es para informar que el dia de hoy ha ingresado un nuevo registro a la base de datos de Salas Situacionales para el municipio de " + getMunicName(
-                            result[0]).title() + " a las " + hour,
+                            result[0]).title().decode("latin1") + " a las " + hour,
                         "Si tiene dudas o consultas puede hacerlas llegar al departamento de TI de SESAN o a traves de su oficina regional.",
                         "Gracias"]
-
         try:
             mail2(request, body_message, row.mail)
         except:

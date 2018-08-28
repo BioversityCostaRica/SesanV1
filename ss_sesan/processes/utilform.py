@@ -214,12 +214,16 @@ def makeJSONToMySQL(uname,iniqueID,request,xformid):
 
     JSONFile = os.path.join(request.registry.settings['user.repository'],*[getParent(uname), "user", uname, "data", 'json', iniqueID, "*.json"])
     JSONFile=glob.glob(JSONFile)
+    mapDir = os.path.join(request.registry.settings['user.repository'],
+                          *[getParent(uname), "user", uname, "data", "MAPS"])
     if JSONFile:
 
         args = []
+
         args.append(JSONToMySQL)
         args.append("-u " + request.registry.settings['mysql.user'])
         args.append("-p " + request.registry.settings['mysql.password'])
+        args.append("-M " + mapDir)
         args.append("-m " + os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",xformid, "manifest.xml"]))
         args.append("-j " + JSONFile[0])
         args.append("-s " + "DATA_"+getParent(uname)+"_"+xformid)
@@ -234,14 +238,12 @@ def makeJSONToMySQL(uname,iniqueID,request,xformid):
         except:
             print ""
 
+        if not os.path.exists(mapDir):
+            os.makedirs(mapDir)
+
         args.append("-J " +os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",xformid, "custom2.js"]) )
         try:
             check_call(args)
-
-            sendGroup(request, uname)
-
-
-
 
             #print args
             #print "insert"
@@ -255,6 +257,7 @@ def makeJSONToMySQL(uname,iniqueID,request,xformid):
     else:
         print "Unable to find JSON files"
         return False
+
     return True
 
 def storeSubmission(uname,request):
