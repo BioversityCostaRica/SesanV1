@@ -56,7 +56,7 @@ def dataReport(self, month, year):
     mySession = DBSession()
 
     if not valReport(self, month, year):
-        print "-------------------"
+        #print "-------------------"
         return {}
 
     data = {}
@@ -225,7 +225,7 @@ def getSAN(value):
 
 def valReport(self, month, year):
     mySession = DBSession()
-    print self.user.login
+    #print self.user.login
     my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
     myDB = []
     if not my_forms is None:
@@ -250,10 +250,10 @@ def valReport(self, month, year):
         acum.append(int(result))
     mySession.close()
 
-    print "**************************"
-    print myDB
-    print acum
-    print "**************************"
+    #print "**************************"
+    #print myDB
+    #print acum
+    #print "**************************"
     if sum(acum) >= 1:
         return True
     else:
@@ -415,7 +415,7 @@ def addNewUser(regDict, request, login):
         else:
             if result == 0:
                 if "chb_del_mon" not in regDict:
-                    print "add delegado"
+                    #print "add delegado"
                     addUser = User(user_fullname=regDict["fullname"],
                                    user_name=regDict["user_name"],
                                    user_joindate=str(t.now()),
@@ -1382,9 +1382,9 @@ def addMail(request, fullname, mail, munic_id):
                     "Gracias"]
 
     #try:
-    print "send"
+    #print "send"
     mail2(request, body_message, mail)
-    print "*-*-*-"
+    #print "*-*-*-"
     #except:
     #    pass
 
@@ -1417,18 +1417,18 @@ def getRangeList(munic):
         if getRanges(row.code_variable_ind, int(munic)) != []:
             data.append([row.id_variables_ind, row.name_variable_ind, getRanges(row.code_variable_ind,int(munic))])
 
-    pprint(data)
+    #pprint(data)
     return data
 
 
 def sendGroup(request, uname):
     mySession = DBSession()
     result = mySession.query(User.user_munic).filter(User.user_name == uname).first()
-    print result[0]
+    #print result[0]
     list = mySession.query(MailList).filter(MailList.munic_id == result[0]).all()
 
     for row in list:
-        print row.mail
+        #print row.mail
         hour = str(datetime.now()).split(" ")[1].split(".")[0]
         body_message = ["Estimado " + row.mail_name.decode("latin1"),
                         "Este correo es para informar que el dia de hoy ha ingresado un nuevo registro a la base de datos de Salas Situacionales para el municipio de " + getMunicName(
