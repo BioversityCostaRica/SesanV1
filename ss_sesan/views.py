@@ -353,7 +353,7 @@ class report_view(privateView):
         msg = []
 
         date = self.request.url.split("/")[-1].split("_")
-        print self.request.POST
+        # print self.request.POST
         # date = date.split("_")
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
@@ -399,16 +399,30 @@ class gtool_view(privateView):
         data4plot = []
         gtoolCSS_JS.need()
 
+
         if "getData4Analize" in self.request.POST:
-            if self.user.user_role ==2:
-                vals = self.request.POST.get('getData4Analize', '').split("*$%")
-                val, data4plot = getData4Analize(self, vals)
-                if val == 1:
-                    msg = data4plot
-                    data4plot = []
-                log(self.user.login, "request data for gtool: " + self.request.POST.get('getData4Analize', ''),
-                    "normal",
-                    "4")
+            if self.user.user_role == 2:
+                if "if_munic" in self.request.POST:
+                    user_d = getUserData(getUserByMunic(self.request.POST.get("if_munic")))
+
+                    #user_d = getUserData(getUserByMunic(self.request.POST.get("munic_sel")))
+                    print user_d
+                    if user_d == "ND":
+                        msg = ["Info", "No hay ningun monitor asignado a este municipio", "info"]
+                        data4plot = []
+                    else:
+
+                        user_d.user = user_d
+                        user_d.request = self.request
+
+                        vals = self.request.POST.get('getData4Analize', '').split("*$%")
+                        val, data4plot = getData4Analize(user_d, vals)
+                        if val == 1:
+                            msg = data4plot
+                            data4plot = []
+                        log(self.user.login, "request data for gtool: " + self.request.POST.get('getData4Analize', ''),
+                            "normal",
+                            "4")
             else:
                 vals = self.request.POST.get('getData4Analize', '').split("*$%")
                 val, data4plot = getData4Analize(self, vals)
@@ -419,15 +433,15 @@ class gtool_view(privateView):
                     "normal",
                     "4")
 
-
         if self.user.user_role == 2:
 
             return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
-                    "dates": self.request.cookies["cur_date"].split("_"),"depto": getDeptName(getUserDeptoID(self.user.login))}
+                    "dates": self.request.cookies["cur_date"].split("_"),
+                    "depto": getDeptName(getUserDeptoID(self.user.login)),
+                    "munics": getMunics(getUserDeptoID(self.user.login)), "sel_m":self.request.POST.get("if_munic")}
         else:
             return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
                     "dates": self.request.cookies["cur_date"].split("_")}
-
 
 
 @view_config(route_name='dashboard', renderer='templates/dashboard.jinja2')
@@ -441,7 +455,7 @@ class dashboard_view(privateView):
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
 
-        print self.request.POST
+        # print self.request.POST
         msg = []
 
         if "munic_sel" in self.request.POST:

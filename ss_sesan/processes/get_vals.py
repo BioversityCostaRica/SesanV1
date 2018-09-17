@@ -19,6 +19,7 @@ from qrtools import QR  # apt-get install libzbar-dev, pip install zbar, pip ins
 from ..encdecdata import decodeData
 import xlsxwriter
 import shutil
+#from .setFormVals import verifyPilar
 from sqlalchemy import or_
 
 import sys
@@ -1241,7 +1242,7 @@ def getData4Analize(self, vals):
             data = [[]]
             data[0].append("Date")
             for v in vals[0].split(","):
-                data[0].append(getColName(v, vals[1]))
+                data[0].append(getColName(v, vals[1]).replace("_", " "))
 
             my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
 
@@ -1283,6 +1284,7 @@ def getData4Analize(self, vals):
                         except:
                             row.append(None)
                 if vals[1] == "Indicadores":
+
                     for v in vals[0].split(","):
                         try:
                             row.append(float(_finditem(rowM, getColName(v, vals[1]))["val"][0]))
@@ -1309,11 +1311,24 @@ def getData4Analize(self, vals):
                 data.append(row)
 
             #pprint(data)
-            return 2, data
+            return 2, json.dumps(data, ensure_ascii=False, encoding='latin1')
 
 
     else:
         return 1, ["Precaucion", "Debe seleccionar algun subset de datos", "warning"]
+
+
+def verifyPilar(pId):
+    mySession = DBSession()
+
+    result = mySession.query(Indicadore.id_indicadores).filter(Indicadore.Id_pilares == pId).all()
+    for r in result:
+        var = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == r.id_indicadores).all()
+        for v in var:
+            if v.unidad_variable_ind == "" or v.v_pregunta == "":
+                return False
+    mySession.close()
+    return True
 
 
 def getGToolData(self):
@@ -1324,13 +1339,14 @@ def getGToolData(self):
     result = mySession.query(Pilare).filter(Pilare.user_name == self.user.parent).all()
 
     for r in result:
-        data["pilar"].append([r.id_pilares, r.name_pilares])
-        inds = mySession.query(Indicadore).filter(Indicadore.Id_pilares == r.id_pilares).all()
-        for i in inds:
-            data["ind"].append([i.id_indicadores, i.name_indicadores.replace("_", " ")])
-            vars = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == i.id_indicadores).all()
-            for v in vars:
-                data["var"].append([v.id_variables_ind, v.name_variable_ind])
+        if verifyPilar(r.id_pilares):
+            data["pilar"].append([r.id_pilares, r.name_pilares])
+            inds = mySession.query(Indicadore).filter(Indicadore.Id_pilares == r.id_pilares).all()
+            for i in inds:
+                data["ind"].append([i.id_indicadores, i.name_indicadores.replace("_", " ")])
+                vars = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == i.id_indicadores).all()
+                for v in vars:
+                    data["var"].append([v.id_variables_ind, v.name_variable_ind])
     mySession.close()
     return json.dumps(data, ensure_ascii=False, encoding='latin1')
 
