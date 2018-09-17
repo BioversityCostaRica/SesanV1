@@ -14,8 +14,8 @@
 
 
 
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<script type="text/javascript">google.load('visualization', '1.0', {'packages':['corechart','charteditor', "controls"]});</script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">google.load('visualization', '1.0', {'packages': ['corechart', 'charteditor', "controls"]});</script>
 
 </head>
 
@@ -24,6 +24,7 @@
 {% block body %}
     <div id="wrapper">
         {% block mainavbar %}
+            <input type="hidden" value="{{ msg }}" id="msj">
             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
@@ -42,8 +43,14 @@
                                             id="insti">{{ activeUser.fullName.decode("latin1") }}
 
 
-                                        {% if activeUser.user_role!=1 %}
-                                            | {{ activeUser.munic.decode("latin1").title() }}{% endif %}</strong>
+                                        {% if activeUser.user_role!=1 and activeUser.user_role!=2 %}
+                                            | {{ activeUser.munic.decode("latin1").title() }}
+                                        {% else %}
+                                            {% if activeUser.user_role==2 %}
+
+                                                | {{ depto.decode("latin1").title() }}
+                                            {% endif %}
+                                        {% endif %}</strong>
 
                                 </span>
                                     <span>
@@ -62,7 +69,8 @@
 
                             {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="dashboard", dates=dashData.date[0] +"_"+ dashData.date[1] %}
 
-                            <input type="hidden" id="cur_date" value="{{ dashData.date[0] }}_{{ dashData.date[1] }}" name="cur_date">
+                            <input type="hidden" id="cur_date" value="{{ dashData.date[0] }}_{{ dashData.date[1] }}"
+                                   name="cur_date">
                         {% endblock dashmenu %}
 
                     </ul>
@@ -85,51 +93,9 @@
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
                             <span class="m-r-sm text-muted welcome-message">Bienvenidos al sistema de monitoreo<a
-                                    href="http://www.sesan.gob.gt/" target="_blank" style="color: #1ab492">SESAN</a></span>
+                                    href="http://www.sesan.gob.gt/" target="_blank"
+                                    style="color: #1ab492">SESAN</a></span>
                         </li>
-
-                        {#                        <li class="dropdown">#}
-                        {#                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">#}
-                        {#                                <i class="fa fa-bell"></i> <span class="label label-primary">3</span>#}
-                        {#                            </a>#}
-                        {#                            <ul class="dropdown-menu dropdown-alerts">#}
-                        {#                                <li>#}
-                        {#                                    <a href="#" data-toggle="modal" data-target="#myModal4">#}
-                        {#                                        <div>#}
-                        {#                                            <i class="fa fa-check-square-o fa-fw"></i> Aprobar: MAGA#}
-                        {#                                            <span class="pull-right text-muted small">4 minutes ago</span>#}
-                        {#                                        </div>#}
-                        {#                                    </a>#}
-                        {#                                </li>#}
-                        {#                                <li class="divider"></li>#}
-                        {#                                <li>#}
-                        {#                                    <a href="#" data-toggle="modal" data-target="#myModal4">#}
-                        {#                                        <div>#}
-                        {#                                            <i class="fa fa-check-square-o fa-fw"></i> Aprobar: CONALFA#}
-                        {#                                            <span class="pull-right text-muted small">12 minutes ago</span>#}
-                        {#                                        </div>#}
-                        {#                                    </a>#}
-                        {#                                </li>#}
-                        {#                                <li class="divider"></li>#}
-                        {#                                <li>#}
-                        {#                                    <a href="#" data-toggle="modal" data-target="#myModal4">#}
-                        {#                                        <div>#}
-                        {#                                            <i class="fa fa-check-square-o fa-fw"></i> Aprobar: MSPAS#}
-                        {#                                            <span class="pull-right text-muted small">4 minutes ago</span>#}
-                        {#                                        </div>#}
-                        {#                                    </a>#}
-                        {#                                </li>#}
-                        {#                                <li class="divider"></li>#}
-                        {#                                <li>#}
-                        {#                                    <div class="text-center link-block">#}
-                        {#                                        <a href="#">#}
-                        {#                                            <strong>Aprobar todos</strong>#}
-                        {#                                            <i class="fa fa-check"></i>#}
-                        {#                                        </a>#}
-                        {#                                    </div>#}
-                        {#                                </li>#}
-                        {#                            </ul>#}
-                        {#                        </li>#}
 
 
                         <li>
@@ -170,11 +136,14 @@
                             <div class="col-md-9">
                                 <div class="widget style1">
                                     {% if activeUser.user_role!=1 %}
+
+
                                         <div class="col-xs-8"><i class="fa fa-frown-o fa-5x"></i>
                                             <h2 class="font-bold">No existen registros para esta fecha </h2>
                                             <span> Utilize el formulario en ODK Collect para ingresar los datos</span>
 
                                         </div>
+
                                     {% endif %}
 
 
@@ -215,10 +184,15 @@
                                                               id="formXLS"
                                                               enctype='multipart/form-data'>
 
-
+                                                            {% if activeUser.user_role==2 %}
+                                                                <input type="hidden" id="genXLS"
+                                                                   value="{{ dashData.date[0] }} {{ dashData.date[1] }} {{ sel_m }}"
+                                                                   name="genXLS">
+                                                                {% else %}
                                                             <input type="hidden" id="genXLS"
                                                                    value="{{ dashData.date[0] }} {{ dashData.date[1] }}"
                                                                    name="genXLS">
+                                                                {% endif %}
                                                         </form>
 
                                                         <!--->
@@ -391,7 +365,7 @@
                     </div>
 
 
-                    {% if activeUser.user_role!=1 %}
+                    {% if activeUser.user_role!=1  %}
                         <div class="col-md-3">
                             <div class="ibox-content form-group" id="data_4">
                                 <form role="form" method="POST" action="{{ request.path }}" id="newMonth"
@@ -403,6 +377,31 @@
                                             type="text" id="dateP" name="dateP" readonly class="form-control"
                                             value="{{ dashData.date[0] }} {{ dashData.date[1] }}">
                                     </div>
+
+
+                                    {% if activeUser.user_role==2 %}
+                                        <br>
+
+                                        <div class="input-group col-lg-12">
+
+
+                                            <select id="munic_list" name="munic_sel"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2"  onchange="this.form.submit();">
+                                                <option value=""></option>
+
+
+                                                {% for row in munics.munic %}
+
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="{{ row[0] }}" {% if sel_m ==row[0] |string %} selected {% endif %}>{{ row[1].decode("latin1") }}</option>
+
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+                                    {% endif %}
 
                                 </form>
 
@@ -455,7 +454,7 @@
                                         </div>
 
                                         <input type="hidden" id="map_points" value="{{ dashData.comunidades2 }}">
-                                        <input type="hidden" id="map_name" value="{{ activeUser.munic.decode("latin1") }}">
+                                        <input type="hidden" id="map_name" value="{{ munid }}">
 
                                     </div>
 
@@ -471,34 +470,36 @@
                     {% if dashData.signatures %}
 
                         {% for s in dashData.signatures %}
-                        <div class="modal inmodal" id="myModal{{ loop.index0 }}" tabindex="-1" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content animated fadeIn">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"><span
-                                                aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                                        </button>
-                                        <i class="fa fa-check modal-icon"></i>
-                                        <h2 class="modal-title">La informacion que se muestra en este informe ha sido
-                                            aprobada por la siguiente persona</h2>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!---->
-                                        <p>
-                                            <strong>
-                                                {{ s[1].decode("latin1") }}
-                                            </strong>
-                                        </p>
-                                        <img src="{{ s[0] }}" alt="person" style="width: 100%;"/>
-                                        <!---->
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar
-                                        </button>
+                            <div class="modal inmodal" id="myModal{{ loop.index0 }}" tabindex="-1" role="dialog"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content animated fadeIn">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal"><span
+                                                    aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                                            </button>
+                                            <i class="fa fa-check modal-icon"></i>
+                                            <h2 class="modal-title">La informacion que se muestra en este informe ha
+                                                sido
+                                                aprobada por la siguiente persona</h2>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!---->
+                                            <p>
+                                                <strong>
+                                                    {{ s[1].decode("latin1") }}
+                                                </strong>
+                                            </p>
+                                            <img src="{{ s[0] }}" alt="person" style="width: 100%;"/>
+                                            <!---->
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
 
 

@@ -28,8 +28,8 @@ def mail2(request,body_message, to):
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <meta name="viewport" content="width=device-width" />
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width" >
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>Alerts e.g. approaching your limit</title>
     <style type="text/css" media="screen">
     * {
@@ -360,7 +360,8 @@ def mail2(request,body_message, to):
 
     # Record the MIME types of both parts - text/plain and text/html.
     part1 = MIMEText(text, 'plain')
-    part2 = MIMEText(html.encode('utf-8'), 'html')
+
+    part2 = MIMEText(html.decode("latin1"), 'html', "latin1")
 
     # Attach parts into message container.
     # According to RFC 2046, the last part of a multipart message, in this case
@@ -371,12 +372,11 @@ def mail2(request,body_message, to):
     mail = smtplib.SMTP(request.registry.settings['mail.server'], request.registry.settings['mail.port'])
 
     mail.ehlo()
-
     mail.starttls()
-
     mail.login(me, request.registry.settings['mail.password'])
     mail.sendmail(me, to, msg.as_string())
     mail.quit()
     print ">>>>>>>>>>>>>>>>>>send"
+    return
 
 

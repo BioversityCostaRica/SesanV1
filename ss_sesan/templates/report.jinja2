@@ -16,6 +16,7 @@
 {% block body %}
     <div id="wrapper">
         {% block mainavbar %}
+            <input type="hidden" value="{{ msg }}" id="msj">
             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
@@ -30,7 +31,18 @@
                                 </span>
 
                                     <span class="clear"> <span class="block m-t-xs">
-                                    <strong class="font-bold">{{ activeUser.fullName.decode("latin1") }} | {{ activeUser.organization }}</strong>
+                                    <strong class="font-bold"
+                                            id="insti">{{ activeUser.fullName.decode("latin1") }}
+
+
+                                        {% if activeUser.user_role!=1 and activeUser.user_role!=2 %}
+                                            | {{ activeUser.munic.decode("latin1").title() }}
+                                        {% else %}
+                                            {% if activeUser.user_role==2 %}
+
+                                                | {{ depto.decode("latin1").title() }}
+                                            {% endif %}
+                                        {% endif %}</strong>
 
                                 </span>
                                     <span>
@@ -135,29 +147,59 @@
                     <div class="col-sm-2">
 
                     </div>
-                    <div class="col-sm-8 text-center">
+                    <div class="col-sm-6 text-center">
 
                         <h2>Reporte sala situacional. SESAN</h2>
 
 
                     </div>
+                    {% if activeUser.user_role==2 %}
+                        <div class="col-sm-2 align-right" style="padding-top: 1.5%;">
+
+                            <form role="form" method="POST" action="{{ request.path }}" id="newMonth"
+                                  enctype='multipart/form-data'>
+
+
+                                <select id="munic_list" name="munic_sel"
+                                        data-placeholder="Seleccione un municipio..."
+                                        class="chosen-select form-control m-b" tabindex="2"
+                                        onchange="this.form.submit();">
+                                    <option value=""></option>
+
+
+                                    {% for row in munics.munic %}
+
+
+                                        <option value="{{ row[0] }}"
+                                                id="{{ row[0] }}" {% if sel_m ==row[0] |string %}
+                                                selected {% endif %}>{{ row[1].decode("latin1") }}</option>
+
+                                    {% endfor %}
+                                </select>
+
+
+                            </form>
+
+                        </div>
+
+                    {% endif %}
                     <div class="col-sm-2 text-right" style="padding-top: 0.5%">
 
 
-                        <button  class="btn btn-primary btn-circle btn-lg btn-outline" class="fa fa-check" type="button" title="Guardar reporte"
+                        <button class="btn btn-primary btn-circle btn-lg btn-outline" class="fa fa-check" type="button"
+                                title="Guardar reporte"
                                 onclick="javascript:printReport();"
                                 name="linkRep"
                                 id="linkRep"><i
-                                class="fa fa-save" ></i>
+                                class="fa fa-save"></i>
                         </button>
                         <input type="hidden" id="pptx_img" value="">
                         <input type="hidden" id="pptx_img2" value="">
                         {% if dataReport != {} %}
-                        <input type="hidden" id="rep_mun" value="{{ dataReport.date[2].title().decode("latin1") }}">
-                        <input type="hidden" id="rep_date" value="{{ dataReport.date[0] }},{{ dataReport.date[1] }}">
+                            <input type="hidden" id="rep_mun" value="{{ dataReport.date[2].title().decode("latin1") }}">
+                            <input type="hidden" id="rep_date"
+                                   value="{{ dataReport.date[0] }},{{ dataReport.date[1] }}">
                         {% endif %}
-
-
 
 
                     </div>
@@ -170,6 +212,9 @@
             <div class="row wrapper wrapper-content animated fadeInRight" id="reportF">
 
                 {% block pagecontent %}
+
+
+
 
                     {% if dataReport == {} %}
                         <div class="col-md-9">
@@ -185,103 +230,106 @@
 
                             </div>
                         </div>
+
                     {% else %}
-
-
-
 
 
                         <div id="main_s" class="row wrapper wrapper-content animated fadeInRight">
 
 
-                        <div id="sit_san2">
-                            <div class="col-md-3" id="sit_san" style="padding-left: 2%">
-                                <h2><strong>Situacion SAN</strong></h2>
-                                <strong>Fecha de emision: {{ dataReport.date[0] }},{{ dataReport.date[1] }} </strong>
-                                <br>
-                                <strong>Comisión Municipal de Seguridad Alimentaria y Nutricional
-                                    de {{ dataReport.date[2].title().decode("latin1") }}</strong>
-                                <div class="widget yellow-bg p-lg text-center"
-                                     style="background-color:{{ dataReport.san[1] }} !important; " id="alert_img">
-                                    <div class="m-b-md">
-                                        <i class="fa fa-warning fa-4x"></i>
-                                        <h1 class="m-xs">{{ dataReport.san[0] }}</h1>
-                                        <h3 class="font-bold no-margins">
-                                            {{ dataReport.san[2] }}
-                                        </h3>
-                                    </div>
-                                </div>
-
-                                <br>
-
-                                <div class="row text-center" style="font-size:150%">
-                                    <div class="col-lg-6">
-                                        <p>
-                                            <i style="color: #1AB394" class="fa fa-circle"></i><span class="nav-label">Días con lluvia durante el mes</span>
-                                        </p>
-                                        <canvas id="doughnutChart2" width="80" height="80"
-                                                style="margin: 18px auto 0"></canvas>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <p>
-                                            <i style="color: #1AB394" class="fa fa-circle"></i><span class="nav-label">Niños con desnutricion</span>
-                                        </p>
-                                        <canvas id="doughnutChart" width="80" height="80"
-                                                style="margin: 18px auto 0"></canvas>
-                                        <input type="hidden" id="pltData1" value="{{ dataReport.plt_values.lluvia }}">
-                                        <input type="hidden" id="pltData2" value="{{ dataReport.plt_values.nin_des }}">
-
-                                    </div>
-                                </div>
-
-                                <br>
-                                <div class="ibox">
-
-                                    <div class="">
-
-
-                                        <div class="ibox">
-
-                                            <table class="table table-hover" style="font-size: 125%">
-                                                <tbody>
-                                                {% for row in dataReport |reverse %}
-                                                    {% if row not in ["plt_values", "date", "san", "points"] %}
-                                                        <tr>
-                                                            <td class="project-status" style="text-align: center;">
-                                                                <button class="btn btn-warning" type="button"
-                                                                        style="background-color:{{ dataReport[row][2] }} !important;border-color:{{ dataReport[row][2] }} !important;">
-                                                                    <i
-                                                                            class="fa fa-warning"></i></button>
-                                                            </td>
-                                                            <td class="project-title">
-                                                                <a href="project_detail.html">{{ row.replace("_alert", "").decode("latin1") }}</a>
-                                                                <br/>
-                                                                <small>{{ dataReport[row][1].decode('latin-1') }}</small>
-                                                            </td>
-                                                            <td class="project-completion">
-                                                                <small>Indice del pilar {{ dataReport[row][0] }}%
-                                                                </small>
-                                                                <div class="progress progress-mini">
-                                                                    <div style="width: {{ dataReport[row][0] }}%; background-color: {{ dataReport[row][2] }} !important; color: {{ dataReport[row][2] }} !important;"
-                                                                         class="progress-bar"></div>
-                                                                </div>
-                                                            </td>
-
-                                                        </tr>
-                                                    {% endif %}
-
-                                                {% endfor %}
-
-
-                                                </tbody>
-                                            </table>
+                            <div id="sit_san2">
+                                <div class="col-md-3" id="sit_san" style="padding-left: 2%">
+                                    <h2><strong>Situacion SAN</strong></h2>
+                                    <strong>Fecha de
+                                        emision: {{ dataReport.date[0] }},{{ dataReport.date[1] }} </strong>
+                                    <br>
+                                    <strong>Comisión Municipal de Seguridad Alimentaria y Nutricional
+                                        de {{ dataReport.date[2].title().decode("latin1") }}</strong>
+                                    <div class="widget yellow-bg p-lg text-center"
+                                         style="background-color:{{ dataReport.san[1] }} !important; " id="alert_img">
+                                        <div class="m-b-md">
+                                            <i class="fa fa-warning fa-4x"></i>
+                                            <h1 class="m-xs">{{ dataReport.san[0] }}</h1>
+                                            <h3 class="font-bold no-margins">
+                                                {{ dataReport.san[2] }}
+                                            </h3>
                                         </div>
                                     </div>
+
+                                    <br>
+
+                                    <div class="row text-center" style="font-size:150%">
+                                        <div class="col-lg-6">
+                                            <p>
+                                                <i style="color: #1AB394" class="fa fa-circle"></i><span
+                                                    class="nav-label">Días con lluvia durante el mes</span>
+                                            </p>
+                                            <canvas id="doughnutChart2" width="80" height="80"
+                                                    style="margin: 18px auto 0"></canvas>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <p>
+                                                <i style="color: #1AB394" class="fa fa-circle"></i><span
+                                                    class="nav-label">Niños con desnutricion</span>
+                                            </p>
+                                            <canvas id="doughnutChart" width="80" height="80"
+                                                    style="margin: 18px auto 0"></canvas>
+                                            <input type="hidden" id="pltData1"
+                                                   value="{{ dataReport.plt_values.lluvia }}">
+                                            <input type="hidden" id="pltData2"
+                                                   value="{{ dataReport.plt_values.nin_des }}">
+
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    <div class="ibox">
+
+                                        <div class="">
+
+
+                                            <div class="ibox">
+
+                                                <table class="table table-hover" style="font-size: 125%">
+                                                    <tbody>
+                                                    {% for row in dataReport |reverse %}
+                                                        {% if row not in ["plt_values", "date", "san", "points"] %}
+                                                            <tr>
+                                                                <td class="project-status" style="text-align: center;">
+                                                                    <button class="btn btn-warning" type="button"
+                                                                            style="background-color:{{ dataReport[row][2] }} !important;border-color:{{ dataReport[row][2] }} !important;">
+                                                                        <i
+                                                                                class="fa fa-warning"></i></button>
+                                                                </td>
+                                                                <td class="project-title">
+                                                                    <a href="project_detail.html">{{ row.replace("_alert", "").decode("latin1") }}</a>
+                                                                    <br/>
+                                                                    <small>{{ dataReport[row][1].decode('latin-1') }}</small>
+                                                                </td>
+                                                                <td class="project-completion">
+                                                                    <small>Indice del pilar {{ dataReport[row][0] }}%
+                                                                    </small>
+                                                                    <div class="progress progress-mini">
+                                                                        <div style="width: {{ dataReport[row][0] }}%; background-color: {{ dataReport[row][2] }} !important; color: {{ dataReport[row][2] }} !important;"
+                                                                             class="progress-bar"></div>
+                                                                    </div>
+                                                                </td>
+
+                                                            </tr>
+                                                        {% endif %}
+
+                                                    {% endfor %}
+
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                 </div>
-
-
                             </div>
-                        </div>
                             <div class="col-md-6 ">
 
                             </div>
@@ -520,51 +568,7 @@
                             </div>
                         </div>
                         <!----------------->
-                        <!-- ADD_PAGE -->
 
-                        <{#div class="row">
-                            <script type="text/javascript"
-                                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDo13AUO2xL-UgyHvklmo6yVVvPT90mtyU&v=3.exp"></script>
-                            <div class="col-md-6">
-                                <div class="ibox" id="map_d">
-                                    <div class="ibox-title">
-                                        <h5>Nivel de alerta por comunidad</h5>
-                                    </div>
-                                    <div class="ibox-content">
-
-                                        <div class="google-map" id="map1"></div>
-                                        <div id="legend" style="font-family: Arial, sans-serif;
-
-                                                            background: #fff;
-                                                            padding: 10px;
-                                                            margin: 10px;
-                                                            border: 1px solid #afb2b4;
-                                                            ">
-                                            <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
-                                                                                           style="color: #11c300"> </i>&nbsp;Sin
-                                                Afectación</h3>
-                                            <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
-                                                                                           style="color: #ffe132"> </i>&nbsp;Afectación
-                                                Moderada</h3>
-                                            <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
-                                                                                           style="color: #ff9936"> </i>&nbsp;Afectación
-                                                Alta</h3>
-                                            <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-circle"
-                                                                                           style="color: #ff1313"> </i>&nbsp;Afectación
-                                                Muy Alta</h3>
-                                            <h3 style="margin-top: 0;font-size: small;"><i class="fa fa-minus"
-                                                                                           style="color: #86D3C3"> </i>&nbsp;Limite
-                                                municipal</h3>
-                                        </div>
-
-                                        <input type="hidden" id="map_points" value="{{ dataReport.points }}">
-                                        <input type="hidden" id="map_name" value="{{ dataReport.date[2] }}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>#}
-
-                        <!--*-*-*-*-*-->
 
 
 
@@ -574,6 +578,7 @@
 
                         <!---------------->
                     {% endif %}
+
 
                 {% endblock pagecontent %}
 

@@ -69,6 +69,8 @@ class User(object):
 #         return ['g:%s' % g for g in user.groups]
 
 def getUserData(user):
+    if user =="ND":
+        return "ND"
     res = None
     mySession = DBSession()
     result = mySession.query(userModel).filter_by(user_name = user).filter_by(user_active = 1).first()

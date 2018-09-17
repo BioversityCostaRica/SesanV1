@@ -43,10 +43,17 @@
 
                                     <dt>Parent:</dt>
                                     <dd><a href="#" class="text-navy"> {{ activeUser.parent }}</a></dd>
+
+                                    {% if activeUser.user_role==2 %}
+                                    <dt>Departamento:</dt>
+                                    <dd> {{ depto.decode("latin1") }} </dd>
+                                    {% else %}
+
                                     <dt>Municipio:</dt>
                                     <dd> {{ activeUser.munic.decode("latin1") }} </dd>
                                     <dt>Formularios :</dt>
                                     <dd> {{ forms }} </dd>
+                                    {% endif %}
                                 </dl>
                             </div>
                             <div class="col-lg-7" id="cluster_info">
@@ -61,7 +68,7 @@
 
 
                             </div>
-
+                            {% if activeUser.user_role!=2 %}
                             <div class="row col-lg-12" id="cluster_info" align="center">
 
                                 <dt>Configuracion</dt>
@@ -69,6 +76,7 @@
 
 
                             </div>
+                        {% endif %}
 
                         </div>
 

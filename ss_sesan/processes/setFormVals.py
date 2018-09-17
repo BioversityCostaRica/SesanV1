@@ -136,7 +136,8 @@ def getPilarData(user):
     result = mySession.query(Pilare).filter(Pilare.user_name == user).all()
 
     for res in result:
-        data[res.name_pilares] = {"desc": res.pilar_desc, "coef": res.coef_pond, "p_id": res.id_pilares,
+        #sprint res.pilar_desc
+        data[res.name_pilares] = {"desc": str(res.pilar_desc), "coef": res.coef_pond, "p_id": res.id_pilares,
                                   "state": verifyPilar(res.id_pilares)}
         inds = mySession.query(Indicadore).filter(Indicadore.Id_pilares == res.id_pilares).all()
         data[res.name_pilares]["ind"] = []
@@ -266,7 +267,7 @@ def getListPU(login):
         if verifyPilar(row[1]):
             pilares.append([row[0], row[1]])
 
-    result = mySession.query(User.user_fullname, User.user_name).filter(User.user_parent == login).all()
+    result = mySession.query(User.user_fullname, User.user_name).filter(User.user_parent == login).filter(User.user_role==0).all()
     users = []
     for row in result:
         users.append([row[0], row[1]])
@@ -290,7 +291,7 @@ def getUserMunic(user):
         return ""
 
 
-def form_to_user(request, login, fname, users):
+def form_to_user(request, login, fname, users,if_sel):
     users = users.split(",")
     for user in users:
         outdir = os.path.join(request.registry.settings["user.repository"], login, "user", user,
@@ -317,12 +318,13 @@ def form_to_user(request, login, fname, users):
         with open(jsonFile, "w") as outfile:
             jsonString = json.dumps(metadata, indent=4, ensure_ascii=False).encode("utf8")
             outfile.write(jsonString)
-
-        cu1 = outdir.replace(fname.title().replace(" ", "_"), "curbanos.csv")
-        cu2 = f2.replace(login + "_" + fname.title().replace(" ", "_") + "_" + user + ".xml", "curbanos.csv")
+        if if_sel in [2,3]:
+            cu1 = outdir.replace(fname.title().replace(" ", "_"), "curbanos.csv")
+            cu2 = f2.replace(login + "_" + fname.title().replace(" ", "_") + "_" + user + ".xml", "curbanos.csv")
+            os.system("cp %s %s" % (cu1, cu2))
 
         os.system("cp %s %s" % (f1, f2))
-        os.system("cp %s %s" % (cu1, cu2))
+
 
         # modify name of form
 
@@ -342,45 +344,53 @@ def form_to_user(request, login, fname, users):
 
 def add_CU(db, request, login, users):
     mySession = DBSession()
-    users = users.split(",")
 
-    munics = []
+    if_cu=mySession.execute("SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '%s') AND (TABLE_NAME = 'lkpsem_comunidad_totales')"%db).scalar()
 
-    result = mySession.query(User.user_munic).filter(User.user_munic != 1000).filter(User.user_parent == login).filter(
-        User.user_name.in_(users)).all()
-    for row in result:
-        munics.append(row.user_munic)
+    if int(if_cu) !=0:
+        users = users.split(",")
 
-    result = mySession.query(CentrosUrbano.id_cu, CentrosUrbano.cu_name).filter(
-        CentrosUrbano.munic_id.in_(munics)).all()
-    file = open(request.registry.settings["user.repository"] + "/cen_u.sql", "w")
-    for row in result:
-        file.write(
-            "INSERT INTO %s.lkpsem_comunidad_totales (sem_comunidad_totales_cod,sem_comunidad_totales_des)  VALUES ('%s','%s');" % (
-                db, row.id_cu, str(row.cu_name).decode("latin1")))
+        munics = []
 
-    file.close()
+        result = mySession.query(User.user_munic).filter(User.user_munic != 1000).filter(User.user_parent == login).filter(
+            User.user_name.in_(users)).all()
+        for row in result:
+            munics.append(row.user_munic)
 
-    args = []
-    args.append("mysql")
-    args.append("--defaults-file=" + request.registry.settings['mysql.cnf'])
-    args.append(db)
+        result = mySession.query(CentrosUrbano.id_cu, CentrosUrbano.cu_name).filter(
+            CentrosUrbano.munic_id.in_(munics)).all()
+        file = open(request.registry.settings["user.repository"] + "/cen_u.sql", "w")
+        for row in result:
+            file.write(
+                "INSERT INTO %s.lkpsem_comunidad_totales (sem_comunidad_totales_cod,sem_comunidad_totales_des)  VALUES ('%s','%s');" % (
+                    db, row.id_cu, str(row.cu_name).decode("latin1")))
 
-    with open(request.registry.settings["user.repository"] + "/cen_u.sql") as input_file:
-        proc = Popen(args, stdin=input_file, stderr=PIPE, stdout=PIPE)
-        output, error = proc.communicate()
-        if output != "" or error != "":
-            msg = "Error creating database \n"
-            msg = msg + "File: cen_u.sql" + "\n"
-            msg = msg + "Error: \n"
-            msg = msg + error + "\n"
-            msg = msg + "Output: \n"
-            msg = msg + output + "\n"
-            print msg
-            error = True
+        file.close()
+
+        args = []
+        args.append("mysql")
+        args.append("--defaults-file=" + request.registry.settings['mysql.cnf'])
+        args.append(db)
+
+        with open(request.registry.settings["user.repository"] + "/cen_u.sql") as input_file:
+            #print request.registry.settings["user.repository"] + "/cen_u.sql"
+            proc = Popen(args, stdin=input_file, stderr=PIPE, stdout=PIPE)
+            output, error = proc.communicate()
+            if output != "" or error != "":
+                msg = "Error creating database \n"
+                msg = msg + "File: cen_u.sql" + "\n"
+                msg = msg + "Error: \n"
+                msg = msg + error + "\n"
+                msg = msg + "Output: \n"
+                msg = msg + output + "\n"
+                print msg
+                error = True
 
 
-def genForm_Files(login, pilarId, request, fname):
+
+def genForm_Files(login, pilarId, request, fname, if_sel):
+    reload(sys)
+    sys.setdefaultencoding('latin1')
     mySession = DBSession()
     path = os.path.join(request.registry.settings["user.repository"], login, "forms", fname.title().replace(" ", "_"),
                         fname.title().replace(" ", "_") + ".xlsx")
@@ -428,21 +438,63 @@ def genForm_Files(login, pilarId, request, fname):
     now = datetime.datetime.now()
     opt = str(request.POST.get("val_multi"))
     opt = "multiple"
-    questions = [
-        ["start", "start_time_survey_1", "", "", "", "", "", "", ""],
-        ["today", "day_of_survey", "", "", "", "", "", "", ""],
-        ["deviceid", "device_id_3", "", "", "", "", "", "", ""],
-        ["note", "notex", u"%s, SESAN %s" % (fname, str(now.year)), "", "", "", "", "", ""],
-        ["begin group", "grpx", "", "", "", "", "", "", "field-list"],
-        ["text", "txt_rep_muni_comusan_4", u"Nombre de la persona que recopila la información", "", "", "", "yes", "",
-         u"Debe ingresar el nombre de la persona que recopila la información"],
-        ["date", "date_fecha_informe_6", "Fecha a la que corresponde el informe", "", "", "", "yes", "", "month-year"],
-        ["select_%s lista_curb" % opt, "sem_comunidad_totales",
-         u"Seleccione la o las comunidades incluidas en este reporte",
-         "", "", "", "", "", "search('curbanos') minimal"],
-        ["end group", "grpx", "", "", "", "", "", "", ""],
 
-    ]
+
+    if if_sel ==1: #sin comunidades
+        questions = [
+            ["start", "start_time_survey_1", "", "", "", "", "", "", ""],
+            ["today", "day_of_survey", "", "", "", "", "", "", ""],
+            ["deviceid", "device_id_3", "", "", "", "", "", "", ""],
+            ["note", "notex", "%s, SESAN %s" % (fname, str(now.year)), "", "", "", "", "", ""],
+            ["begin group", "grpx", "", "", "", "", "", "", "field-list"],
+            ["text", "txt_rep_muni_comusan_4", u"Nombre de la persona que recopila la información", "", "", "", "yes",
+             "",
+             u"Debe ingresar el nombre de la persona que recopila la información"],
+            ["date", "date_fecha_informe_6", "Fecha a la que corresponde el informe", "", "", "", "yes", "",
+             "month-year"],
+            ["end group", "grpx", "", "", "", "", "", "", ""],
+
+        ]
+
+    elif if_sel==2: #seleccion unica de comunidades
+        questions = [
+            ["start", "start_time_survey_1", "", "", "", "", "", "", ""],
+            ["today", "day_of_survey", "", "", "", "", "", "", ""],
+            ["deviceid", "device_id_3", "", "", "", "", "", "", ""],
+            ["note", "notex", "%s, SESAN %s" % (fname, str(now.year)), "", "", "", "", "", ""],
+            ["begin group", "grpx", "", "", "", "", "", "", "field-list"],
+            ["text", "txt_rep_muni_comusan_4", u"Nombre de la persona que recopila la información", "", "", "", "yes",
+             "",
+             u"Debe ingresar el nombre de la persona que recopila la información"],
+            ["date", "date_fecha_informe_6", "Fecha a la que corresponde el informe", "", "", "", "yes", "",
+             "month-year"],
+            ["select_one lista_curb" , "sem_comunidad_totales",
+             "Seleccione la comunidad que esta reportando",
+             "", "", "", "", "", "minimal search('curbanos')"],
+            ["end group", "grpx", "", "", "", "", "", "", ""],
+
+        ]
+
+    elif if_sel==3: #seleccion multiple de comunidades
+        questions = [
+            ["start", "start_time_survey_1", "", "", "", "", "", "", ""],
+            ["today", "day_of_survey", "", "", "", "", "", "", ""],
+            ["deviceid", "device_id_3", "", "", "", "", "", "", ""],
+            ["note", "notex", "%s, SESAN %s" % (fname, str(now.year)), "", "", "", "", "", ""],
+            ["begin group", "grpx", "", "", "", "", "", "", "field-list"],
+            ["text", "txt_rep_muni_comusan_4", u"Nombre de la persona que recopila la información", "", "", "", "yes",
+             "",
+             u"Debe ingresar el nombre de la persona que recopila la información"],
+            ["date", "date_fecha_informe_6", "Fecha a la que corresponde el informe", "", "", "", "yes", "",
+             "month-year"],
+            ["select_multiple lista_curb", "sem_comunidad_totales",
+             "Seleccione la o las comunidades incluidas en este reporte",
+             "", "", "", "", "", "minimal search('curbanos')"],
+            ["end group", "grpx", "", "", "", "", "", "", ""],
+
+        ]
+
+
 
     pilarId = pilarId.split(",")
 
@@ -456,13 +508,14 @@ def genForm_Files(login, pilarId, request, fname):
         for i in indicadores:
             questions.append(["begin group", "grp" + str(i.id_indicadores), "", "", "", "", "", "", "field-list"])
             questions.append(
-                ["note", "note" + str(i.id_indicadores), "Indicador: %s" % i.name_indicadores, "", "", "", "", "", ""])
+                ["note", "note" + str(i.id_indicadores), "Indicador: %s" % i.name_indicadores.replace("_", " "), "", "", "", "", "", ""])
 
             variables = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == i.id_indicadores).all()
             for v in variables:
                 questions.append(
-                    ["decimal", v.code_variable_ind, v.v_pregunta, "Medida:" + v.unidad_variable_ind,
-                     ".<=" + str(v.var_max), "El valor debe ser menor o igual que " + str(v.var_max), "yes",
+                    ["decimal", v.code_variable_ind, v.v_pregunta, "Medida: " + v.unidad_variable_ind,
+                     ".>=" + str(0), "El valor debe ser mayor o igual que " + str(0), "yes",
+                     #".<=" + str(v.var_max), "El valor debe ser menor o igual que " + str(v.var_max), "yes",
                      "Complete: " + v.v_pregunta, ""])
                 # agregar a variables ind_hint, regla, mensaje de error, y requiered
             questions.append(["end group", "grp" + str(i.id_indicadores), "", "", "", "", "", "", ""])
@@ -475,10 +528,12 @@ def genForm_Files(login, pilarId, request, fname):
 
     for row in enumerate(questions):
         for col in enumerate(row[1]):
-            sheet1.write(row[0] + 1, col[0], u"" + str(col[1]).decode('latin1').decode("utf-8"))
-            # print col[1]
+            sheet1.write(row[0] + 1, col[0], str(col[1]))
+
 
     book.close()
+
+
 
     # odktools para crear la base de datos
 
@@ -490,7 +545,7 @@ def genForm_Files(login, pilarId, request, fname):
     args.append("-t maintable")  # maintable name
     args.append("-v device_id_3")  # Main survey variable
 
-    args.append("-u " + os.path.join(outputDir, "uuid-triggers.sql"))
+    #args.append("-u " + os.path.join(outputDir, "uuid-triggers.sql"))
     args.append("-f " + os.path.join(outputDir, "manifest.xml"))
     args.append("-T " + os.path.join(outputDir, "iso639.sql"))
     args.append("-m " + os.path.join(outputDir, "metadata.sql"))
@@ -499,17 +554,21 @@ def genForm_Files(login, pilarId, request, fname):
     args.append("-C " + os.path.join(outputDir, "create.xml"))
     args.append("-c " + os.path.join(outputDir, "create.sql"))
 
+    # temp curbanos file
+    if if_sel in [2,3]:
+        csv_curb = open(outputDir + "/curbanos.csv", "w")
+        csv_curb.write("urban_id,urban_name\n")
+        csv_curb.write("-9999,ND\n")
+        csv_curb.close()
+        args.append(outputDir+ "/curbanos.csv")
+
     error = False
     cnfFile = request.registry.settings["mysql.cnf"]
 
     try:  # odktomysql
-        print"\n*-1-*\n"
-        print path
-        print args
         check_call(args)
-        print"\n*-11-*\n"
     except CalledProcessError as e:
-        msg = "Error exporting files to database \n"
+        msg = "Error : ODKTools, exporting files to database \n"
         msg = msg + "Command: " + " ".join(args) + "\n"
         msg = msg + "Error: \n"
         msg = msg + e.message
@@ -525,11 +584,9 @@ def genForm_Files(login, pilarId, request, fname):
         args.append("--defaults-file=" + cnfFile)
         args.append('--execute=DROP DATABASE IF EXISTS ' + 'DATA_' + login + '_' + fname.title().replace(' ', '_'))
         try:
-            print"\n*-2-*\n"
             check_call(args)
-            print"\n*-21-*\n"
         except CalledProcessError as e:
-            msg = "Error exporting files to database \n"
+            msg = "Error: Drop database if exist \n"
             msg = msg + "Commang: " + " ".join(args) + "\n"
             msg = msg + "Error: \n"
             msg = msg + e.message
@@ -542,11 +599,9 @@ def genForm_Files(login, pilarId, request, fname):
         args.append("--defaults-file=" + cnfFile)
         args.append('--execute=CREATE DATABASE ' + 'DATA_' + login + '_' + fname.title().replace(' ', '_'))
         try:
-            print"\n*-3-*\n"
             check_call(args)
-            print"\n*-31-*\n"
         except CalledProcessError as e:
-            msg = "Error exporting files to database \n"
+            msg = "Error: create database \n"
             msg = msg + "Commang: " + " ".join(args) + "\n"
             msg = msg + "Error: \n"
             msg = msg + e.message
@@ -563,7 +618,7 @@ def genForm_Files(login, pilarId, request, fname):
             proc = Popen(args, stdin=input_file, stderr=PIPE, stdout=PIPE)
             output, error = proc.communicate()
             if output != "" or error != "":
-                msg = "Error creating database \n"
+                msg = "Error: run create.sql \n"
                 msg = msg + "File: " + os.path.join(outputDir, 'create.sql') + "\n"
                 msg = msg + "Error: \n"
                 msg = msg + error + "\n"
@@ -572,6 +627,7 @@ def genForm_Files(login, pilarId, request, fname):
                 print msg
                 error = True
 
+    """
     if not error:  # create triggers
         args = []
         args.append("mysql")
@@ -589,8 +645,8 @@ def genForm_Files(login, pilarId, request, fname):
                 msg = msg + "Output: \n"
                 msg = msg + output + "\n"
                 print msg
-                error = True
-
+                error = Trues
+    """
     if not error:  # insert values
         args = []
         args.append("mysql")
@@ -601,7 +657,7 @@ def genForm_Files(login, pilarId, request, fname):
             proc = Popen(args, stdin=input_file, stderr=PIPE, stdout=PIPE)
             output, error = proc.communicate()
             if output != "" or error != "":
-                msg = "Error creating database \n"
+                msg = "Error: in insert.sql \n"
                 msg = msg + "File: " + os.path.join(outputDir, 'insert.sql') + "\n"
                 msg = msg + "Error: \n"
                 msg = msg + error + "\n"
@@ -612,41 +668,43 @@ def genForm_Files(login, pilarId, request, fname):
 
     # ALTER TABLE '%s'.`lkpsem_comunidad_totales`;CHANGE COLUMN `sem_comunidad_totales_des` `sem_comunidad_totales_des` VARCHAR(100) NULL DEFAULT NULL COMMENT 'Description' ;
     # sem_comunidad_totales
-    if not error:  # create database
-        args = []
-        args.append("mysql")
-        args.append("--defaults-file=" + cnfFile)
-        args.append(
-            "--execute=ALTER TABLE %s.lkpsem_comunidad_totales MODIFY COLUMN sem_comunidad_totales_des VARCHAR(100)" % (
-                'DATA_' + login + '_' + fname.title().replace(' ', '_')))
 
-        try:
-            check_call(args)
-        except CalledProcessError as e:
-            msg = "Error exporting files to database \n"
-            msg = msg + "Commang: ALTER TABLE\n"
-            msg = msg + "Error: \n"
-            msg = msg + e.message
-            print msg
-            return e
+    if if_sel in [2,3]:
+        if not error:  # create database
+            args = []
+            args.append("mysql")
+            args.append("--defaults-file=" + cnfFile)
+            args.append(
+                "--execute=ALTER TABLE %s.lkpsem_comunidad_totales MODIFY COLUMN sem_comunidad_totales_des VARCHAR(100)" % (
+                    'DATA_' + login + '_' + fname.title().replace(' ', '_')))
 
-    if not error:  # create database
-        args = []
-        args.append("mysql")
-        args.append("--defaults-file=" + cnfFile)
-        args.append(
-            "--execute=ALTER TABLE %s.maintable MODIFY COLUMN sem_comunidad_totales VARCHAR(150)" % (
-                'DATA_' + login + '_' + fname.title().replace(' ', '_')))
+            try:
+                check_call(args)
+            except CalledProcessError as e:
+                msg = "Error: alter table lkpsem_comunidadades_totales \n"
+                msg = msg + "Commang: ALTER TABLE\n"
+                msg = msg + "Error: \n"
+                msg = msg + e.message
+                print msg
+                return e
+        if if_sel == 3:
+            if not error:  # create database
+                args = []
+                args.append("mysql")
+                args.append("--defaults-file=" + cnfFile)
+                args.append(
+                    "--execute=ALTER TABLE %s.maintable MODIFY COLUMN sem_comunidad_totales VARCHAR(150)" % (
+                        'DATA_' + login + '_' + fname.title().replace(' ', '_')))
 
-        try:
-            check_call(args)
-        except CalledProcessError as e:
-            msg = "Error exporting files to database \n"
-            msg = msg + "Commang: ALTER TABLE\n"
-            msg = msg + "Error: \n"
-            msg = msg + e.message
-            print msg
-            return e
+                try:
+                    check_call(args)
+                except CalledProcessError as e:
+                    msg = "Error: ALTER maintable \n"
+                    msg = msg + "Commang: ALTER TABLE\n"
+                    msg = msg + "Error: \n"
+                    msg = msg + e.message
+                    print msg
+                    return e
 
     if not error:
         xls2xform.xls2xform_convert(path, path.replace(".xlsx", ".xml"))
@@ -657,42 +715,43 @@ def genForm_Files(login, pilarId, request, fname):
 
 # def form_to_user(parent, uname)
 
-def newForm(request, vals, login):
+def newForm(request, vals, login, if_sel):
+    if_sel=int(if_sel.split("_")[1])
     vals = vals.split("++")
-    try:
-        mySession = DBSession()
+    #try:
+    mySession = DBSession()
 
-        newF = Form(form_user=login, form_name=vals[0], pilar_id=vals[1],
-                    form_db="DATA_" + login + "_" + vals[0].title().replace(" ", "_"))
-        transaction.begin()
+    newF = Form(form_user=login, form_name=vals[0], pilar_id=vals[1],
+                form_db="DATA_" + login + "_" + vals[0].title().replace(" ", "_"))
+    transaction.begin()
 
-        mySession.add(newF)
+    mySession.add(newF)
 
-        if vals[2] != "" and vals[2] != "undefined":
-            mySession.flush()
-            id_F = newF.form_id
-            mySession.refresh(newF)
-            uList = vals[2].split(",")
-            for u in uList:
-                newF_U = FormsByUser(idforms=id_F, id_user=u)
-                mySession.add(newF_U)
-
-        if not genForm_Files(login, vals[1], request, vals[0]):
-            delForm(request, id_F, login)
-            raise
-        else:
-            if vals[2] != "":
-                form_to_user(request, login, vals[0], vals[2])
-                add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login, vals[2])
-
-        transaction.commit()
-        mySession.close()
-        return ["Correcto", "Formulario creado con exito", "success"]
+    if vals[2] != "" and vals[2] != "undefined":
+        mySession.flush()
+        id_F = newF.form_id
+        mySession.refresh(newF)
+        uList = vals[2].split(",")
+        for u in uList:
+            newF_U = FormsByUser(idforms=id_F, id_user=u)
+            mySession.add(newF_U)
+    transaction.commit()
+    mySession.close()
+    if not genForm_Files(login, vals[1], request, vals[0],if_sel):
+        delForm(request, id_F, login)
+        #raise
+    else:
+        if vals[2] != "":
+            form_to_user(request, login, vals[0], vals[2],if_sel)
+            add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login, vals[2])
 
 
-    except:
-        mySession.close()
-        return ["Error", "Sucedio un error al generar el formulario", "error"]
+    return ["Correcto", "Formulario creado con exito", "success"]
+
+
+    #except:
+    #    mySession.close()
+    #    return ["Error", "Sucedio un error al generar el formulario", "error"]
 
 
 def getPilarNames(ids):
@@ -725,6 +784,7 @@ def getUsersF(fid):
     mySession.close()
     return data
 
+#20180910 acoto_Quert_jos_san jose pinula
 
 def forms_id(login):
     mySession = DBSession()
@@ -833,9 +893,24 @@ def verifyUserData(db, uname):
     return result
 
 
+def get_if_sel(db):
+    mySession = DBSession()
+
+    if_cu = mySession.execute(
+        "SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '%s') AND (TABLE_NAME = 'lkpsem_comunidad_totales')" % db).scalar()
+
+    if int(if_cu) != 0:
+        return 2
+    else:
+        return 1
+
+
+
+
+
 def updateFU(vals, request, login):
 
-    print "*-*-*-*-"
+
     vals = vals.split("*")
     fid = vals[1]
 
@@ -844,38 +919,23 @@ def updateFU(vals, request, login):
     result = mySession.query(FormsByUser.id_user).filter(FormsByUser.idforms == fid).all()
     result = [r[0] for r in result]
     cont = 0
-    try:
-        if vals[0] != "":
-            ulist = vals[0].split(",")
+    #try:
+    if vals[0] != "":
+        ulist = vals[0].split(",")
 
-            for u in ulist:
-                if u not in result and u != "":
-                    # add
-                    form_to_user(request, login, getFormName(fid), u)
-                    add_CU('DATA_' + login + "_" + getFormName(fid).title().replace(" ", "_"), request, login, u)
-                    result.append(u)
-                    transaction.begin()
-                    newF_U = FormsByUser(idforms=fid, id_user=u)
-                    mySession.add(newF_U)
-                    transaction.commit()
-            for r in result:
-                if r not in ulist:
-                    if verifyUserData('DATA_' + login + "_" + getFormName(fid).title().replace(" ", "_"), r) == 0:
-                        files = os.path.join(request.registry.settings["user.repository"], login, "user", r,
-                                             getFormName(fid).title().replace(" ", "_"))
-                        try:
-                            shutil.rmtree(files)
-                        except:
-                            pass
-                        transaction.begin()
-                        mySession.query(FormsByUser).filter(FormsByUser.id_user == r).filter(
-                            FormsByUser.idforms == fid).delete(
-                            synchronize_session='fetch')
-                        transaction.commit()
-                else:
-                    cont = cont + 1
-        else:
-            for r in result:
+        for u in ulist:
+            if u not in result and u != "":
+                # add
+
+                form_to_user(request, login, getFormName(fid), u, get_if_sel('DATA_' + login + "_" + getFormName(fid).title().replace(" ", "_")))
+                add_CU('DATA_' + login + "_" + getFormName(fid).title().replace(" ", "_"), request, login, u)
+                result.append(u)
+                transaction.begin()
+                newF_U = FormsByUser(idforms=fid, id_user=u)
+                mySession.add(newF_U)
+                transaction.commit()
+        for r in result:
+            if r not in ulist:
                 if verifyUserData('DATA_' + login + "_" + getFormName(fid).title().replace(" ", "_"), r) == 0:
                     files = os.path.join(request.registry.settings["user.repository"], login, "user", r,
                                          getFormName(fid).title().replace(" ", "_"))
@@ -885,13 +945,29 @@ def updateFU(vals, request, login):
                         pass
                     transaction.begin()
                     mySession.query(FormsByUser).filter(FormsByUser.id_user == r).filter(
-                        FormsByUser.idforms == fid).delete(synchronize_session='fetch')
+                        FormsByUser.idforms == fid).delete(
+                        synchronize_session='fetch')
                     transaction.commit()
-                else:
-                    cont = cont + 1
+            else:
+                cont = cont + 1
+    else:
+        for r in result:
+            if verifyUserData('DATA_' + login + "_" + getFormName(fid).title().replace(" ", "_"), r) == 0:
+                files = os.path.join(request.registry.settings["user.repository"], login, "user", r,
+                                     getFormName(fid).title().replace(" ", "_"))
+                try:
+                    shutil.rmtree(files)
+                except:
+                    pass
+                transaction.begin()
+                mySession.query(FormsByUser).filter(FormsByUser.id_user == r).filter(
+                    FormsByUser.idforms == fid).delete(synchronize_session='fetch')
+                transaction.commit()
+            else:
+                cont = cont + 1
 
-                    # new = list(set(ulist) - set(result))
+                # new = list(set(ulist) - set(result))
 
-        return ["Correcto", "Formulario modificado correctamente", "success"]
-    except:
-        return ["Error", "Sucedio un error al modificar los usuarios de este formulario", "error"]
+    return ["Correcto", "Formulario modificado correctamente", "success"]
+    #except:
+    #    return ["Error", "Sucedio un error al modificar los usuarios de este formulario", "error"]

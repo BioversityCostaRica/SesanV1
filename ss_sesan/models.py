@@ -3,6 +3,7 @@ from sqlalchemy import Column, DateTime, Integer, Numeric, String, text
 from sqlalchemy.ext.declarative import declarative_base
 
 
+
 from sqlalchemy.orm import (
     scoped_session,
     sessionmaker,
@@ -175,6 +176,7 @@ class User(Base):
     user_munic = Column(Integer)
     user_active = Column(Integer, server_default=text("'1'"))
     user_role = Column(Integer)
+    user_dept = Column(String(120))
 
 
 class VariablesInd(Base):

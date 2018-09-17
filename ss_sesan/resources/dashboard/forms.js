@@ -118,6 +118,38 @@ $(document).ready(function () {
 
         }
     });
+
+    $('.rd').bind('change', function () {
+        var active= $(this).attr("id");
+        $("#if_select").val(active);
+        $.each($(".rd"), function (key, value) {
+            if ($(this).attr("id") != active){
+                $(this).prop('checked', false);
+
+            }
+
+
+        });
+    });
+    $("#if_select").val("rd_1");
+
+
+    //f_name
+    function isNumeric(value) {
+        return /^\d+$/.test(value);
+    }
+
+    $('#f_name').on('input', function () {
+        var value = $(this).val();
+        if (isNumeric(value)) {
+            $(this).val("");
+        }
+        else {
+            var value_without_space = value.replace('-', '').replace('~', '').replace("_", "").replace(/[^a-z0-9 ]/gi, '')
+            $(this).val(value_without_space);
+        }
+    });
+
 });
 
 

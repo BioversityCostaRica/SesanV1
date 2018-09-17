@@ -29,7 +29,7 @@
                                                                               id="alertF">* Debe incluir un nombre</span>
 
                                 </p>
-                                <input type="text" class="form-control col-lg-12" id="f_name" value="">
+                                <input type="text" class="form-control col-lg-12" id="f_name" value="" maxlength="40">
                                 <br><br>
                                 <p>
                                     Selecciones los pilares que quiere incluir en este formulario<span
@@ -46,18 +46,23 @@
                                     <select class="form-control dual_select" multiple id="dl1">
 
                                         {% for row in lists[0] %}
-                                            <option value="{{ row[1] }}">{{ row[0] }}</option>
+                                            <option value="{{ row[1] }}">{{ row[0].decode("latin1") }}</option>
                                         {% endfor %}
                                     </select>
                                 {% endif %}
 
                                 <br>
-                            <div class="row">
-                                <p class="col-lg-6">
+                                <div class="row">
+                                    <div class="col-md-8 ">
+                                        <label><input class="rd radio-info" id="rd_1" type="radio" value="1" checked>No agregar seleccion de comunidades</label>
+                                        <label><input class="rd radio-info" id="rd_2" type="radio" value="2">Seleccion unica de comunidades</label>
+                                        <label><input class="rd radio-info" id="rd_3" type="radio" value="3">Seleccion multiple de comunidades</label>
+                                    </div>
+                                    {#<p class="col-lg-6">
                                     Habilitar seleccion multiple de comunidades
 
-                                   </p> <input  type="checkbox" class="js-switch" checked id="multiple" data-toggle="toggle" data-on="Si" data-off="No"/>
-                            </div>
+                                   </p> <input  type="checkbox" class="js-switch" checked id="multiple" data-toggle="toggle" data-on="Si" data-off="No"/>#}
+                                </div>
                                 <br>
                                 <p>
                                     Selecciones los usuarios que utilizaran este formulario
@@ -91,6 +96,7 @@
 
                     <input name="fn" id="fn" type="hidden" value="">
                     <input name="val_multi" id="val_multi" type="hidden" value="multiple">
+                    <input name="if_select" id="if_select" type="hidden" value="">
 
                     <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" name="btn_save_form" id="btn_save_var">Guardar

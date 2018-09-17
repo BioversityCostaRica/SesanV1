@@ -31,7 +31,7 @@ $(document).ready(function () {
                 cancelButtonText: "No, deseo cancelar!",
                 closeOnConfirm: false,
                 closeOnCancel: false,
-                html:false
+                html: false
             },
             function (isConfirm) {
                 if (isConfirm) {
@@ -53,7 +53,6 @@ $(document).ready(function () {
     });
 
 
-
     $(".submitM").submit(function (e) {
 
         var form = this;
@@ -70,7 +69,7 @@ $(document).ready(function () {
                 cancelButtonText: "No, deseo cancelar!",
                 closeOnConfirm: false,
                 closeOnCancel: false,
-                html:false
+                html: false
             },
             function (isConfirm) {
                 if (isConfirm) {
@@ -99,9 +98,8 @@ $(document).ready(function () {
             if ($(this).attr("coded") == mun.toString()) {
 
                 if ($(this).attr("sel") != "") {
-                    console.log($(this).attr("sel"));
                     var option = new Option($(this).attr("value"), $(this).attr("codem"), "selected");
-                    console.log(option);
+
                 }
                 else {
                     var option = new Option($(this).attr("value"), $(this).attr("codem"));
@@ -139,9 +137,44 @@ $(document).ready(function () {
     }
 
 
+    function isNumeric(value) {
+        return /^\d+$/.test(value);
+    }
+
+    $('#user_name').on('input', function () {
+        var value = $(this).val();
+        if (isNumeric(value)) {
+            $(this).val("");
+        }
+        else {
+            var value_without_space = value.replace('-', '').replace('~', '').replace(" ", "").replace("_", "").replace(/[^a-z0-9]/gi, '')
+            $(this).val(value_without_space);
+        }
+    });
+
+    $('#chb_del_mon').change(function() {
+        if($(this).is(":checked")) {
+            $("#m_l").show();
+        }
+        else{
+            $("#m_l").hide();
+        }
+    });
 
 
 
+    $('#modalUsers').on('shown.bs.modal', function () {
+
+
+        $(".toggle").css({"min-width": "20% !important","width": "20% !important"});
+        $("#chb_del_mon").css({"min-width": "20% !important","width": "20% !important"});
+
+        console.log("ccsa");
+
+    });
+
+
+    //chb_del_mon
 
 });
 

@@ -112,7 +112,7 @@ $(document).ready(function () {
 
 
             var connect = current.querySelectorAll('.noUi-connect');
-            var color = ["#11c300", "#ffe132","#ff9936",  "#ff1313"];
+            var color = ["#11c300", "#ffe132", "#ff9936", "#ff1313"];
 
             for (var i = 0; i < connect.length; i++) {
                 $(connect[i]).css({"background": color[i]});
@@ -130,11 +130,11 @@ $(document).ready(function () {
                 var connect = current.querySelectorAll('.noUi-connect');
                 if (!left_to_rigth) {
 
-                    var color = ["#11c300","#ffe132", "#ff9936",  "#ff1313"];
+                    var color = ["#11c300", "#ffe132", "#ff9936", "#ff1313"];
                     left_to_rigth = true;
                 }
                 else {
-                    var color = ["#ff1313","#ff9936", "#ffe132",  "#11c300"];
+                    var color = ["#ff1313", "#ff9936", "#ffe132", "#11c300"];
                     left_to_rigth = false;
                 }
 
@@ -267,7 +267,7 @@ $(document).ready(function () {
 
 
         if (parseInt($("#p_lv1_" + vId).val()) < parseInt($("#p_lv3_" + vId).val())) {
-            var color =["#11c300",  "#ffe132","#ff9936", "#ff1313"];
+            var color = ["#11c300", "#ffe132", "#ff9936", "#ff1313"];
             left_to_rigth = true;
             min = parseInt($("#var_min_" + vId).val());
             max = parseInt($("#var_max_" + vId).val());
@@ -278,7 +278,7 @@ $(document).ready(function () {
 
         }
         else {
-            var color = ["#ff1313",  "#ff9936","#ffe132", "#11c300"];
+            var color = ["#ff1313", "#ff9936", "#ffe132", "#11c300"];
             left_to_rigth = false;
             min = parseInt($("#var_min_" + vId).val());
             max = parseInt($("#var_max_" + vId).val());
@@ -288,7 +288,6 @@ $(document).ready(function () {
             lv1 = parseInt($("#p_lv3_" + vId).val());
 
         }
-
 
 
         current.noUiSlider.updateOptions({
@@ -312,37 +311,37 @@ $(document).ready(function () {
         current.noUiSlider.on('update', function (values) {
 
 
-                vals = values;
+            vals = values;
 
 
-                id = vId;
+            id = vId;
 
 
-                var r1, r2, r3, r4;
-                min = parseInt($("#var_min_" + id).val());
-                max = parseInt($("#var_max_" + id).val());
-                if (min < max) {
+            var r1, r2, r3, r4;
+            min = parseInt($("#var_min_" + id).val());
+            max = parseInt($("#var_max_" + id).val());
+            if (min < max) {
 
 
-                    r1 = min.toString() + "-" + vals[0];
-                    r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
-                    r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
-                    r4 = (Number(vals[2]) + 1).toString() + "-" + max.toString();
-                }
-                else {
+                r1 = min.toString() + "-" + vals[0];
+                r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
+                r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
+                r4 = (Number(vals[2]) + 1).toString() + "-" + max.toString();
+            }
+            else {
 
-                   r1 = max.toString() + "-" + vals[0];
-                    r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
-                    r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
-                    r4 = (Number(vals[2]) + 1).toString() + "-" + min.toString();
-                }
+                r1 = max.toString() + "-" + vals[0];
+                r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
+                r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
+                r4 = (Number(vals[2]) + 1).toString() + "-" + min.toString();
+            }
 
-                $("#rang1_" + id).html("Sin afectacion:" + r1);
-                $("#rang2_" + id).html("Afectacion Moderada:" + r2);
-                $("#rang3_" + id).html("Afectacion Alta:" + r3);
-                $("#rang4_" + id).html("Afectacion muy alta:" + r4);
+            $("#rang1_" + id).html("Sin afectacion:" + r1);
+            $("#rang2_" + id).html("Afectacion Moderada:" + r2);
+            $("#rang3_" + id).html("Afectacion Alta:" + r3);
+            $("#rang4_" + id).html("Afectacion muy alta:" + r4);
 
-            });
+        });
 
     });
 
@@ -369,7 +368,7 @@ $(document).ready(function () {
 
 
         var connect = slider.querySelectorAll('.noUi-connect');
-        var color = ["#11c300",  "#ffe132","#ff9936", "#ff1313"];
+        var color = ["#11c300", "#ffe132", "#ff9936", "#ff1313"];
 
         for (var i = 0; i < connect.length; i++) {
             $(connect[i]).css({"background": color[i]});
@@ -405,7 +404,7 @@ $(document).ready(function () {
         $("#rotate_nf").click(function () {
             var values = vals;
             var connect = slider.querySelectorAll('.noUi-connect');
-                            console.log("csa");
+            console.log("csa");
 
             if (!left_to_rigth_fn) {
 
@@ -418,7 +417,7 @@ $(document).ready(function () {
                 r4 = (Number(values[2]) + 1).toString() + "-" + $('#var_max_' + vId).val();
             }
             else {
-                var color = ["#ff1313", "#ff9936",  "#ffe132","#11c300"];
+                var color = ["#ff1313", "#ff9936", "#ffe132", "#11c300"];
                 left_to_rigth_fn = false;
                 r4 = (Number(values[0]) - 1).toString() + "-0";
                 r3 = (Number(values[1]) - 1).toString() + "-" + (Number(values[0])).toString();
@@ -435,6 +434,13 @@ $(document).ready(function () {
             $(".noUi-base, .noUi-connects").css({'position': 'initial'});
         });
 
+    });
+
+    $('.pop').popover().click(function () {
+        //console.log("opopop");
+        setTimeout(function () {
+            $('.pop').popover('hide');
+        }, 5000);
     });
 
 

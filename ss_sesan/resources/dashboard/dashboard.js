@@ -11,6 +11,16 @@ $(document).ready(function () {
 
     }
 
+    if ($("#msj").val() != "[]") {
+        var msj = $("#msj").val().replace("[", "").replace("]", "").split(",");
+        swal({
+            title: msj[0].slice(1, -1),
+            text: msj[1].slice(2, -1),
+            type: msj[2].slice(2, -1),
+        });
+        $("#msj").val("[]");
+    }
+
 
     //alert(document.cookie);
 
@@ -620,8 +630,7 @@ function genMap() {
     //map_points2 = map_points.split("], [");
     //map_points2 = JSON.parse("[" + map_points.replace(/'/g, '"') + "]");
 
-    var map_name = $('#map_name').val().replace(" ", "_");
-
+    var map_name = $('#map_name').val();
     var kmlLayer = new google.maps.KmlLayer({
         url: "http://192.155.81.175/kml/" + map_name + ".kml",
         map: map1,

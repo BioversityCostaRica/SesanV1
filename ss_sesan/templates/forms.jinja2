@@ -75,59 +75,63 @@
         </div>
         {% if formList|length > 0 %}
 
-        <div class="ibox-content">
-            <div class="table-responsive">
-                <table class="table  table-bordered">
-                    <thead>
-                    <tr>
-
-
-                        <th>Formulario</th>
-                        <th>Pilares</th>
-                        <th>Usuarios</th>
-                        <th>Envios</th>
-                        <th></th>
-
-
-                    </tr>
-                    </thead>
-                    <tbody>
-
-
-                    {% for row in formList %}
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table class="table  table-bordered">
+                        <thead>
                         <tr>
-                            <td>{{ row[0][0].decode("latin1") }}</td>
-                            <td>{{ row[1]|length }}</td>
-                            <td>{{ row[2]|length }}</td>
-                            <td>{{ row[3] }}</td>
-
-                            <td class="text-center" >
-
-                                <form method="POST" role="form" class="form-horizontal m-t sub_f"
-                                      action="{{ request.path }}" id="submit_{{ row[0][1] }}" >
-                                    <input type="hidden" value="{{ (row[0][0]|string).encode("utf8") +"--"+ (row[0][1]|string).encode("utf8") }}" name="form_id">
-                                    <button type="submit" class="btn btn-danger btn-circle btn-xs" name="delUser"
-                                            id="delUser_{{ (row[0][0]|string).encode("utf8") +"--"+ (row[0][1]|string).encode("utf8") }}"><i class="fa fa-times"></i>
-                                    </button>
-
-{#                                    <button class="btn btn-warning btn-circle btn-xs" type="button"#}
-{#                                            data-toggle="modal" data-target="#mo"><i class="fa fa-edit"></i>#}
-{#                                    </button>#}
-                                    <button class="btn btn-default btn-circle btn-xs" type="button" data-toggle="modal" data-target="#modalE_{{ row[0][1] }}"><i
-                                            class="fa fa-plus" ></i>
-                                    </button>
 
 
-                                </form>
-                                {% snippet "snippets/Edit_FormByUser.jinja2", request=request,FID=row[0][1],us= row[2], us_a=lists[1] %}
-                            </td>
+                            <th>Formulario</th>
+                            <th>Pilares</th>
+                            <th>Usuarios</th>
+                            <th>Envios</th>
+                            <th></th>
+
+
                         </tr>
+                        </thead>
+                        <tbody>
 
-                    {% endfor %}
-                    </tbody>
-                </table>
+
+                        {% for row in formList %}
+                            <tr>
+                                <td>{{ row[0][0].decode("latin1") }}</td>
+                                <td>{{ row[1]|length }}</td>
+                                <td>{{ row[2]|length }}</td>
+                                <td>{{ row[3] }}</td>
+
+                                <td class="text-center">
+
+                                    <form method="POST" role="form" class="form-horizontal m-t sub_f"
+                                          action="{{ request.path }}" id="submit_{{ row[0][1] }}">
+                                        <input type="hidden"
+                                               value="{{ (row[0][0]|string).encode("utf8") +"--"+ (row[0][1]|string).encode("utf8") }}"
+                                               name="form_id">
+                                        <button type="submit" class="btn btn-danger btn-circle btn-xs" name="delUser"
+                                                id="delUser_{{ (row[0][0]|string).encode("utf8") +"--"+ (row[0][1]|string).encode("utf8") }}">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+
+                                        {#                                    <button class="btn btn-warning btn-circle btn-xs" type="button"#}
+                                        {#                                            data-toggle="modal" data-target="#mo"><i class="fa fa-edit"></i>#}
+                                        {#                                    </button>#}
+                                        <button class="btn btn-default btn-circle btn-xs" type="button"
+                                                data-toggle="modal" data-target="#modalE_{{ row[0][1] }}"><i
+                                                class="fa fa-plus"></i>
+                                        </button>
+
+
+                                    </form>
+                                    {% snippet "snippets/Edit_FormByUser.jinja2", request=request,FID=row[0][1],us= row[2], us_a=lists[1] %}
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
         {% endif %}
         {% snippet "snippets/newForm.jinja2", request=request,lists=lists %}
 

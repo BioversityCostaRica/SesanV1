@@ -19,6 +19,8 @@
     {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="register" %}
 {% endblock dashmenu %}
 
+
+
 <div class="wrapper wrapper-content animated fadeInRight">
     {% block pagecontent %}
         <input type="hidden" value="{{ msg }}" id="msj">
@@ -27,46 +29,62 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Lista de monitores </h5>
+                        <h5>Lista de usuarios </h5>
+
+                        <div class="row" style="text-align: right">
+
+
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary " type="button"
+                                                style="text-align: center; width: 20%; margin-right: 2%"
+                                                data-toggle="modal" data-target="#modalUsers"><i
+                                                class="fa fa-plus"></i>&nbspNuevo usuario
+                                </button>
+                                    </span>
+
+                        </div>
 
                     </div>
                     <div class="ibox-content">
-                        <div class="row">
 
-                            <div class="col-sm-3">
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-primary " type="button"
-                                                style="text-align: center; width: 80%"
-                                                data-toggle="modal" data-target="#modalUsers"><i
-                                                class="fa fa-plus"></i>&nbsp;Nuevo usuario
-                                </button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table  table-bordered">
-                                <thead>
+
+                        <div class="table-responsive" style="display: block;">
+
+                            <h5>Monitores </h5>
+
+
+                            <table class="table table-bordered table-hover"
+                                   style="{% if ulist | length > 3 %} max-width: 99.25% {% else %}max-width: 100% {% endif %} ;margin-bottom: 0%;max-height: 30px">
+                                <thead style="display: contents;">
                                 <tr>
 
 
-                                    <th>Nombre</th>
-                                    <th>Usuario</th>
-                                    <th>Correo electronico</th>
-                                    <th>Municipio</th>
-                                    <th>Actions</th>
+                                    <th style="width: 20%">Monitores</th>
+                                    <th style="width: 20%">Usuario</th>
+                                    <th style="width: 20%">Correo electronico</th>
+                                    <th style="width: 20%">Municipio</th>
+                                    <th style="width: 20%">Actions</th>
                                 </tr>
                                 </thead>
+
+
+                            </table>
+                        </div>
+
+                        <div class="table-responsive"
+                             style="display: block;max-height: 250px;overflow-y: auto;-ms-overflow-style: -ms-autohiding-scrollbar;padding-top: -1px">
+                            <table class="table table-bordered table-hover">
+
+
                                 <tbody>
 
-                                {% for row in ulist %}
+                                {% for row in ulist |sort %}
                                     <tr>
-                                        <td>{{ row[0].decode("latin1") }}</td>
-                                        <td>{{ row[1] }}</td>
-                                        <td>{{ row[2] }}</td>
-                                        <td>{{ row[3].decode("latin1") }}</td>
-                                        <td class="text-center">
+                                        <td style="width: 20%">{{ row[0].decode("latin1") }}</td>
+                                        <td style="width: 20%">{{ row[1] }}</td>
+                                        <td style="width: 20%">{{ row[2] }}</td>
+                                        <td style="width: 20%">{{ row[3].decode("latin1") }}</td>
+                                        <td style="width: 20%" class="text-center">
 
 
                                             <div class="" style="display: ruby">
@@ -109,10 +127,107 @@
                                         </td>
                                     </tr>
 
+
+
+
+
+
+                                {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+
+
+                        <!----------------------------->
+
+
+                        <br>
+
+                        <div class="table-responsive" style="display: block">
+                            <h5>Delegados </h5>
+                            <table class="table table-bordered table-hover"
+                                   style="{% if ulist2 | length > 3 %} max-width: 99.25% {% else %}max-width: 100% {% endif %} ;margin-bottom: 0%;max-height: 30px">
+                                <thead>
+                                <tr>
+
+
+                                    <th style="width: 20%">Delegados</th>
+                                    <th style="width: 20%">Usuario</th>
+                                    <th style="width: 20%">Correo electronico</th>
+                                    <th style="width: 20%">Departamento</th>
+                                    <th style="width: 20%">Opciones</th>
+                                </tr>
+                                </thead>
+
+
+                            </table>
+                        </div>
+                        <div class="table-responsive"
+                             style="display: block;max-height: 250px;overflow-y: auto;-ms-overflow-style: -ms-autohiding-scrollbar;padding-top: -1px">
+                            <table class="table table-bordered table-hover">
+
+                                <tbody>
+
+                                {% for row in ulist2 |sort %}
+                                    <tr>
+                                        <td style="width: 20%">{{ row[0].decode("latin1") }}</td>
+                                        <td style="width: 20%">{{ row[1] }}</td>
+                                        <td style="width: 20%">{{ row[2] }}</td>
+                                        <td style="width: 20%">{{ row[3].decode("latin1") }}</td>
+                                        <td style="width: 20%" class="text-center">
+
+
+                                            <div class="" style="display: ruby">
+
+                                                <form method="POST" role="form"
+                                                      class="form-horizontal m-t submitU"
+                                                      action="{{ request.path }}" id="submit{{ "_"+row[1] }}">
+                                                    <input type="hidden" value="{{ row[1] }}" name="uname_u">
+                                                    <button type="submit"
+                                                            title="Eliminar usuario"
+                                                            class="btn btn-danger btn-circle btn-xs"
+                                                            name="delUser" id="delUser"><i
+                                                            class="fa fa-times"></i>
+                                                    </button>
+
+
+                                                </form>
+
+                                                <button class="btn btn-warning btn-circle btn-xs" type="submit"
+                                                        title="Editar usuario"
+                                                        data-toggle="modal" data-target="#up_{{ row[1] }}"><i
+                                                        class="fa fa-edit"></i>
+                                                </button>
+
+                                                {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], name=row[0],uname=row[1], mail=row[2],val=1 %}
+
+
+                                                <button class="btn btn-default btn-circle btn-xs" type="submit"
+                                                        title="Cambiar password"
+                                                        data-toggle="modal" data-target="#pass_{{ row[1] }}"><i
+                                                        class="fa fa-unlock-alt"></i>
+                                                </button>
+
+                                                {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], val=2 %}
+
+
+                                            </div>
+
+
+                                        </td>
+                                    </tr>
+
+
+
                                 {% endfor %}
                                 </tbody>
                             </table>
                         </div>
+
+
+                        <!----------------------------->
+
 
                     </div>
                 </div>
@@ -158,7 +273,7 @@
                                     <div class="form-group"><label class="col-sm-2 control-label">Nombre de
                                         usuario</label>
                                         <div class="col-sm-10"><input required="" type="text" class="form-control"
-                                                                      name="user_name">
+                                                                      name="user_name" id="user_name">
                                             <span class="help-block m-b-none">Este es el nombre de usuario que se usara para ingresar al sistema</span>
                                         </div>
                                     </div>
@@ -185,6 +300,14 @@
                                     <div class="hr-line-dashed"></div>
 
 
+                                    <div class="form-group"><label class="col-sm-2 control-label">Rol</label>
+                                        <div class="col-sm-10"><input type="checkbox" name="chb_del_mon"
+                                                                      class="js-switch" checked id="chb_del_mon"
+                                                                      data-toggle="toggle" data-on="Monitor"
+                                                                      data-off="Delegado"/>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
 
                                     {#<div class="form-group"><label class="col-sm-2 control-label">Municipio</label>
 
@@ -202,7 +325,7 @@
                                             <span id='m_munic'></span>
                                         </div>
                                     </div>#}
-                                    <div class="form-group"><label class="col-sm-2 control-label">Municipio</label>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Ubicación</label>
 
                                         <div class="col-sm-5">
 
@@ -226,7 +349,7 @@
 
 
                                         </div>
-                                        <div class="col-sm-5">
+                                        <div class="col-sm-5" id="m_l">
 
 
                                             <select id="munic_list" name="munic"
@@ -235,16 +358,15 @@
                                                 <option value=""></option>
 
                                                 {% for row in fill_reg.munic %}
-                                                        <input type="hidden" sel="" codeM="{{ row[0] }}"
-                                                               value="{{ row[1].decode("latin1") }}"
-                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    <input type="hidden" sel="" codeM="{{ row[0] }}"
+                                                           value="{{ row[1].decode("latin1") }}"
+                                                           codeD="{{ row[2] }}" class="mlist">
 
                                                 {% endfor %}
 
 
-
                                             </select>
-                                        <span id='m_munic'></span>
+                                            <span id='m_munic'></span>
 
                                         </div>
                                     </div>
