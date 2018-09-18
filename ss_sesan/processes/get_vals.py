@@ -1144,6 +1144,9 @@ def getMunics(dep):
         res["munic"].append([int(i.munic_id), i.munic_nombre, int(i.cod_depto)])
 
     mySession.close()
+    print res["munic"]
+    res["munic"].sort()
+    print res["munic"]
     return res
 
 def getUserDeptoID(login):
