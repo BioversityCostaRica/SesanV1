@@ -1,0 +1,333 @@
+{% extends 'dashboard.jinja2' %}
+{% block title %}
+    <title>SESAN | Listas de correo</title>
+{% endblock title %}
+
+
+{% block pageheading %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-8 text-center">
+            <h2>Listas de correo por municipio</h2>
+        </div>
+    </div>
+{% endblock pageheading %}
+
+{% block dashmenu %}
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="mails" %}
+{% endblock dashmenu %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% block pagecontent %}
+
+        <input type="hidden" value="{{ msg }}" id="msj">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content animated fadeInUp">
+
+
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>Seleccione un municipio para ver su lista de correo</h5>
+                            <div class="ibox-tools">
+
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row m-b-sm m-t-sm">
+                                <div class="form-group">
+                                    <form method="POST" role="form" class="form-horizontal m-t"
+                                          action="{{ request.path }}" id="submit">
+
+
+                                        {#<div class="col-sm-6">
+                                            <select id="munic_list" name="munic"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.munic %}
+
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="i_{{ row[0] }}" {% if fill_reg.sel ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1").title() }}
+
+
+                                                    </option>
+                                                {% endfor %}
+
+                                            </select>
+
+                                        </div>#}
+
+                                        <div class="col-sm-4">
+
+
+                                            <select id="depto_list" name="depto"
+                                                    data-placeholder="Seleccione un departamento..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.depto %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="{{ row[0] }}" {% if fill_reg.s_depto ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}
+
+                                            </select>
+
+
+                                        </div>
+                                        <div class="col-sm-4">
+
+
+                                            <select id="munic_list" name="munic"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+
+                                                {% for row in fill_reg.munic %}
+
+                                                    {% if fill_reg.sel ==  row[0] %}
+
+                                                        <input type="hidden" sel="selected" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    {% else %}
+                                                        <input type="hidden" sel="" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    {% endif %}
+                                                {% endfor %}
+
+
+
+
+                                            </select>
+
+                                        </div>
+
+
+
+
+                                        <button type="submit" name="submit" id="loading-example-btn"
+                                                class="btn btn-white btn-sm"><i
+                                                class="fa fa-search"></i> Buscar
+                                        </button>
+
+                                        <input type="hidden" value="{{ fill_reg.sel }}" id="id_mun_sel">
+                                    </form>
+                                </div>
+                            </div>
+
+                            <input type="hidden" value="{{ msg }}" id="msj">
+                            {% if fill_reg.sel %}
+
+
+
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+
+
+                                        {% if mail_list|length == 0 %}
+
+                                            <div class="col-xs-8"><i class="fa fa-frown-o fa-5x"></i>
+                                                <h2 class="font-bold">El municipio seleccionado no cuenta con ninguna
+                                                    direccion de correo electronico relacionada</h2>
+
+
+                                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#myModal_{{ fill_reg.sel }}">
+                                                    Agregar los direccion de correo electronico
+                                                    a {{ fill_reg.sel_name.decode("latin1") }}
+                                                </button>
+
+                                                <!------------------------->
+
+                                            </div>
+
+                                        {% else %}
+
+                                            <div class="table-responsive">
+                                                <table class="table  table-bordered">
+                                                    <thead>
+                                                    <tr>
+
+                                                        <th>Nombre</th>
+                                                        <th>Correo electronico</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    {% for row in mail_list|sort %}
+                                                        <tr>
+
+
+                                                            <td>{{ row[2].decode('latin-1') }}</td>
+                                                            <td>{{ row[1] }}</td>
+                                                            <td class="text-center">
+                                                                <form method="POST" role="form"
+                                                                      class="form-horizontal m-t submitM"
+                                                                      action="{{ request.path }}"
+                                                                      id="submitmail">
+                                                                    <input type="hidden" value="{{ row[0] }}"
+                                                                           name="delMail">
+                                                                    <input type="hidden" value="{{ fill_reg.sel }}" name="sel_name">
+                                                                    <input type="hidden" value="{{ fill_reg.s_depto }}" name="depto">
+                                                                    <button type="submit"
+                                                                            class="btn btn-danger btn-circle btn-xs"
+                                                                            name="delMail" id="delMail"><i
+                                                                            class="fa fa-times"></i>
+                                                                    </button>
+
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                        data-target="#myModal_{{ fill_reg.sel }}">
+                                                    Agregar los direccion de correo electronico
+                                                    a {{ fill_reg.sel_name.decode("latin1") }}
+                                                </button>
+                                        {% endif %}
+
+                                        <!--------------------->
+                                        <div class="modal inmodal " id="myModal_{{ fill_reg.sel }}"
+                                                     tabindex="-1" role="dialog" aria-hidden="true">
+
+
+
+                                                    <div class="modal-dialog modal-lg">
+                                                        <div class="modal-content animated fadeIn">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close"
+                                                                        data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                                                                        class="sr-only">Close</span></button>
+                                                                <i class="fa fa-envelope modal-icon"></i>
+                                                                <h4 class="modal-title">Correo nuevo</h4>
+
+                                                            </div>
+                                                            <div class="modal-body"
+                                                                 style="overflow-y: auto; padding: 1px 0px 0px 0px ">
+
+                                                                <div class="ibox float-e-margins">
+                                                                    <div class="ibox-title">
+                                                                        <h5>Complete el siguiente formulario para
+                                                                            agregar un correo nuevo</h5>
+
+                                                                    </div>
+
+
+
+
+
+                                                                    <div class="ibox-content">
+                                                                        <form method="POST" role="form"
+                                                                              class="form-horizontal m-t"
+                                                                              action="{{ request.path }}"
+                                                                              id="submit">
+
+                                                                            <input type="hidden" name="munic_id" value="{{ fill_reg.sel}}">
+                                                                            <input type="hidden" value="{{ fill_reg.s_depto }}" id="depto" name="depto">
+                                                                            <div class="form-group"><label
+                                                                                    class="col-sm-2 control-label">Nombre
+                                                                                completo</label>
+                                                                                <div class="col-sm-10"><input
+                                                                                        required="" type="text"
+                                                                                        class="form-control"
+                                                                                        name="fullname">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="hr-line-dashed"></div>
+
+                                                                            <div class="form-group"><label
+                                                                                    class="col-sm-2 control-label">Correo
+                                                                                electronico</label>
+                                                                                <div class="col-sm-10"><input required
+                                                                                                              type="email"
+                                                                                                              class="form-control"
+                                                                                                              name="email">
+                                                                                </div>
+                                                                            </div>
+
+
+                                                                            <div class="form-group">
+                                                                                <div class="col-sm-4 col-sm-offset-2">
+                                                                                    <button class="btn btn-white"
+                                                                                            type="button"
+                                                                                            onclick="window.location.href='{{ request.route_url('mails') }}'">
+                                                                                        Cancelar
+                                                                                    </button>
+                                                                                    <button class="btn btn-primary"
+                                                                                            type="submit" name="reg"
+                                                                                            id="reg">
+                                                                                        Registrar
+                                                                                    </button>
+
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-white"
+                                                                        data-dismiss="modal">Close
+                                                                </button>
+                                                                {#                        <button type="button" class="btn btn-primary">Save changes</button>#}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                                <!------------------------->
+
+
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% endblock pagecontent %}
+
+
+</div>
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $('.chosen-select').chosen({width: "100%"});
+
+
+        });
+    </script>
+{% endblock javascript %}s

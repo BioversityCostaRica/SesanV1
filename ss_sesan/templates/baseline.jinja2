@@ -39,22 +39,61 @@
                                 <div class="form-group">
                                     <form method="POST" role="form" class="form-horizontal m-t"
                                           action="{{ request.path }}" id="submit">
-                                        <div class="col-sm-6">
+                                        <div class="col-sm-4">
+
+
+                                            <select id="depto_list" name="depto"
+                                                    data-placeholder="Seleccione un departamento..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.depto %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="{{ row[0] }}" {% if fill_reg.s_depto ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}
+
+                                            </select>
+
+
+                                        </div>
+                                        <div class="col-sm-4">
+
+
                                             <select id="munic_list" name="munic"
                                                     data-placeholder="Seleccione un municipio..."
                                                     class="chosen-select form-control m-b" tabindex="2">
                                                 <option value=""></option>
 
+
                                                 {% for row in fill_reg.munic %}
 
+                                                    {% if fill_reg.sel ==  row[0] %}
+
+                                                        <input type="hidden" sel="selected" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    {% else %}
+                                                        <input type="hidden" sel="" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    {% endif %}
+                                                {% endfor %}
+
+
+                                                {#{% for row in fill_reg.munic %}
 
                                                     <option value="{{ row[0] }}"
-                                                            id="i_{{ row[0] }}" {% if fill_reg.sel ==  row[0] %}
-                                                            selected {% endif %}> {{ row[1].decode("utf").title() }}
+                                                            id="i_{{ row[0] }}" depto="{{ row[2] }}" {% if fill_reg.sel ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
 
 
                                                     </option>
-                                                {% endfor %}
+                                                {% endfor %}#}
 
                                             </select>
 
@@ -63,6 +102,7 @@
                                                 class="btn btn-white btn-sm"><i
                                                 class="fa fa-search"></i> Buscar
                                         </button>
+
 
                                         <input type="hidden" value="{{ fill_reg.sel }}" id="id_mun_sel">
                                     </form>
@@ -83,7 +123,7 @@
                                                         class="sr-only">Close</span>
                                                 </button>
                                                 <h4 class="modal-title">Registro de linea base para el municipio
-                                                    de {{ fill_reg.sel_name }} </h4>
+                                                    de {{ fill_reg.sel_name.decode("latin1") }} </h4>
                                                 <small class="font-bold">Para registrar una linea base nueva debe
                                                     completar
                                                     todos los campos requeridos
@@ -104,13 +144,13 @@
                                                                           t_id="{{ row.id }}">{{ row.id }}</span>
                                                                 </td>
                                                                 <td class="project-title">
-                                                                    <a>{{ row.var.decode("utf-8") }}</a>
+                                                                    <a>{{ row.var.decode("latin1") }}</a>
 
 
                                                                 </td>
                                                                 <td>
                                                                     <small>
-                                                                        Indicador: {{ row.ind.decode("utf-8") }} </small>
+                                                                        Indicador: {{ row.ind.decode("latin1") }} </small>
                                                                 </td>
 
                                                                 <td class="project-people">
@@ -136,6 +176,7 @@
 
                                                 <input type="hidden" value="" name="mun_sel_data" id="mun_sel_data">
                                                 <input type="hidden" value="{{ fill_reg.sel }}" name="id_mun_sel">
+                                                <input type="hidden" value="{{ fill_reg.s_depto }}" name="id_depto_sel">
                                             </div>
                                         </div>
                                     </form>
@@ -157,6 +198,7 @@
                                             id="delete_data" value="delete">&nbsp;Eliminar esta linea base
                                     </button>
                                     <input type="hidden" value="{{ fill_reg.sel }}" name="id_mun_sel">
+                                    <input type="hidden" value="{{ fill_reg.s_depto }}" name="id_depto_sel">
                                     <input type="hidden" value="" name="mun_sel_data2" id="mun_sel_data2">
                                 {% endif %}
                                 <div class="project-list">
@@ -174,7 +216,7 @@
 
                                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                                         data-target="#myModal5">
-                                                    Agregar linea base de {{ fill_reg.sel_name }}
+                                                    Agregar linea base de {{ fill_reg.sel_name.decode("latin1") }}
                                                 </button>
 
                                             </div>
@@ -184,16 +226,17 @@
                                             {% for row in lb_data|sort %}
                                                 <tr>
                                                     <td class="project-status">
-                                                        <span class="label label-primary" t_id="{{ row }}">{{ row }}</span>
+                                                        <span class="label label-primary"
+                                                              t_id="{{ row }}">{{ row }}</span>
                                                     </td>
                                                     <td class="project-title">
-                                                        <a>{{ lb_data[row].var.decode("utf-8") }}</a>
+                                                        <a>{{ lb_data[row].var.decode("latin1") }}</a>
 
 
                                                     </td>
                                                     <td>
                                                         <small>
-                                                            Indicador: {{ lb_data[row].ind.decode("utf-8")  }} </small>
+                                                            Indicador: {{ lb_data[row].ind.decode("latin1") }} </small>
                                                     </td>
 
                                                     <td class="project-people">

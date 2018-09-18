@@ -60,6 +60,27 @@
 
                         </div>
 
+
+                    {% if activeUser.user_role==2 %}
+                    <div class="col-sm-3">
+                            <select id="dset3" name="dset3"
+                                    data-placeholder="Seleccione un set de municipio..."
+                                    class="chosen-select form-control m-b" tabindex="2">
+
+                                {% for row in munics.munic %}
+
+
+                                        <option value="{{ row[0] }}"
+                                                id="{{ row[0] }}" {% if sel_m ==row[0] |string %}
+                                                selected {% endif %}>{{ row[1].decode("latin1") }}</option>
+
+                                    {% endfor %}
+
+                            </select>
+
+                        </div>
+                    {% endif %}
+
                         <div class="col-sm-1">
                             <form method="POST" role="form" class=""
                                   action="{{ request.path }}" id="submit">
@@ -70,6 +91,8 @@
                                 </button>
 
                                 <input type="hidden" value="" id="getData4Analize" name="getData4Analize">
+
+                                <input type="hidden" value="" id="if_munic" name="if_munic">
                             </form>
 
                         </div>

@@ -1,0 +1,266 @@
+{% extends 'dashboard.jinja2' %}
+{% block title %}
+    <title>SESAN | Rangos de afectación</title>
+{% endblock title %}
+
+
+{% block pageheading %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-8 text-center">
+            <h2>Rangos de afectación por municipio</h2>
+        </div>
+    </div>
+{% endblock pageheading %}
+
+{% block dashmenu %}
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="ranges" %}
+{% endblock dashmenu %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% block pagecontent %}
+
+        <input type="hidden" value="{{ msg }}" id="msj">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content animated fadeInUp">
+
+
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>Seleccione un municipio para ver o modificar sus rangos de afectación</h5>
+                            <div class="ibox-tools">
+
+                            </div>
+                        </div>
+                        <div class="ibox-content">
+                            <div class="row m-b-sm m-t-sm">
+                                <div class="form-group">
+                                    <form method="POST" role="form" class="form-horizontal m-t"
+                                          action="{{ request.path }}" id="submit">
+                                        <div class="col-sm-4">
+
+
+                                            <select id="depto_list" name="depto"
+                                                    data-placeholder="Seleccione un departamento..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.depto %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="{{ row[0] }}" {% if fill_reg.s_depto ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}
+
+                                            </select>
+
+
+                                        </div>
+                                        <div class="col-sm-4">
+
+
+                                            <select id="munic_list" name="munic"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+
+                                                {% for row in fill_reg.munic %}
+
+                                                    {% if fill_reg.sel ==  row[0] %}
+
+                                                        <input type="hidden" sel="selected" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    {% else %}
+                                                        <input type="hidden" sel="" codeM="{{ row[0] }}"
+                                                               value="{{ row[1].decode("latin1") }}"
+                                                               codeD="{{ row[2] }}" class="mlist">
+                                                    {% endif %}
+                                                {% endfor %}
+
+
+                                                {#{% for row in fill_reg.munic %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="i_{{ row[0] }}" depto="{{ row[2] }}" {% if fill_reg.sel ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}#}
+
+                                            </select>
+
+                                        </div>
+                                        <button type="submit" name="submit" id="loading-example-btn"
+                                                class="btn btn-white btn-sm"><i
+                                                class="fa fa-search"></i> Buscar
+                                        </button>
+
+
+                                        <input type="hidden" value="{{ fill_reg.sel }}" id="id_mun_sel">
+                                    </form>
+                                </div>
+                            </div>
+                            {#<div class="row m-b-sm m-t-sm">
+                                <div class="form-group">
+                                    <form method="POST" role="form" class="form-horizontal m-t"
+                                          action="{{ request.path }}" id="submit">
+                                        <div class="col-sm-6">
+                                            <select id="munic_list" name="munic"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.munic %}
+
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="i_{{ row[0] }}" {% if fill_reg.sel ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1").title() }}
+
+
+                                                    </option>
+                                                {% endfor %}
+
+                                            </select>
+
+                                        </div>
+                                        <button type="submit" name="submit" id="loading-example-btn"
+                                                class="btn btn-white btn-sm"><i
+                                                class="fa fa-search"></i> Buscar
+                                        </button>
+
+                                        <input type="hidden" value="{{ fill_reg.sel }}" id="id_mun_sel">
+                                    </form>
+
+
+                                </div>
+                            </div>#}
+                            <input type="hidden" value="{{ varsR_id }}" id="varsR_id">
+                            {% if range | length != 0 %}
+
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="table-responsive">
+                                            <table class="table  table-bordered">
+                                                <thead>
+                                                <tr>
+
+                                                    <th>Variable</th>
+                                                    <th>Rango</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                {% for row in range|sort %}
+                                                    <tr>
+
+                                                        <td>{{ row[1].decode('latin-1') }}</td>
+                                                        <td>
+                                                            <!--this-is-the-slider------->
+
+                                                            <input type="hidden" value="{{ row[2][0] }}"
+                                                                   id="minR_{{ row[0] }}">
+                                                            <input type="hidden" value="{{ row[2][7] }}"
+                                                                   id="maxR_{{ row[0] }}">
+
+                                                            <input type="hidden" value="{{ row[2][1] }}"
+                                                                   id="lv1_{{ row[0] }}">
+                                                            <input type="hidden" value="{{ row[2][3] }}"
+                                                                   id="lv2_{{ row[0] }}">
+                                                            <input type="hidden" value="{{ row[2][5] }}"
+                                                                   id="lv3_{{ row[0] }}">
+
+
+                                                            <div class="col-sm-8 form-control input-sm sliderR"
+                                                                 id="sliderR_{{ row[0] }}"></div>
+                                                            <br><br>
+                                                            <div class="row">
+                                                                <small class="col-lg-3 "
+                                                                       id="rangR1_{{ row[0] }}">Sin
+                                                                    afectacion:{{ row[2][0]|string +"-"+ row[2][1]|string }}
+                                                                </small>
+                                                                <small class="col-lg-3 "
+                                                                       id="rangR2_{{ row[0] }}">Afectacion
+                                                                    Moderada:{{ row[2][2]|string +"-"+ row[2][3]|string }}
+                                                                </small>
+                                                                <small class="col-lg-3 "
+                                                                       id="rangR3_{{ row[0] }}">Afectacion
+                                                                    Alta:{{ row[2][4]|string +"-"+ row[2][5]|string }}
+                                                                </small>
+                                                                <small class="col-lg-3 "
+                                                                       id="rangR4_{{ row[0] }}">Afectacion muy
+                                                                    alta:{{ row[2][6]|string +"-"+ row[2][7]|string }}
+                                                                </small>
+                                                            </div>
+
+
+                                                            <!------------------>
+                                                        </td>
+                                                        <td class="text-center">
+                                                            <form method="POST" role="form"
+                                                                  class="form-horizontal m-t submitR"
+                                                                  action="{{ request.path }}"
+                                                                  id="submitrange">
+
+
+                                                                <input name="mun_ran_{{ row[0] }}"
+                                                                       id="mun_ran_{{ row[0] }}" type="hidden" value="">
+                                                                <input name="mun_id" id="mun_id" type="hidden"
+                                                                       value="{{ fill_reg.sel }}">
+                                                                <input name="dep_id" id="dep_id" type="hidden"
+                                                                       value="{{ fill_reg.s_depto }}">
+                                                                <input name="var_id" id="var_id" type="hidden"
+                                                                       value="{{ row[0] }}">
+
+                                                                <button type="submit"
+                                                                        class="btn btn-primary btn-circle btn-xs"
+                                                                        name="saveRange" id="saveRange"><i
+                                                                        class="fa fa-save"></i>
+                                                                </button>
+
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            {% endif %}
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock pagecontent %}
+
+
+</div>
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $('.chosen-select').chosen({width: "100%"});
+
+
+        });
+    </script>
+{% endblock javascript %}s

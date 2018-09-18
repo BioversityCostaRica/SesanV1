@@ -16,6 +16,15 @@ $(document).ready(function () {
 
     var json = $.parseJSON($("#filldata").val());
 
+
+
+
+    $("#if_munic").val( $('#dset3').val());
+    $("#dset3").on('change', function (e) {
+        $("#if_munic").val( $('#dset3').val());
+    });
+
+
     $('#dset').on('change', function (e) {
         opt = $('#dset').val();
         $('#dset2').empty()
@@ -78,16 +87,19 @@ $(document).ready(function () {
 
                 if (i == 0) {
                     for (j = 0; j < d.length; j++) {
+                        console.log(d[j].split('"').join(""));
+
                         if (j == 0) {
-                            dataTable.addColumn('string', d[j]);
+                            dataTable.addColumn('string', d[j].split('"').join(""));
                         }
                         else {
-                            dataTable.addColumn('number', d[j]);
+                            dataTable.addColumn('number', d[j].split('"').join(""));
                         }
                     }
                 }
                 else {
                     d.forEach(function (item, k) {
+
                         if (k > 0) {
                             if (item == "None") {
                                 d[k] = null
@@ -95,6 +107,9 @@ $(document).ready(function () {
                             else {
                                 d[k] = parseFloat(d[k])
                             }
+                        }
+                        else{
+                            d[k] = d[k].split('"').join("")
                         }
                     });
                     dataTable.addRow(d);
@@ -128,6 +143,8 @@ $(document).ready(function () {
     function drawChart(dataTable) {
         var data = dataTable;
 
+        console.log(data);
+
         var wrapper = new google.visualization.ChartWrapper({
             chartType: 'LineChart',
             dataTable: data,
@@ -142,10 +159,10 @@ $(document).ready(function () {
 
         google.visualization.events.addListener(chartEditor, 'ok', function redrawChart() {
 
-            wrapper2 = chartEditor.getChartWrapper();
-            wrapper2.setOption('height', "100%");
-            wrapper2.setOption('width', "500px");
-            wrapper2.draw(document.getElementById('chart'));
+            wrapper = chartEditor.getChartWrapper();
+            wrapper.setOption('height', "100%");
+            wrapper.setOption('width', "500px");
+            wrapper.draw(document.getElementById('chart'));
         });
         $("#editchart").click(function (e) {
             chartEditor.openDialog(wrapper);

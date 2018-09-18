@@ -82,7 +82,7 @@
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <div class="col-sm-11">
-                            <h5>Pilar : {{ p }}</h5>
+                            <h5>Pilar : {{ p.decode("latin1") }}</h5>
                             <h5 style="color: #3f9aff">&nbsp;
                                 (CP : {{ pilar_data[p].coef }})</h5>
                         </div>
@@ -98,6 +98,12 @@
                                 <button type="submit" class="btn btn-danger btn-circle btn-xs" type="button"><i
                                         class="fa fa-times"></i>
                                 </button>
+                            <button type="button" class=" pop btn btn-info btn-circle btn-xs"
+                                                data-toggle="popover" data-placement="auto right"
+                                                data-content="{{ pilar_data[p].desc.decode("latin1") }}">
+                                            <i class="fa fa-info"></i>
+                                        </button>
+
 
 
                                 {#                            <button class="btn btn-warning btn-circle btn-xs" type="button" data-toggle="modal"#}
@@ -130,7 +136,7 @@
                             <tr style="" class="footable-even">
 
                                 <td class="footable-visible footable-first-column"><span
-                                        class="footable-toggle"></span>{{ i.name }}
+                                        class="footable-toggle"></span>{{ i.name.decode("latin1") }}
                                 </td>
 
 
@@ -150,8 +156,8 @@
 
                                         {% for v in i.vars %}
                                             <tr>
-                                                <td>{{ v.name_variable_ind.decode("utf-8") }}</td>
-                                                <td class="text-center">{{ v.unidad_variable_ind.decode("utf-8") }}</td>
+                                                <td>{{ v.name_variable_ind.decode("latin1") }}</td>
+                                                <td class="text-center">{{ v.unidad_variable_ind.decode("latin1") }}</td>
                                                 <td class="text-center">{{ v.v_pregunta.decode("latin1") }}</td>
                                                 <td class="text-center">
 
@@ -163,7 +169,7 @@
                                                             class="fa fa-edit"></i>
                                                     </button>
 
-                                                    {% snippet "snippets/edit_variables.jinja2", request=request, id_variables_ind=v.id_variables_ind, name_variable_ind=v.name_variable_ind.decode("utf-8"), v_pregunta=v.v_pregunta.decode("latin1"),unidad_variable_ind=v.unidad_variable_ind.decode("latin1"), min=v.var_min, max=v.var_max %}
+                                                    {% snippet "snippets/edit_variables.jinja2", request=request, id_variables_ind=v.id_variables_ind, name_variable_ind=v.name_variable_ind.decode("latin1"), v_pregunta=v.v_pregunta.decode("latin1"),unidad_variable_ind=v.unidad_variable_ind.decode("latin1"), min=v.var_min, max=v.var_max, range=v.range %}
 
 
                                                 </td>

@@ -35,11 +35,11 @@
 
                                     <select class="form-control dual_select" multiple id="fu_l_{{ FID }}">
                                         {% for row in us %}
-                                            <option selected value="{{ row[0] }}">{{ row[1] }}</option>
+                                            <option selected value="{{ row[0] }}">{{ row[1].decode("latin1") }}</option>
                                         {% endfor %}
                                         {% for row in us_a %}
                                             {% if [row[1],row[0]] not in us %}
-                                            <option value="{{ row[1] }}">{{ row[0] }}</option>
+                                            <option value="{{ row[1] }}">{{ row[0].decode("latin1") }}</option>
                                             {% endif %}
                                         {% endfor %}
                                     </select>

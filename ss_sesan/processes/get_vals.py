@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 from ..models import DBSession, Institucione, Munic, User, VariablesInd, Pilare, Indicadore, Grupo, RangosPilare, \
-    LineasBase, CentrosUrbano, CoefPond, FormsByUser, Form
+    LineasBase, CentrosUrbano, CoefPond, FormsByUser, Form, RangosGrupo, MailList, Departamento
+from send_mail import mail2
 from sqlalchemy import func
 from datetime import datetime as t
 from ..encdecdata import encodeData
@@ -17,7 +19,12 @@ from qrtools import QR  # apt-get install libzbar-dev, pip install zbar, pip ins
 from ..encdecdata import decodeData
 import xlsxwriter
 import shutil
+#from .setFormVals import verifyPilar
 from sqlalchemy import or_
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 def getPob4Map(id_cu, alert):
@@ -46,16 +53,11 @@ def dataReport(self, month, year):
     unames = []
 
     ###
-
-
-
     mySession = DBSession()
 
     if not valReport(self, month, year):
+        #print "-------------------"
         return {}
-
-
-
 
     data = {}
 
@@ -172,7 +174,7 @@ def dataReport(self, month, year):
     # for o in unames:
     #    for x in getVarValue(o[0], "sem_af_comunidad", month, year, o[1]).split((" ")):
     #        data["points"].append(getPob4Map(x, o[2]))
-
+    #pprint(data)
 
     return data
 
@@ -203,18 +205,18 @@ def getHelpFiles(request):
             fa = "fa-file"
 
         data.append([f, fa, os.path.basename(f)])
-    print data
+    #print data
     return data
 
 
 def getSAN(value):
-    if float(value) <= 11.9:
+    if float(value) <= 6.4:
         return "#11c300", "Situacion Normal"
     else:
-        if float(value) <= 47.5:
+        if float(value) <= 39.8:
             return "#ffe132", "Alerta Temprana"
         else:
-            if float(value) <= 83.6:
+            if float(value) <= 76.9:
                 return "#ff9936", "Crisis"
             else:
                 if float(value) <= 100:
@@ -223,6 +225,7 @@ def getSAN(value):
 
 def valReport(self, month, year):
     mySession = DBSession()
+    #print self.user.login
     my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
     myDB = []
     if not my_forms is None:
@@ -239,11 +242,18 @@ def valReport(self, month, year):
         muni = i.split("_")
 
         muni = " ".join(muni[1:]) + " " + self.user.login + "_"
+
         query = "SELECT COUNT(*) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' ;" % (
             i, str(month), str(year), "%" + muni + "%")
+
         result = mySession.execute(query).scalar()
         acum.append(int(result))
     mySession.close()
+
+    #print "**************************"
+    #print myDB
+    #print acum
+    #print "**************************"
     if sum(acum) >= 1:
         return True
     else:
@@ -251,14 +261,16 @@ def valReport(self, month, year):
 
 
 def fill_reg():
-    res = {"munic": [], "insti": []}
+    res = {"munic": [], "depto": []}
     mySession = DBSession()
     result = mySession.query(Munic).all()
     for i in result:
-        res["munic"].append([int(i.munic_id), str(i.munic_nombre).decode("latin1").encode("utf8")])
-    result = mySession.query(Institucione).filter(Institucione.insti_id != 2).all()
+        res["munic"].append([int(i.munic_id), i.munic_nombre, int(i.cod_depto)])
+
+
+    result = mySession.query(Departamento).filter(Institucione.insti_id != 2).all()
     for i in result:
-        res["insti"].append([int(i.insti_id), i.insti_nombre])
+        res["depto"].append([int(i.cod_depto), i.name_depto])
     mySession.close()
     return res
 
@@ -282,6 +294,8 @@ def getMunicName(municId):
 def getMunicId(municName):
     mySession = DBSession()
     result = mySession.query(Munic.munic_id).filter(Munic.munic_nombre == municName).first()
+    if result is None:
+        return ""
     munic_id = result.munic_id
     mySession.close()
     return munic_id
@@ -292,10 +306,18 @@ def make_qr(repo, login, passw, uname):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
         ip = s.getsockname()[0]
-
+        """
         config_data = {u'admin': {}, u'general': {u'username': uname, u'password': passw,
-                                                  u'server_url': u'http://%s:6542/%s/%s' % (ip, login, uname),
+                                                  u'server_url': u'http://%s/%s/%s' % (ip, login, uname),
                                                   u'metadata_username': uname}}
+        """
+        config_data = {u'admin': {u"admin_pw": "", "change_server": False, "change_form_metadata": False, "delete_after_send":False},
+             u'general': {u"change_server": False, u"navigation": "buttons", u'username': uname,
+                          u'password': passw, u'server_url': u'http://%s/%s/%s' % (ip, login, uname),
+                          u'metadata_username': uname,
+                          u'hide_old_form_versions': True
+                          }}
+
         qr_json = json.dumps(config_data)
         serialization = qr_json.encode('zlib_codec').encode('base64_codec')
         myCode = QR(data=serialization.replace("\n", ""))
@@ -324,11 +346,37 @@ def getForm_By_User(uname):
     return int(result)
 
 
+def updateUser(login, request, post):
+    try:
+        mySession = DBSession()
+        transaction.begin()
+        if "up_user_pass" in post:
+            mySession.query(User).filter(User.user_name == post.get("up_user_pass")).update(
+                {User.user_password: encodeData(post.get("password_"))})
+
+            make_qr(request.registry.settings["user.repository"], login,
+                    post.get("password_"),
+                    post.get("up_user_pass"))
+
+
+
+
+        else:
+            mySession.query(User).filter(User.user_name == post.get("up_user_val")).update(
+                {User.user_email: post.get("email"), User.user_fullname: post.get("fullname")})
+
+        transaction.commit()
+        mySession.close()
+        return ["Correcto", "Datos de usuario actualizados exitosamente", "success"]
+    except:
+        return ["Error", "Sucedio un error al intentar modificar estos datos", "error"]
+
+
 def delUser(uname, login, request):
     mySession = DBSession()
     try:
         if getForm_By_User(uname) > 0:
-            return ["Precaucion", "Este usuario no se puede elimiar porque esta relacionado a uno o mass formularios",
+            return ["Precaucion", "Este usuario no se puede elimiar porque esta relacionado a uno o mas formularios",
                     "warning"]
 
         transaction.begin()
@@ -347,29 +395,46 @@ def delUser(uname, login, request):
 def addNewUser(regDict, request, login):
     mySession = DBSession()
 
-    res1 = mySession.query(LineasBase).filter(LineasBase.munic_id == regDict["munic"]).all()
-    res2 = mySession.query(CoefPond).filter(CoefPond.munic_id == regDict["munic"]).all()
+    if "chb_del_mon" in regDict:
+        res1 = mySession.query(LineasBase).filter(LineasBase.munic_id == regDict["munic"]).all()
+        res2 = mySession.query(CoefPond).filter(CoefPond.munic_id == regDict["munic"]).all()
 
-    if not res1 or not res2:
-        return 4
+        if not res1 or not res2:
+            return 4
 
-    result = mySession.query(func.count(User.user_name)).filter(
-        User.user_munic == int(regDict["munic"])).scalar()
+        result = mySession.query(func.count(User.user_name)).filter(
+            User.user_munic == int(regDict["munic"])).scalar()
+    else:
+        result = mySession.query(func.count(User.user_name)).filter(
+            User.user_dept == int(regDict["depto"])).scalar()
+
 
     if not result is None:
         if result == 1:
             return 0
         else:
             if result == 0:
-                addUser = User(user_fullname=regDict["fullname"],
-                               user_name=regDict["user_name"],
-                               user_joindate=str(t.now()),
-                               user_password=encodeData(regDict["password"]),
-                               user_email=regDict["email"],
-                               user_munic=regDict["munic"],
-                               user_active=1,
-                               user_role=0,
-                               user_parent=login)
+                if "chb_del_mon" not in regDict:
+                    #print "add delegado"
+                    addUser = User(user_fullname=regDict["fullname"],
+                                   user_name=regDict["user_name"],
+                                   user_joindate=str(t.now()),
+                                   user_password=encodeData(regDict["password"]),
+                                   user_email=regDict["email"],
+                                   user_active=1,
+                                   user_role=2,
+                                   user_parent=login,
+                                   user_dept=regDict["depto"])
+                else:
+                    addUser = User(user_fullname=regDict["fullname"],
+                                   user_name=regDict["user_name"],
+                                   user_joindate=str(t.now()),
+                                   user_password=encodeData(regDict["password"]),
+                                   user_email=regDict["email"],
+                                   user_munic=regDict["munic"],
+                                   user_active=1,
+                                   user_role=0,
+                                   user_parent=login)
                 try:
 
                     transaction.begin()
@@ -378,58 +443,25 @@ def addNewUser(regDict, request, login):
                     mySession.close()
 
                     # # create necessary files and directories
-                    path = os.path.join(request.registry.settings["user.repository"],
-                                        *[login, "user", regDict["user_name"], "config"])
-                    os.makedirs(path)
-                    #
-                    # paths = [getIntName(regDict["inst"]) + "_" + getMunicName(regDict["munic"]).replace(" ", "") + "_" +
-                    #          regDict[
-                    #              "user_name"] + '.xml']
+                    if "chb_del_mon" in regDict:
+                        path = os.path.join(request.registry.settings["user.repository"],
+                                            *[login, "user", regDict["user_name"], "config"])
+                        os.makedirs(path)
 
-                    #
-                    # xmlFile = os.path.join(path, *paths)
-                    #
-                    # pngFile = os.path.join(path, getIntName(regDict["inst"]).lower() + ".png")
-                    #
-                    # os.system("cp %s %s" % (
-                    #     os.path.join(request.registry.settings["user.repository"], "forms", getIntName(regDict["inst"]),
-                    #                  getIntName(regDict["inst"]) + ".xml"), xmlFile))
-                    # os.system("cp %s %s" % (
-                    #     os.path.join(request.registry.settings["user.repository"], "forms", getIntName(regDict["inst"]),
-                    #                  getIntName(regDict["inst"]).lower() + ".png"), pngFile))
-                    #
-                    # paths = [getIntName(regDict["inst"]) + "_" + getMunicName(regDict["munic"]) + "_" + regDict[
-                    #     "user_name"] + '.json']
-                    # jsonFile = os.path.join(path, *paths)
-                    #
-                    # metadata = {}
-                    # metadata["formID"] = getIntName(regDict["inst"]) + "_" + getMunicName(regDict["munic"])
-                    # metadata["name"] = getIntName(regDict["inst"]) + "_" + getMunicName(regDict["munic"]) + "_" + \
-                    #                    regDict[
-                    #                        "user_name"]
-                    # metadata["majorMinorVersion"] = "1.0"
-                    # metadata["version"] = datetime.now().strftime("%Y%m%d")
-                    # metadata["hash"] = 'md5:' + md5(open(xmlFile, 'rb').read()).hexdigest()
-                    # metadata["descriptionText"] = getIntName(regDict["inst"]) + "_3" + getMunicName(
-                    #     regDict["munic"]) + "_" + regDict["fullname"] + "_" + datetime.now().strftime("%Y%m%d")
-                    #
-                    # with open(jsonFile, "w") as outfile:
-                    #     jsonString = json.dumps(metadata, indent=4, ensure_ascii=False).encode("utf8")
-                    #     outfile.write(jsonString)
-                    #
-                    make_qr(request.registry.settings["user.repository"], login,
-                            regDict["password"],
-                            regDict["user_name"])
+                        make_qr(request.registry.settings["user.repository"], login,
+                                regDict["password"],
+                                regDict["user_name"])
 
-                    # create urban centers .csv file
-                    result = mySession.query(CentrosUrbano.id_cu, CentrosUrbano.cu_name).filter_by(
-                        munic_id=regDict["munic"]).all()
-                    if result:
-                        csv_curb = open(path.replace("config", "/curbanos.csv"), "w")
-                        csv_curb.write("urban_id,urban_name\n")
-                        for row in result:
-                            csv_curb.write(str(row.id_cu) + "," + str(row.cu_name) + "\n")
-                        csv_curb.close()
+                        # create urban centers .csv file
+
+                        result = mySession.query(CentrosUrbano.id_cu, CentrosUrbano.cu_name).filter_by(
+                            munic_id=regDict["munic"]).all()
+                        if result:
+                            csv_curb = open(path.replace("config", "/curbanos.csv"), "w")
+                            csv_curb.write("urban_id,urban_name\n")
+                            for row in result:
+                                csv_curb.write(str(row.id_cu) + "," + str(row.cu_name) + "\n")
+                            csv_curb.close()
 
                     return 1
 
@@ -464,34 +496,59 @@ def getComp(lb, act):
         return 0
 
 
+def getUserMunic(uname):
+    mySession = DBSession()
+
+    result= mySession.query(User.user_munic).filter(User.user_name==uname).first()
+
+
+
+
+    mySession.close()
+    return getMunicName(result[0])
+
+
 def getVarValue(db, code, month, year, uname):
     mySession = DBSession()
     ret = ""
 
-    # try:
-    result = mySession.execute(
-        "SELECT AVG(%s) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
-            code, db, month, year, "% " + uname + "_%"))
-    for res in result:
-        ret = str(res[0])
-    # except:
-    #    ret = "ND"
+    try:
+        #print uname
+        #print code
+        #print month
+        #print getUserMunic(uname)
+        #by = "% " + uname + " " + getUserMunic(uname).decode("latin1") + " %"
+        #print "SELECT * FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
+        #         db, month, year, by)
+        #print "*-*-*-*"
+        result = mySession.execute(
+            "SELECT AVG(%s) FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
+                code, db, month, year, "% " + uname + "_%"))
+        for res in result:
+            ret = str(res[0])
+    except:
+        ret = "ND"
     mySession.close()
     return ret
 
 
 def getComun(db, code, month, year, uname):
-    mySession = DBSession()
-    ret = ""
 
-    # try:
-    result = mySession.execute(
-        "SELECT %s FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
-            code, db, month, year, "% " + uname + "_%"))
-    for res in result:
-        ret = str(res[0])
-    # except:
-    #    ret = "ND"
+    mySession = DBSession()
+
+    if_cu = mySession.execute(
+        "SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '%s') AND (TABLE_NAME = 'lkpsem_comunidad_totales')" % db).scalar()
+    ret = ""
+    if int(if_cu) != 0:
+
+        # try:
+        result = mySession.execute(
+            "SELECT %s FROM %s.maintable WHERE MONTH(date_fecha_informe_6) = %s and YEAR (date_fecha_informe_6) = %s and surveyid like binary '%s' LIMIT 1;" % (
+                code, db, month, year, "% " + uname + "_%"))
+        for res in result:
+            ret = str(res[0])
+        # except:
+        #    ret = "ND"
     mySession.close()
     return ret
 
@@ -506,15 +563,15 @@ def getCoefPond(idVar, munId):
     return res
 
 
-def calcValue(val, idVar,
-              type,
+def calcValue(val, idVar, type,
               munId):  # if type = 2 calc Equivalent values elif type == 1 calc Weighting coefficient, if type =3 get pilar coeff
     mySession = DBSession()
+    #print munId
     res = ""
     if type == 1:
         res = getCoefPond(idVar, munId)
     elif type == 2:
-        sql = "CALL sesan_v2.getValueGroup(%s, %s);" % (idVar, val)
+        sql = "CALL sesan_v2.getValueGroup(%s, %s, %s);" % (idVar, val, int(getMunicId(munId)))
         result = mySession.execute(sql)
         for res in result:
             res = str(res[0])
@@ -523,6 +580,7 @@ def calcValue(val, idVar,
         res = result.coef_pond
 
     mySession.close()
+
     return float(res)
 
 
@@ -591,13 +649,28 @@ def getLB(id_var, munic):
     return lb_valor
 
 
+def getUserByMunic(munic):
+    mySession = DBSession()
+    result = mySession.query(User.user_name).filter(User.user_munic==munic).first()
+    if result:
+        user = result.user_name
+    else:
+        user = "ND"
+
+    mySession.close()
+    return user
+
+
+
 def getDashReportData(self, month, year):
     # month = "05"
     # year = "2018"
 
+
+
     mySession = DBSession()
     data = {}
-
+    data["coverage"]=0
     my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
     res = []
     myDB = []
@@ -644,6 +717,7 @@ def getDashReportData(self, month, year):
                 i_pi = mySession.query(Indicadore.Id_pilares).filter_by(id_indicadores=i).first()
 
                 if str(int(i_pi[0])) in pilares_ind_db:
+
                     p_name = mySession.query(Pilare.name_pilares, Pilare.id_pilares).filter_by(
                         id_pilares=int(i_pi[0])).first()
                     tot_alert = []
@@ -652,17 +726,17 @@ def getDashReportData(self, month, year):
                         Id_pilares=int(i_pi[0])).all()
 
                     for i_n in i_name:
+
                         # print i_n[0]
                         data[p_name[0]][i_n[0]] = {"var": [], "val": []}  # add indicadores
                         variables = mySession.query(VariablesInd).filter_by(id_indicadores=int(i_n[1])).all()
-                        valCP = 1
+                        valCP = 0
                         acum = []
                         for v in variables:
                             # print v.code_variable_ind
                             sa = getVarValue(db, v.code_variable_ind, month, year, self.user.login)
 
                             # add variables data
-
                             if sa != "ND":
                                 l_base = getLB(v.id_variables_ind, self.user.munic)
 
@@ -679,12 +753,6 @@ def getDashReportData(self, month, year):
                                                                                                               self.user.munic))
 
                         tot_alert.append([valCP, sum(acum)])
-                        # print "**-*-*-*-*-*\n\n\n\n\n\n\n"
-                        # print db
-                        # print valCP
-                        # print v.id_variables_ind
-                        # print "%.2f" % (sum(acum))
-                        # print "**-*-*-*-*-*\n\n\n\n\n\n\n"
                         data[p_name[0]][i_n[0]]["val"].append("%.2f" % (sum(acum) / valCP))
                         # data[p_name[0]][i_n[0]]["val"].append("CCCC")
                     pilares.append(int(i_pi[0]))
@@ -694,6 +762,7 @@ def getDashReportData(self, month, year):
                     for t in tot_alert:
                         t0 = t0 + t[0]
                         t1 = t1 + t[1]
+
                     alertP = getPilarAlert(p_name[1], "%.2f" % (t1 / t0))
 
                     data[p_name[0] + "_alert"] = ["%.2f" % (t1 / t0), alertP[1].title(), alertP[0]]
@@ -707,30 +776,16 @@ def getDashReportData(self, month, year):
 
             for id_cu in com:
                 data["comunidades2"].append(getPob4Map(id_cu, alertP[0]))
-            # data["acciones"] = getRepInfo(ruuid,db, "acc")
-            data["coverage"] = calcDataCoverage(db, ruuid, getMunicId(self.user.munic))
-
-
-            # else:
-            #    data["error"] = True
+            data["coverage"] =data["coverage"]+ calcDataCoverage(db, ruuid, getMunicId(self.user.munic),self.user.login)
 
     meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
              "Noviembre", "Diciembre"]
 
     data["date"] = [meses[int(month) - 1], year]
-    # import json
-    # r = json.dumps(unicode(data),ensure_ascii=False,encoding='utf8')
-    # with open("/home/acoto/pr_pptx/sort_db/data.json", 'wb') as f:
-    #    json.dump(r,f, ensure_ascii=False, encoding='utf8')
     mySession.close()
 
     for i, s in enumerate(data["comunidades2"]):
-        # if (s[0] not in data["comunidades2"]):
         data["comunidades2"][i] = s[0]
-    # print list(set(data["comunidades2"]))
-
-    #pprint(data["san"])
-
 
     return data
 
@@ -753,7 +808,22 @@ def getSignature(db, uname, parent, month, year, request):
     # return [ result[0],"_".join(db.split("_")[2:]) ]
 
 
+def getPass(uname):
+    mySession = DBSession()
+
+    result= mySession.query(User.user_password).filter(User.user_name==uname).first()
+
+    return result[0]
+
+
 def getConfigQR(uname, parent, request):
+
+    make_qr(request.registry.settings["user.repository"], parent,
+            decodeData(getPass(uname)),
+            uname)
+
+
+
     img_path = os.path.join(request.registry.settings["user.repository"],
                             *[parent, "user", uname, "config", "conf.png"])
     f = open(img_path)
@@ -875,15 +945,37 @@ def updateData(mun_id, data, flag):
         return ["Error", "Error al actualizar los datos", "error"]
 
 
-def calcDataCoverage(db, device_id_3, mun_id):
+def calcDataCoverage(db, device_id_3, mun_id, login):
     mySession = DBSession()
-    query = "SELECT (100/count(*)) * (select count(sem_comunidad_totales) from %s.maintable_msel_sem_comunidad_totales where device_id_3 ='%s')  FROM sesan_v2.centros_urbanos where munic_id=%s;" % (
-        db, device_id_3, mun_id)
-    result = mySession.execute(query).scalar()
-    if result:
-        return int(result)
-    else:
-        return False
+    if_cu = mySession.execute(
+        "SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '%s') AND (TABLE_NAME = 'lkpsem_comunidad_totales')" % db).scalar()
+    ret = ""
+    if int(if_cu) != 0:
+        if_cu2 = mySession.execute(
+            "SELECT count(*) FROM information_schema.TABLES WHERE (TABLE_SCHEMA = '%s') AND (TABLE_NAME = 'maintable_msel_sem_comunidad_totales')" % db).scalar()
+        if int(if_cu2) !=0:
+
+            query = "SELECT (100/count(*)) * (select count(sem_comunidad_totales) from %s.maintable_msel_sem_comunidad_totales where device_id_3 ='%s')  FROM sesan_v2.centros_urbanos where munic_id=%s;" % (
+                db, device_id_3, mun_id)
+            result = mySession.execute(query).scalar()
+            if result:
+                return int(result)
+            else:
+                return 0
+        else:
+            li=db.split("_")
+            query = "SELECT (100/count(*)) * (select count(sem_comunidad_totales) from %s.maintable where surveyid like binary '%s')  FROM sesan_v2.centros_urbanos where munic_id=%s;" % (
+                db, "%"+li[1]+ " "+li[2]+ " "+login +" %", mun_id)
+
+
+            result = mySession.execute(query).scalar()
+
+            if result:
+                return int(result)
+            else:
+                return 0
+
+    return 0
 
 
 def genXLS(self, data, month):
@@ -891,18 +983,19 @@ def genXLS(self, data, month):
 
     path = os.path.join(self.request.registry.settings['user.repository'], "TMP", "datos_reporte.xlsx")
 
-    workbook = xlsxwriter.Workbook(path)
+    #workbook = xlsxwriter.Workbook(path)
 
-    pilares = []
+    #pilares = []
     workbook = xlsxwriter.Workbook(path)
 
     worksheet = workbook.add_worksheet("Metadata")
 
     san = dataReport(self, month, data["date"][1])
+
     data["san"] = san["san"]
     # worksheet.write(y, x, str)
     worksheet.write(0, 0, "Sala Situacional para el mes de %s, %s" % (data["date"][0], data["date"][1]))
-    worksheet.write(1, 0, "Municipio: " + str(self.user.munic).title())
+    worksheet.write(1, 0, "Municipio: " + str(self.user.munic).title().decode("latin1"))
     # worksheet.write(2, 0, "Institucion que reporta: " + str(self.user.organization))
     worksheet.write(3, 0, "Cobertura en comunidades: " + str(data["coverage"]) + "%")
 
@@ -965,21 +1058,21 @@ def genXLS(self, data, month):
                 for v in data[p][d]["var"]:
                     cont = cont + 1
                     format = workbook.add_format({'bg_color': "#99CC66", "top": 1, "bottom": 1, "left": 1, "right": 1})
-                    worksheet.write(row, 2, v[0].decode("utf-8").replace("_", " "), format)
-                    worksheet.write(row, 3, v[1].decode("utf-8").replace("_", " "), format)
-                    rang = getRanges(v[6], 1)
+                    worksheet.write(row, 2, v[0].decode("latin1").replace("_", " "), format)
+                    worksheet.write(row, 3, v[1].decode("latin1").replace("_", " "), format)
+                    rang = getRanges(v[6], int(getMunicId(self.user.munic)))
                     for col, r in enumerate(rang):
                         format = workbook.add_format({"top": 1, "bottom": 1, "left": 1, "right": 1})
                         worksheet.write(row, col + 4, r, format)
 
                     format = workbook.add_format({'bg_color': "#99CC66", "top": 1, "bottom": 1, "left": 1, "right": 1})
-                    worksheet2.write(row, 2, v[0].decode("utf-8").replace("_", " "), format)
-                    worksheet2.write(row, 3, v[1].decode("utf-8").replace("_", " "), format)
+                    worksheet2.write(row, 2, v[0].decode("latin1").replace("_", " "), format)
+                    worksheet2.write(row, 3, v[1].decode("latin1").replace("_", " "), format)
                     worksheet2.write(row, 4, v[2], format)
-                    worksheet2.write(row, 5, float(v[3].decode("utf-8").replace("_", " ")), format)
+                    worksheet2.write(row, 5, float(v[3].decode("latin1").replace("_", " ")), format)
 
-                    worksheet3.write(row, 6, v[0].decode("utf-8").replace("_", " "), format)
-                    worksheet3.write(row, 7, float(v[3].decode("utf-8").replace("_", " ")), format)
+                    worksheet3.write(row, 6, v[0].decode("latin1").replace("_", " "), format)
+                    worksheet3.write(row, 7, float(v[3].decode("latin1").replace("_", " ")), format)
 
                     state = ""
                     if int(v[4]) == 1:
@@ -996,21 +1089,21 @@ def genXLS(self, data, month):
                     row = row + 1
                 format = workbook.add_format({'bg_color': "#99CC66", "top": 1, "bottom": 1, "left": 1, "right": 1})
                 if init2 != row:
-                    worksheet.merge_range('B%s:B%s' % (init2, row), d.decode("utf-8").replace("_", " "), format)
-                    worksheet2.merge_range('B%s:B%s' % (init2, row), d.decode("utf-8").replace("_", " "), format)
-                    worksheet3.merge_range('E%s:E%s' % (init2, row), d.decode("utf-8").replace("_", " "), format)
+                    worksheet.merge_range('B%s:B%s' % (init2, row), d.decode("latin1").replace("_", " "), format)
+                    worksheet2.merge_range('B%s:B%s' % (init2, row), d.decode("latin1").replace("_", " "), format)
+                    worksheet3.merge_range('E%s:E%s' % (init2, row), d.decode("latin1").replace("_", " "), format)
                     worksheet3.merge_range('F%s:F%s' % (init2, row), data[p][d]["val"][0], format)
 
                 else:
-                    worksheet.write(row - 1, 1, d.decode("utf-8").replace("_", " "), format)
-                    worksheet2.write(row - 1, 1, d.decode("utf-8").replace("_", " "), format)
-                    worksheet3.write(row - 1, 4, d.decode("utf-8").replace("_", " "), format)
+                    worksheet.write(row - 1, 1, d.replace("_", " ").decode("latin1"), format)
+                    worksheet2.write(row - 1, 1, d.replace("_", " ").decode("latin1"), format)
+                    worksheet3.write(row - 1, 4, d.replace("_", " ").decode("latin1"), format)
                     worksheet3.write(row - 1, 5, data[p][d]["val"][0], format)
 
             format = workbook.add_format({"top": 1, "bottom": 1, "left": 1, "right": 1})
-            worksheet.merge_range('A%s:A%s' % (init, row), p.decode("utf-8"), format)
-            worksheet2.merge_range('A%s:A%s' % (init, row), p.decode("utf-8"), format)
-            worksheet3.merge_range('C%s:C%s' % (init, row), p.decode("utf-8"), format)
+            worksheet.merge_range('A%s:A%s' % (init, row), p.decode("latin1"), format)
+            worksheet2.merge_range('A%s:A%s' % (init, row), p.decode("latin1"), format)
+            worksheet3.merge_range('C%s:C%s' % (init, row), p.decode("latin1"), format)
             worksheet3.merge_range('D%s:D%s' % (init, row), data[p + "_alert"][0], format)
 
             worksheet2.merge_range('G%s:G%s' % (init, row), "SESAN", format)
@@ -1039,27 +1132,76 @@ def getFileResponse(request):
     return response
 
 
-def getUsersList(login):
+
+#def getUsersByDept(dep_id):
+#    mySession = DBSession()
+
+def getMunics(dep):
+    res = {"munic": []}
     mySession = DBSession()
-    result = mySession.query(User).filter(User.user_parent == login).all()
+    result = mySession.query(Munic).filter(Munic.cod_depto==dep).all()
+    for i in result:
+        res["munic"].append([int(i.munic_id), i.munic_nombre, int(i.cod_depto)])
+
+    mySession.close()
+    return res
+
+def getUserDeptoID(login):
+    mySession = DBSession()
+    result = mySession.query(User.user_dept).filter(User.user_name==login).first()
+    depId = result.user_dept
+    mySession.close()
+    return depId
+
+def getDeptName(dep):
+    mySession = DBSession()
+    result = mySession.query(Departamento.name_depto).filter(Departamento.cod_depto == dep).first()
+    depName = result.name_depto
+    mySession.close()
+    return depName
+
+def getUsersList(login, role):
+    mySession = DBSession()
+    result = mySession.query(User).filter(User.user_parent == login).filter(User.user_role==role).all()
     data = []
     for row in result:
-        data.append([row.user_fullname, row.user_name, row.user_email, getMunicName(row.user_munic).title()])
+        if role == 0:
+            data.append([row.user_fullname, row.user_name, row.user_email, getMunicName(row.user_munic).title()])
+        if role == 2:
+            data.append([row.user_fullname, row.user_name, row.user_email, getDeptName(row.user_dept).title()])
+
     mySession.close()
+
+
 
     return data
 
 
+def getVarIdByCode(code):
+    mySession = DBSession()
+    result = mySession.query(VariablesInd.id_variables_ind).filter(VariablesInd.code_variable_ind == code).scalar()
+    mySession.close()
+    return result
+
+
 def getRanges(code, munic):
-    print "*-*-*-"
-    print code
-    print munic
-    print "*-*-*"
     mySession = DBSession()
 
-    result = mySession.query()
-    rang = [0, 10, 11, 15, 16, 22, 23, 100]
-
+    result = mySession.query(RangosGrupo.r_min, RangosGrupo.r_max).filter(
+        RangosGrupo.id_variables_ind == getVarIdByCode(code)).filter(RangosGrupo.munic_code==munic).all()
+    vals = []
+    if result:
+        for row in result:
+            #print row
+            vals.append(int(row[0]))
+            vals.append(int(row[1]))
+    else:
+        result = mySession.query(RangosGrupo.r_min, RangosGrupo.r_max).filter(
+            RangosGrupo.id_variables_ind == getVarIdByCode(code)).filter(RangosGrupo.munic_code==None).all()
+        for row in result:
+            vals.append(int(row[0]))
+            vals.append(int(row[1]))
+    rang = vals
     return rang
 
 
@@ -1089,7 +1231,7 @@ def _finditem(obj, key):  # recursive function for find any key in python dict
 
 
 def getData4Analize(self, vals):
-    print vals
+    #print vals
     mySession = DBSession()
 
     if len(vals) > 1:
@@ -1100,7 +1242,7 @@ def getData4Analize(self, vals):
             data = [[]]
             data[0].append("Date")
             for v in vals[0].split(","):
-                data[0].append(getColName(v, vals[1]))
+                data[0].append(getColName(v, vals[1]).replace("_", " "))
 
             my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
 
@@ -1117,7 +1259,7 @@ def getData4Analize(self, vals):
             for db in myDB:
                 dates = mySession.execute(
                     "SELECT date_fecha_informe_6 FROM %s.maintable WHERE surveyid like binary '%s';" % (
-                    db, "%" + self.user.login + "_%"))
+                        db, "% " + self.user.login + "_%"))
                 for d in dates:
                     datesF.append(d[0])
             datesF.sort()
@@ -1129,11 +1271,11 @@ def getData4Analize(self, vals):
                 row.append(str(d))
                 rowM = getDashReportData(self, dt[1], dt[0])
 
-                if vals[1]=="SAN":
-                    rowM=dataReport(self, dt[1], dt[0])
+                if vals[1] == "SAN":
+                    rowM = dataReport(self, dt[1], dt[0])
                     row.append(float(rowM["san"][0]))
-                    #print rowM["san"]
-                    #print "SAN"
+                    # print rowM["san"]
+                    # print "SAN"
 
                 if vals[1] == "Pilares":
                     for v in vals[0].split(","):
@@ -1142,6 +1284,7 @@ def getData4Analize(self, vals):
                         except:
                             row.append(None)
                 if vals[1] == "Indicadores":
+
                     for v in vals[0].split(","):
                         try:
                             row.append(float(_finditem(rowM, getColName(v, vals[1]))["val"][0]))
@@ -1167,12 +1310,25 @@ def getData4Analize(self, vals):
 
                 data.append(row)
 
-            pprint(data)
-            return 2, data
+            #pprint(data)
+            return 2, json.dumps(data, ensure_ascii=False, encoding='latin1')
 
 
     else:
         return 1, ["Precaucion", "Debe seleccionar algun subset de datos", "warning"]
+
+
+def verifyPilar(pId):
+    mySession = DBSession()
+
+    result = mySession.query(Indicadore.id_indicadores).filter(Indicadore.Id_pilares == pId).all()
+    for r in result:
+        var = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == r.id_indicadores).all()
+        for v in var:
+            if v.unidad_variable_ind == "" or v.v_pregunta == "":
+                return False
+    mySession.close()
+    return True
 
 
 def getGToolData(self):
@@ -1183,12 +1339,175 @@ def getGToolData(self):
     result = mySession.query(Pilare).filter(Pilare.user_name == self.user.parent).all()
 
     for r in result:
-        data["pilar"].append([r.id_pilares, r.name_pilares])
-        inds = mySession.query(Indicadore).filter(Indicadore.Id_pilares == r.id_pilares).all()
-        for i in inds:
-            data["ind"].append([i.id_indicadores, i.name_indicadores.replace("_", " ")])
-            vars = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == i.id_indicadores).all()
-            for v in vars:
-                data["var"].append([v.id_variables_ind, v.name_variable_ind])
+        if verifyPilar(r.id_pilares):
+            data["pilar"].append([r.id_pilares, r.name_pilares])
+            inds = mySession.query(Indicadore).filter(Indicadore.Id_pilares == r.id_pilares).all()
+            for i in inds:
+                data["ind"].append([i.id_indicadores, i.name_indicadores.replace("_", " ")])
+                vars = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == i.id_indicadores).all()
+                for v in vars:
+                    data["var"].append([v.id_variables_ind, v.name_variable_ind])
     mySession.close()
-    return json.dumps(data)
+    return json.dumps(data, ensure_ascii=False, encoding='latin1')
+
+
+def getMails(mun):
+    mySession = DBSession()
+
+    result = mySession.query(MailList).filter(MailList.munic_id == mun).all()
+
+    data = []
+    for row in result:
+        data.append([row.idmail_list, row.mail, row.mail_name])
+    mySession.close()
+
+    return data
+
+
+def addMail(request, fullname, mail, munic_id):
+    mySession = DBSession()
+    # try:
+
+    new_mail = MailList(munic_id=munic_id,
+                        mail=mail,
+                        mail_name=fullname)
+
+    transaction.begin()
+    mySession.add(new_mail)
+    transaction.commit()
+    mySession.close()
+    body_message = ["Estimado " + fullname,
+                    "Este correo es para informar que ha sido agregado a la lista de distribucion de correos informativos para la Sala Situacional de " + getMunicName(munic_id),
+                    "Si tiene dudas o consultas puede hacerlas llegar al departamento de TI de SESAN o a traves de su oficina regional",
+                    "Gracias"]
+
+    #try:
+    #print "send"
+    mail2(request, body_message, mail)
+    #print "*-*-*-"
+    #except:
+    #    pass
+
+    return ["Correcto", "Correo registrado correctamente", "success"]
+    # except:
+    #    return ["Error", "Sucedio un error registrar este correo", "error"]
+
+
+def delMail(mailId):
+    try:
+
+        mySession = DBSession()
+
+        transaction.begin()
+        mySession.query(MailList).filter(MailList.idmail_list == mailId).delete()
+        transaction.commit()
+        mySession.close()
+
+        return ["Correcto", "Correo eliminado correctamente", "success"]
+    except:
+        return ["Error", "Sucedio un error eliminar este correo", "error"]
+
+
+def getRangeList(munic):
+    mySession = DBSession()
+    result = mySession.query(VariablesInd.id_variables_ind, VariablesInd.code_variable_ind,
+                             VariablesInd.name_variable_ind).all()
+    data = []
+    for row in result:
+        if getRanges(row.code_variable_ind, int(munic)) != []:
+            data.append([row.id_variables_ind, row.name_variable_ind, getRanges(row.code_variable_ind,int(munic))])
+
+    #pprint(data)
+    return data
+
+
+def sendGroup(request, uname):
+    mySession = DBSession()
+    result = mySession.query(User.user_munic).filter(User.user_name == uname).first()
+    #print result[0]
+    list = mySession.query(MailList).filter(MailList.munic_id == result[0]).all()
+
+    for row in list:
+        #print row.mail
+        hour = str(datetime.now()).split(" ")[1].split(".")[0]
+        body_message = ["Estimado " + row.mail_name.decode("latin1"),
+                        "Este correo es para informar que el dia de hoy ha ingresado un nuevo registro a la base de datos de Salas Situacionales para el municipio de " + getMunicName(
+                            result[0]).title().decode("latin1") + " a las " + hour,
+                        "Si tiene dudas o consultas puede hacerlas llegar al departamento de TI de SESAN o a traves de su oficina regional.",
+                        "Gracias"]
+        try:
+            mail2(request, body_message, row.mail)
+        except:
+            pass
+    mySession.close()
+    return
+
+
+def UpdateOrInsertRange(post):
+    mySession = DBSession()
+
+
+    try:
+
+        result = mySession.query(RangosGrupo).filter(RangosGrupo.munic_code == post.get("mun_id")).filter(
+            RangosGrupo.id_variables_ind == post.get("var_id")).all()
+
+        if result:
+            rang = post.get("mun_ran_" + post.get("var_id")).split(";")
+
+            transaction.begin()
+            flag = True
+            if rang[-1] == "LR":
+                vals = rang[:-1]
+
+            else:
+                rang.reverse()
+                vals = rang[1:]
+                flag = False
+
+            for i, x in enumerate(vals):
+                x = x.split("-")
+                if flag:
+                    mySession.query(RangosGrupo).filter(RangosGrupo.munic_code == int(post.get("mun_id"))).filter(
+                        RangosGrupo.id_variables_ind == int(post.get("var_id"))).filter(
+                        RangosGrupo.id_grupos == i + 1).update({RangosGrupo.r_min: x[0], RangosGrupo.r_max: x[1]})
+                else:
+                    mySession.query(RangosGrupo).filter(RangosGrupo.munic_code == int(post.get("mun_id"))).filter(
+                        RangosGrupo.id_variables_ind == int(post.get("var_id"))).filter(
+                        RangosGrupo.id_grupos == i + 1).update(
+                        {RangosGrupo.r_min: x[1], RangosGrupo.r_max: x[0]})
+
+            transaction.commit()
+
+
+        else:
+
+            rang = post.get("mun_ran_" + post.get("var_id")).split(";")
+
+            transaction.begin()
+            #print rang
+            flag = True
+            if rang[-1] == "LR":
+                vals = rang[:-1]
+
+            else:
+                rang.reverse()
+                vals = rang[1:]
+                flag = False
+
+            for i, x in enumerate(vals):
+                x = x.split("-")
+                if flag:
+                    newRang1 = RangosGrupo(id_variables_ind=int(post.get("var_id")), id_grupos=i + 1, r_min=x[0],
+                                           r_max=x[1], munic_code=post.get("mun_id"))
+                else:
+                    newRang1 = RangosGrupo(id_variables_ind=int(post.get("var_id")), id_grupos=i + 1, r_min=x[1],
+                                           r_max=x[0], munic_code=post.get("mun_id"))
+
+                mySession.add(newRang1)
+            transaction.commit()
+
+        mySession.close()
+        return ["Correcto", "Rango guardado correctamente", "success"]
+    except:
+        return ["Error", "Sucedio un error al guardar este rango", "error"]
