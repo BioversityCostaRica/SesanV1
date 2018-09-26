@@ -10,6 +10,8 @@ from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, add
     valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser, getForm_By_User, \
     getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail, getRangeList, \
     sendGroup, updateUser, UpdateOrInsertRange, getDeptName, getUserDeptoID, getMunics, getUserByMunic
+
+from processes.get_pptx import genPPTX
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
     getXMLForm, storeSubmission
 from datetime import datetime
@@ -19,6 +21,7 @@ from .processes.setFormVals import newPilar, getPilarData, delPilar, updateVar, 
     forms_id, updateFU
 
 from processes.logs import log
+
 
 
 @view_config(route_name='profile', renderer='templates/profile.jinja2')
@@ -352,8 +355,14 @@ class report_view(privateView):
 
         msg = []
 
+
+
         date = self.request.url.split("/")[-1].split("_")
-        # print self.request.POST
+        resp=""
+        if "linkRep" in self.request.POST:
+            return genPPTX(self)
+
+            print "genPPTX()"
         # date = date.split("_")
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
@@ -438,10 +447,10 @@ class gtool_view(privateView):
             return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
                     "dates": self.request.cookies["cur_date"].split("_"),
                     "depto": getDeptName(getUserDeptoID(self.user.login)),
-                    "munics": getMunics(getUserDeptoID(self.user.login)), "sel_m":self.request.POST.get("if_munic")}
+                    "munics": getMunics(getUserDeptoID(self.user.login)), "sel_m":self.request.POST.get("if_munic"),  "title":"Departamento: "+getDeptName(getUserDeptoID(self.user.login))}
         else:
             return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
-                    "dates": self.request.cookies["cur_date"].split("_")}
+                    "dates": self.request.cookies["cur_date"].split("_"), "title":"Municipio: "+self.user.munic}
 
 
 @view_config(route_name='dashboard', renderer='templates/dashboard.jinja2')
@@ -529,6 +538,7 @@ class download_xls(privateView):
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
 
+
         if "genXLS" in self.request.POST:
             if self.user.user_role == 2:
 
@@ -537,7 +547,6 @@ class download_xls(privateView):
                 user_d = getUserData(getUserByMunic(date[2]))
                 user_d.user = user_d
                 user_d.request = self.request
-                print date
                 response = genXLS(user_d, getDashReportData(user_d, date[0], date[1]), date[0])
                 log(self.user.login, "download xls for %s-%s" % (str(date[0]), str(date[1])),
                     "normal",
@@ -582,7 +591,7 @@ class login_view(publicView):
                     response = HTTPFound(location=self.request.route_url('pilares'), headers=headers)
                 else:
                     response = HTTPFound(location=next, headers=headers)
-                response.set_cookie('_LOCALE_', value='es', max_age=31536000)
+                response.set_cookie('_LOCALE_', value='es', max_age=108000)
 
                 return response
             did_fail = True
@@ -718,9 +727,10 @@ class push_view(odkView):
 class submission_view(odkView):
     def processView(self):
         # userid = self.request.matchdict['userid']
+        print self.request.method
         if self.request.method == 'HEAD':
             if isUserActive(self.user):
-                headers = [('location',
+                headers = [('LOCATION',
                             self.request.route_url('odkpush', parent=getParent(self.user), user=self.user))]
                 response = Response(headerlist=headers, status=204)
                 return response

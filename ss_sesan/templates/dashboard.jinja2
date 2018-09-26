@@ -158,7 +158,7 @@
                                         <div class="ibox float-e-margins">
 
                                             <div class="ibox-title" style="font-size: 125% ">
-                                                <h5>Pilar : {{ p.decode("latin1") }}, indice de afectacion </h5>
+                                                <h5>Pilar : {{ p.decode("latin1") }}, indice de afectación </h5>
                                                 <h5 style="color: {{ dashData[p+"_alert"][2] }}">&nbsp;
                                                     {{ dashData[p+"_alert"][0] }}
                                                     ({{ dashData[p+"_alert"][1].decode('latin1').upper() }})</h5>
@@ -193,6 +193,10 @@
                                                                    value="{{ dashData.date[0] }} {{ dashData.date[1] }}"
                                                                    name="genXLS">
                                                                 {% endif %}
+
+                                                        <input type="hidden" id="map_bytes"
+                                                                   value=""
+                                                                   name="map_bytes">
                                                         </form>
 
                                                         <!--->
@@ -210,7 +214,7 @@
                                                         <th data-toggle="true" data-sortable="false">Indicador</th>
                                                         <th data-toggle="true" data-sortable="false"
                                                             class="text-center">
-                                                            Indice de variable
+                                                            Indice de afectación
                                                         </th>
 
                                                         <th data-hide="all"></th>
@@ -228,7 +232,7 @@
                                                             {#                                            <span title="47.20%" class="pie">47.20/100</span>#}
                                                             {#                                             &nbsp;&nbsp;&nbsp;&nbsp; Afectación Alta &nbsp;&nbsp;&nbsp;&nbsp;#}
                                                             <td class="text-center"><strong
-                                                                    style="">{{ dashData[p][ind]["val"][0] }}</strong>
+                                                                    style="color: {{ dashData[p][ind]["val"][1][0][0] }}">{{ dashData[p][ind]["val"][0] }}</strong>
                                                             </td>
 
                                                             <td>

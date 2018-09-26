@@ -382,13 +382,12 @@ $(document).ready(function () {
     });
 
 
-     $('#password2_').on('keyup', function () {
+    $('#password2_').on('keyup', function () {
         if ($('#password_').val() == $('#password2_').val()) {
             $('#message_').html('Correcto').css('color', 'green');
         } else
             $('#message_').html('Las contraseñas no coinciden').css('color', 'red');
     });
-
 
 
     $('#munic_list').on('change', function () {
@@ -417,7 +416,7 @@ $(document).ready(function () {
 
     });
 
-     $("#submit_pass").submit(function (e) {
+    $("#submit_pass").submit(function (e) {
 
         if ($('#password_').val() != $('#password2_').val()) {
             $('#message_').html('Las contraseñas deben coincidir').css('color', 'red');
@@ -631,10 +630,11 @@ function genMap() {
     //map_points2 = JSON.parse("[" + map_points.replace(/'/g, '"') + "]");
 
     var map_name = $('#map_name').val();
+    console.log("http://192.155.81.175/kml/" + map_name + ".kml");
     var kmlLayer = new google.maps.KmlLayer({
         url: "http://192.155.81.175/kml/" + map_name + ".kml",
         map: map1,
-        preserveViewport: true
+        preserveViewport: false
     });
     //kmlLayer.setMap(map1);
 
@@ -691,5 +691,27 @@ function genMap() {
     map1.setCenter({lat: lat, lng: lon});
 
     var legend = document.getElementById('legend');
-    map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend)
+    map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+    console.log("-----------");
+    //var bounds = kmlLayer.getDefaultViewport();
+    //map1.setCenter(bounds.getCenter());
+
+
+    //Display the Image of Google Map.
+
+    html2canvas($('#map1'),
+        {
+            useCORS: true,
+            onrendered: function (canvas) {
+                var dataUrl = canvas.toDataURL('image/png');
+                $("#map_bytes").val(dataUrl);
+                console.log("---****");
+
+            }
+        });
+    console.log("-----------");
+
+
+//map.fitBounds(bounds);
+
 }

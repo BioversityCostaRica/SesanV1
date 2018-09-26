@@ -28,7 +28,9 @@ requires = [
     'MySQL-python',
     'xlsxwriter',
     'pyxform',
-    'babel'
+    'babel',
+    'ruamel.ordereddict',
+    'python-pptx'
 ]
 
 tests_require = [

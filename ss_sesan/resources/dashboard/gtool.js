@@ -20,6 +20,7 @@ $(document).ready(function () {
 
 
     $("#if_munic").val( $('#dset3').val());
+    console.log($('#dset3').val());
     $("#dset3").on('change', function (e) {
         $("#if_munic").val( $('#dset3').val());
     });
@@ -87,7 +88,6 @@ $(document).ready(function () {
 
                 if (i == 0) {
                     for (j = 0; j < d.length; j++) {
-                        console.log(d[j].split('"').join(""));
 
                         if (j == 0) {
                             dataTable.addColumn('string', d[j].split('"').join(""));
@@ -143,12 +143,11 @@ $(document).ready(function () {
     function drawChart(dataTable) {
         var data = dataTable;
 
-        console.log(data);
 
         var wrapper = new google.visualization.ChartWrapper({
             chartType: 'LineChart',
             dataTable: data,
-            title: 'Datos disponibles',
+            options: {'title': $("#plot_title").val()},
             legend: {position: 'bottom'},
             container: document.getElementById('chart')
         });

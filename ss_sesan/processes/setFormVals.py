@@ -56,8 +56,8 @@ def newPilar(jsondata, user):
     # try:
     mySession = DBSession()
     data = ast.literal_eval(jsondata)
-    newPi = Pilare(name_pilares=data["pilarName"], coef_pond=int(data["coef_pond"]), user_name=user,
-                   pilar_desc=data["desc"])
+    newPi = Pilare(name_pilares=data["pilarName"].decode("utf-8"), coef_pond=int(data["coef_pond"]), user_name=user,
+                   pilar_desc=data["desc"].decode("utf-8"))
     transaction.begin()
     mySession.add(newPi)
     transaction.commit()
@@ -78,7 +78,7 @@ def newPilar(jsondata, user):
     transaction.commit()
 
     for i in data["ind"]:
-        newInd = Indicadore(Id_pilares=id, name_indicadores=i)
+        newInd = Indicadore(Id_pilares=id, name_indicadores=i.decode("utf-8"))
         transaction.begin()
         mySession.add(newInd)
         transaction.commit()
@@ -447,10 +447,10 @@ def genForm_Files(login, pilarId, request, fname, if_sel):
             ["deviceid", "device_id_3", "", "", "", "", "", "", ""],
             ["note", "notex", "%s, SESAN %s" % (fname, str(now.year)), "", "", "", "", "", ""],
             ["begin group", "grpx", "", "", "", "", "", "", "field-list"],
-            ["text", "txt_rep_muni_comusan_4", u"Nombre de la persona que recopila la información", "", "", "", "yes",
+            ["text", "txt_rep_muni_comusan_4", u"1-Nombre de la persona que recopila la información", "", "", "", "yes",
              "",
              u"Debe ingresar el nombre de la persona que recopila la información"],
-            ["date", "date_fecha_informe_6", "Fecha a la que corresponde el informe", "", "", "", "yes", "",
+            ["date", "date_fecha_informe_6", "2-Fecha a la que corresponde el informe", "", "", "", "yes", "",
              "month-year"],
             ["end group", "grpx", "", "", "", "", "", "", ""],
 
@@ -463,14 +463,14 @@ def genForm_Files(login, pilarId, request, fname, if_sel):
             ["deviceid", "device_id_3", "", "", "", "", "", "", ""],
             ["note", "notex", "%s, SESAN %s" % (fname, str(now.year)), "", "", "", "", "", ""],
             ["begin group", "grpx", "", "", "", "", "", "", "field-list"],
-            ["text", "txt_rep_muni_comusan_4", u"Nombre de la persona que recopila la información", "", "", "", "yes",
+            ["text", "txt_rep_muni_comusan_4", u"1-Nombre de la persona que recopila la información", "", "", "", "yes",
              "",
              u"Debe ingresar el nombre de la persona que recopila la información"],
-            ["date", "date_fecha_informe_6", "Fecha a la que corresponde el informe", "", "", "", "yes", "",
+            ["date", "date_fecha_informe_6", "2-Fecha a la que corresponde el informe", "", "", "", "yes", "",
              "month-year"],
             ["select_one lista_curb" , "sem_comunidad_totales",
-             "Seleccione la comunidad que esta reportando",
-             "", "", "", "", "", "minimal search('curbanos')"],
+             "3-Seleccione la comunidad que esta reportando",
+             "", "", "", "", "", "search('curbanos')"],
             ["end group", "grpx", "", "", "", "", "", "", ""],
 
         ]
@@ -482,13 +482,13 @@ def genForm_Files(login, pilarId, request, fname, if_sel):
             ["deviceid", "device_id_3", "", "", "", "", "", "", ""],
             ["note", "notex", "%s, SESAN %s" % (fname, str(now.year)), "", "", "", "", "", ""],
             ["begin group", "grpx", "", "", "", "", "", "", "field-list"],
-            ["text", "txt_rep_muni_comusan_4", u"Nombre de la persona que recopila la información", "", "", "", "yes",
+            ["text", "txt_rep_muni_comusan_4", u"1-Nombre de la persona que recopila la información", "", "", "", "yes",
              "",
              u"Debe ingresar el nombre de la persona que recopila la información"],
-            ["date", "date_fecha_informe_6", "Fecha a la que corresponde el informe", "", "", "", "yes", "",
+            ["date", "date_fecha_informe_6", "2-Fecha a la que corresponde el informe", "", "", "", "yes", "",
              "month-year"],
             ["select_multiple lista_curb", "sem_comunidad_totales",
-             "Seleccione la o las comunidades incluidas en este reporte",
+             "3-Seleccione la o las comunidades incluidas en este reporte",
              "", "", "", "", "", "minimal search('curbanos')"],
             ["end group", "grpx", "", "", "", "", "", "", ""],
 
@@ -497,7 +497,7 @@ def genForm_Files(login, pilarId, request, fname, if_sel):
 
 
     pilarId = pilarId.split(",")
-
+    cont= 3
     for p in pilarId:
         result = mySession.query(Pilare).filter(Pilare.id_pilares == p).first()
         questions.append(
@@ -513,11 +513,12 @@ def genForm_Files(login, pilarId, request, fname, if_sel):
             variables = mySession.query(VariablesInd).filter(VariablesInd.id_indicadores == i.id_indicadores).all()
             for v in variables:
                 questions.append(
-                    ["decimal", v.code_variable_ind, v.v_pregunta, "Medida: " + v.unidad_variable_ind,
+                    ["decimal", v.code_variable_ind, str(cont) + "- "+v.v_pregunta, "Medida: " + v.unidad_variable_ind,
                      ".>=" + str(0), "El valor debe ser mayor o igual que " + str(0), "yes",
                      #".<=" + str(v.var_max), "El valor debe ser menor o igual que " + str(v.var_max), "yes",
                      "Complete: " + v.v_pregunta, ""])
                 # agregar a variables ind_hint, regla, mensaje de error, y requiered
+                cont=cont+1
             questions.append(["end group", "grp" + str(i.id_indicadores), "", "", "", "", "", "", ""])
 
     questions.append(["begin group", "grp_signature", "", "", "", "", "", "", "field-list"])
@@ -705,6 +706,24 @@ def genForm_Files(login, pilarId, request, fname, if_sel):
                     msg = msg + e.message
                     print msg
                     return e
+    if not error:  # alter surveyid lenth
+        args = []
+        args.append("mysql")
+        args.append("--defaults-file=" + cnfFile)
+        args.append(
+            "--execute=ALTER TABLE %s.maintable MODIFY COLUMN surveyid VARCHAR(150)" % (
+                'DATA_' + login + '_' + fname.title().replace(' ', '_')))
+
+        try:
+            check_call(args)
+        except CalledProcessError as e:
+            msg = "Error: alter surveyid in maintable \n"
+            msg = msg + "Commang: ALTER TABLE\n"
+            msg = msg + "Error: \n"
+            msg = msg + e.message
+            print msg
+            return e
+
 
     if not error:
         xls2xform.xls2xform_convert(path, path.replace(".xlsx", ".xml"))

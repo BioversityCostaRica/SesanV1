@@ -16,10 +16,10 @@ function genIMG_64() {
 
     try {
 
-        html2canvas($("#sit_san"), {
+        html2canvas($("#sit_min"), {
             onrendered: function (canvas) {
 
-                var data = canvas.toDataURL("image/png", 0.50);
+                var data = canvas.toDataURL("image/png", 0.5);
 
                 $("#pptx_img").val(data);
                 $("#linkRep").prop("disabled", false);
@@ -43,6 +43,22 @@ function genIMG_64() {
             }
 
         });
+
+        html2canvas($("#table_pilar"), {
+            onrendered: function (canvas) {
+
+                var data = canvas.toDataURL("image/png");
+
+                $("#pptx_img3").val(data);
+
+
+                //$("#linkRep").prop("disabled",false);
+
+
+            }
+
+        });
+
 
 
     }

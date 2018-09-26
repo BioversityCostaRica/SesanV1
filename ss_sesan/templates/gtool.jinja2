@@ -1,6 +1,6 @@
 {% extends 'dashboard.jinja2' %}
 {% block title %}
-    <title>SESAN | GTool</title>
+    <title>SESAN | Herramientas</title>
 
 {% endblock title %}
 
@@ -12,7 +12,7 @@
 
         </div>
         <div class="col-sm-8 text-center">
-            <h2>GTool</h2>
+            <h2>Herramientas</h2>
         </div>
     </div>
 {% endblock pageheading %}
@@ -36,6 +36,8 @@
                 <div class="row m-b-sm m-t-sm">
                     <div class="form-group text-center">
                         <input type="hidden" id="filldata" value="{{ filldata }}">
+
+
                         <div class="col-sm-3">
                             <select id="dset" name="dset"
                                     data-placeholder="Seleccione un set de datos..."
@@ -60,7 +62,7 @@
 
                         </div>
 
-
+                    <input type="hidden" id="plot_title" value="{{ title }}">
                     {% if activeUser.user_role==2 %}
                     <div class="col-sm-3">
                             <select id="dset3" name="dset3"
@@ -79,6 +81,8 @@
                             </select>
 
                         </div>
+
+
                     {% endif %}
 
                         <div class="col-sm-1">
