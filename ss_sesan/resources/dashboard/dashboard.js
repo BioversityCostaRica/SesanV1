@@ -692,24 +692,35 @@ function genMap() {
 
     var legend = document.getElementById('legend');
     map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
-    console.log("-----------");
-    //var bounds = kmlLayer.getDefaultViewport();
-    //map1.setCenter(bounds.getCenter());
+/*    console.log("-----------");
 
+    var bounds = kmlLayer.getDefaultViewport();
+    console.log(bounds);
+    var staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap";
 
-    //Display the Image of Google Map.
+    //Set the Google Map Center.
+    staticMapUrl += "?center=" + lat + "," + lon;
 
-    html2canvas($('#map1'),
-        {
-            useCORS: true,
-            onrendered: function (canvas) {
-                var dataUrl = canvas.toDataURL('image/png');
-                $("#map_bytes").val(dataUrl);
-                console.log("---****");
+    //Set the Google Map Size.
+    staticMapUrl += "&size=350x350";
 
-            }
-        });
-    console.log("-----------");
+    //Set the Google Map Zoom.
+    staticMapUrl += "&zoom=" + mapOptions1.zoom;
+    staticMapUrl += "&maptype=roadmap";
+
+    //Set the Google Map Type.
+
+    //Loop and add Markers.
+    for (var i = 0; i < map_points2.length; i++) {
+
+            var markers =map_points2[i].split(",");
+             console.log(markers);
+            staticMapUrl += "&markers=color:red|" + markers[2].replace(" ", "") + "," + markers[3].replace(" ", "");
+        }
+
+    console.log(staticMapUrl + "?key=AIzaSyA_1coZbWdL20_tvxQ3VwcL6XtZX5Yr91E");
+
+    console.log("-----------");*/
 
 
 //map.fitBounds(bounds);
