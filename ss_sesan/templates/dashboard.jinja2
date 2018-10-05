@@ -370,7 +370,7 @@
 
 
                     {% if activeUser.user_role!=1  %}
-                        <div class="col-md-3">
+                        <div class="col-md-3 row">
                             <div class="ibox-content form-group" id="data_4">
                                 <form role="form" method="POST" action="{{ request.path }}" id="newMonth"
                                       enctype='multipart/form-data'>
@@ -411,14 +411,18 @@
 
                                 {% if dashData.signatures %}
                                     <br>
+                                    <p>
                                     {% for s in dashData.signatures %}
-                                        <a class="btn btn-primary btn-facebook btn-outline" style="display: block"
+                                        <a class="btn btn-primary btn-facebook btn-outline" style="display: block;white-space: normal;"
                                            data-toggle="modal" data-target="#myModal{{ loop.index0 }}">
                                             <i class="fa fa-check"> </i> Firma: {{ s[2].replace("_", " ") }}
                                         </a>
+
+
+
                                         <br>
                                     {% endfor %}
-
+                                    </p>
                                     <h3>Cobertura en comunidades {{ dashData.coverage }} %</h3>
 
 

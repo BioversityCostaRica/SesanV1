@@ -46,11 +46,26 @@ $(document).ready(function () {
 
     function update_text() {
 
+        if (left_to_rigth) {
+            $("#rang1_" + vId).html("Sin afectacion:" + $('#var_min_' + vId).val() + " - " + vals[0]);
+            $("#rang2_" + vId).html("Afectacion Moderada:" + (Number(vals[0]) + 1).toString() + " - " + vals[1]);
+            $("#rang3_" + vId).html("Afectacion Alta:" + (Number(vals[1]) + 1).toString() + " - " + vals[2]);
+            $("#rang4_" + vId).html("Afectacion muy alta:" + (Number(vals[2]) + 1).toString() + " - " + $('#var_max_' + vId).val());
+        }
+        else {
 
-        $("#rang1_" + vId).html("Sin afectacion: " + $('#var_min_' + vId).val() + " - " + vals[0]);
-        $("#rang2_" + vId).html("Afectacion Moderada: " + (Number(vals[0]) + 1).toString() + " - " + vals[1]);
-        $("#rang3_" + vId).html("Afectacion Alta: " + (Number(vals[1]) + 1).toString() + " - " + vals[2]);
-        $("#rang4_" + vId).html("Afectacion muy alta: " + (Number(vals[2]) + 1).toString() + " - " + $('#var_max_' + vId).val());
+
+            $("#rang1_" + vId).html("Afectacion muy alta:" + $('#var_min_' + vId).val() + " - " + vals[0]);
+            $("#rang2_" + vId).html("Afectacion Alta:" + (Number(vals[0]) + 1).toString() + " - " + vals[1]);
+            $("#rang3_" + vId).html("Afectacion Moderada:" + (Number(vals[1]) + 1).toString() + " - " + vals[2]);
+            $("#rang4_" + vId).html("Sin afectacion:" + (Number(vals[2]) + 1).toString() + " - " + $('#var_max_' + vId).val());
+
+            /*
+             $("#rang4_" + vId).html("Sin afectacion:" + $('#var_min_' + vId).val() + " - " + vals[0]);
+            $("#rang3_" + vId).html("Afectacion Moderada:" + (Number(vals[0]) + 1).toString() + " - " + vals[1]);
+            $("#rang2_" + vId).html("Afectacion Alta:" + (Number(vals[1]) + 1).toString() + " - " + vals[2]);
+            $("#rang1_" + vId).html("Afectacion muy alta:" + (Number(vals[2]) + 1).toString() + " - " + $('#var_max_' + vId).val());*/
+        }
 
 
     }
@@ -106,6 +121,7 @@ $(document).ready(function () {
                     'max': [max]
                 },
                 tooltips: false,
+                behaviour: 'extend'
                 //format: "v",
 
             });
@@ -126,16 +142,25 @@ $(document).ready(function () {
             });
 
             $("#rotate_" + vd[v]).click(function () {
+                vvd = this.id.split("_")[1];
 
                 var connect = current.querySelectorAll('.noUi-connect');
                 if (!left_to_rigth) {
 
                     var color = ["#11c300", "#ffe132", "#ff9936", "#ff1313"];
                     left_to_rigth = true;
+                    $("#rang1_" + vvd).html("Sin afectacion:" + $("#rang1_" + vvd).html().split(":")[1]);
+                    $("#rang2_" + vvd).html("Afectacion Moderada:" + $("#rang2_" + vvd).html().split(":")[1]);
+                    $("#rang3_" + vvd).html("Afectacion Alta:" + $("#rang3_" + vvd).html().split(":")[1]);
+                    $("#rang4_" + vvd).html("Afectacion muy alta:" + $("#rang4_" + vvd).html().split(":")[1]);
                 }
                 else {
                     var color = ["#ff1313", "#ff9936", "#ffe132", "#11c300"];
                     left_to_rigth = false;
+                    $("#rang4_" + vvd).html("Sin afectacion:" + $("#rang4_" + vvd).html().split(":")[1]);
+                    $("#rang3_" + vvd).html("Afectacion Moderada:" + $("#rang3_" + vvd).html().split(":")[1]);
+                    $("#rang2_" + vvd).html("Afectacion Alta:" + $("#rang2_" + vvd).html().split(":")[1]);
+                    $("#rang1_" + vvd).html("Afectacion muy alta:" + $("#rang1_" + vvd).html().split(":")[1]);
                 }
 
 
@@ -185,7 +210,7 @@ $(document).ready(function () {
 
 
             $('#var_max_' + vd[v]).bind('input', function () {
-
+                console.log($('#var_max_' + vId).val());
                 if (verify_max_min()) {
                     current.noUiSlider.updateOptions({
                         range: {
@@ -258,17 +283,17 @@ $(document).ready(function () {
         //$("#var_min_"+ vId).val("");
         $("#incon_msj_" + vId).css({"color": "white"});
 
-        console.log(obs);
+
         for (var i = 0; i < obs.length; i++) {
             if (obs[i][0] == vId) {
                 current = obs[i][1];
             }
         }
 
-
         if (parseInt($("#p_lv1_" + vId).val()) < parseInt($("#p_lv3_" + vId).val())) {
             var color = ["#11c300", "#ffe132", "#ff9936", "#ff1313"];
             left_to_rigth = true;
+            console.log(left_to_rigth);
             min = parseInt($("#var_min_" + vId).val());
             max = parseInt($("#var_max_" + vId).val());
 
@@ -280,6 +305,7 @@ $(document).ready(function () {
         else {
             var color = ["#ff1313", "#ff9936", "#ffe132", "#11c300"];
             left_to_rigth = false;
+            console.log(left_to_rigth);
             min = parseInt($("#var_min_" + vId).val());
             max = parseInt($("#var_max_" + vId).val());
 
@@ -310,6 +336,8 @@ $(document).ready(function () {
 
         current.noUiSlider.on('update', function (values) {
 
+            max=$("#var_max_" + vId).val();
+            min=$("#var_min_" + vId).val();
 
             vals = values;
 
@@ -318,28 +346,28 @@ $(document).ready(function () {
 
 
             var r1, r2, r3, r4;
-            min = parseInt($("#var_min_" + id).val());
-            max = parseInt($("#var_max_" + id).val());
-            if (min < max) {
 
-
+            if (left_to_rigth) {
                 r1 = min.toString() + "-" + vals[0];
                 r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
                 r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
                 r4 = (Number(vals[2]) + 1).toString() + "-" + max.toString();
+                $("#rang1_" + id).html("Sin afectacion:" + r1);
+                $("#rang2_" + id).html("Afectacion Moderada:" + r2);
+                $("#rang3_" + id).html("Afectacion Alta:" + r3);
+                $("#rang4_" + id).html("Afectacion muy alta:" + r4);
             }
             else {
-
-                r1 = max.toString() + "-" + vals[0];
-                r2 = (Number(vals[0]) + 1).toString() + "-" + vals[1];
-                r3 = (Number(vals[1]) + 1).toString() + "-" + vals[2];
-                r4 = (Number(vals[2]) + 1).toString() + "-" + min.toString();
+                r1 =vals[2]+"-"+ max.toString();
+                r2 = (Number(vals[1])).toString() + "-" + +(Number(vals[2])-1).toString();
+                r3 = (Number(vals[0])).toString() + "-" +(Number(vals[1])-1).toString();
+                r4 = min.toString() +"-"+(Number(vals[0]) - 1).toString();
+                $("#rang4_" + id).html("Sin afectacion:" + r1);
+                $("#rang3_" + id).html("Afectacion Moderada:" + r2);
+                $("#rang2_" + id).html("Afectacion Alta:" + r3);
+                $("#rang1_" + id).html("Afectacion muy alta:" + r4);
             }
 
-            $("#rang1_" + id).html("Sin afectacion:" + r1);
-            $("#rang2_" + id).html("Afectacion Moderada:" + r2);
-            $("#rang3_" + id).html("Afectacion Alta:" + r3);
-            $("#rang4_" + id).html("Afectacion muy alta:" + r4);
 
         });
 

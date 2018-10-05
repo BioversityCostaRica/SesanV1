@@ -178,8 +178,9 @@ class ranges_view(privateView):
         range = []
         varsR_id = []
         msg = []
-
         if "saveRange" in self.request.POST:
+
+
             msg = UpdateOrInsertRange(self.request.POST);
 
             fill_regN["sel"] = int(self.request.POST.get("mun_id", ""))
@@ -283,7 +284,6 @@ class pilares_view(privateView):
         pilarCSS_JS.need()
 
         msg = []
-        # print self.request.POST
         if "jsondata" in self.request.POST:
             msg = newPilar(self.request.POST.get("jsondata", ""), self.user.login)
             data = ast.literal_eval(self.request.POST.get("jsondata", ""))
@@ -359,23 +359,35 @@ class report_view(privateView):
 
         date = self.request.url.split("/")[-1].split("_")
         resp=""
-        if "linkRep" in self.request.POST:
-            return genPPTX(self)
 
-            print "genPPTX()"
         # date = date.split("_")
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
 
         log(self.user.login, "report generated for " + "_".join(date), "normal", "4")
+        print self.request.POST
+        if "linkRep" in self.request.POST:
+            if self.user.user_role == 2:
+                user_d = getUserData(getUserByMunic(getMunicId(self.request.POST.get("rep_mun"))))
+
+                if user_d == "ND":
+                    msg = ["Info", "No hay ningun monitor asignado a este municipio", "info"]
+                    data_rep = {}
+                else:
+                    user_d.user = user_d
+                    user_d.request = self.request
+                    return genPPTX(user_d, date)
+            else:
+                return genPPTX(self, date)
 
         if self.user.user_role == 2:
+            #if "linkRep" in self.request.POST:
+            #    return genPPTX(self, date)
             user_d = getUserData(getUserByMunic(self.request.POST.get("munic_sel")))
             if user_d == "ND":
                 msg = ["Info", "No hay ningun monitor asignado a este municipio", "info"]
                 data_rep = {}
             else:
-
                 user_d.user = user_d
                 user_d.request = self.request
 
@@ -386,6 +398,9 @@ class report_view(privateView):
                 , "munics": getMunics(getUserDeptoID(self.user.login)), "msg": msg,
                     "sel_m": self.request.POST.get("munic_sel")}
         else:
+            if "linkRep" in self.request.POST:
+                return genPPTX(self, date)
+
             return {'activeUser': self.user, "date": int(meses.index(date[0])) + 1,
                     "dataReport": dataReport(self, str(int(meses.index(date[0])) + 1), str(date[1])), "dates": date,
                     "msg": msg}
@@ -415,7 +430,7 @@ class gtool_view(privateView):
                     user_d = getUserData(getUserByMunic(self.request.POST.get("if_munic")))
 
                     #user_d = getUserData(getUserByMunic(self.request.POST.get("munic_sel")))
-                    print user_d
+
                     if user_d == "ND":
                         msg = ["Info", "No hay ningun monitor asignado a este municipio", "info"]
                         data4plot = []
@@ -525,7 +540,7 @@ class dashboard_view(privateView):
             return {'activeUser': self.user, "dashData": dashData, "report": True,
                     "depto": getDeptName(getUserDeptoID(self.user.login)),
                     "munics": getMunics(getUserDeptoID(self.user.login)), "msg": msg,
-                    "sel_m": self.request.POST.get("munic_sel")}
+                    "sel_m": self.request.POST.get("munic_sel"), "munid":self.request.POST.get("munic_sel")}
         else:
             return {'activeUser': self.user, "dashData": dashData, "report": True, "munid": getMunicId(self.user.munic),
                     "msg": msg}
@@ -591,7 +606,7 @@ class login_view(publicView):
                     response = HTTPFound(location=self.request.route_url('pilares'), headers=headers)
                 else:
                     response = HTTPFound(location=next, headers=headers)
-                response.set_cookie('_LOCALE_', value='es', max_age=108000)
+                response.set_cookie('_LOCALE_', value='es', max_age=1080000)
 
                 return response
             did_fail = True

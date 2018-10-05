@@ -47,7 +47,7 @@ function genIMG_64() {
         html2canvas($("#table_pilar"), {
             onrendered: function (canvas) {
 
-                var data = canvas.toDataURL("image/png");
+                var data = canvas.toDataURL("image/png",0.5);
 
                 $("#pptx_img3").val(data);
 

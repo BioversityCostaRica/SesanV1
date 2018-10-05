@@ -60,7 +60,6 @@ def dataReport(self, month, year):
     mySession = DBSession()
 
     if not valReport(self, month, year):
-        # print "-------------------"
         return {}
 
     data = {}
@@ -229,7 +228,6 @@ def getSAN(value):
 
 def valReport(self, month, year):
     mySession = DBSession()
-    # print self.user.login
     my_forms = mySession.query(FormsByUser.idforms).filter(FormsByUser.id_user == self.user.login)
     myDB = []
     if not my_forms is None:
@@ -654,6 +652,7 @@ def getLB(id_var, munic):
 
 def getUserByMunic(munic):
     mySession = DBSession()
+    print munic
     result = mySession.query(User.user_name).filter(User.user_munic == munic).first()
     if result:
         user = result.user_name
@@ -1173,9 +1172,7 @@ def getMunics(dep):
         res["munic"].append([int(i.munic_id), i.munic_nombre, int(i.cod_depto)])
 
     mySession.close()
-    print res["munic"]
     res["munic"].sort()
-    print res["munic"]
     return res
 
 

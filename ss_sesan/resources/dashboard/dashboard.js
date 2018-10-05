@@ -431,7 +431,7 @@ $(document).ready(function () {
         var pltData = $("#pltData1").val().split("-");
         var pltData2 = $("#pltData2").val().split("-");
         var doughnutData = {
-            labels: ["Lluvia", "No lluvia"],
+            labels: ["% Dias: "+(100 / parseInt(pltData[0])) * parseInt(pltData[1]).toString()],
             datasets: [{
                 data: [(100 / parseInt(pltData[0])) * parseInt(pltData[1]), 100 - (100 / parseInt(pltData[0]) ) * parseInt(pltData[1])],
                 backgroundColor: ["#1AB394", "#dedede"]
@@ -440,9 +440,9 @@ $(document).ready(function () {
 
 
         var doughnutOptions = {
-            responsive: false,
+            responsive: true,
             legend: {
-                display: false
+                display: true
             },
             tooltips: {
                 enabled: false
@@ -453,7 +453,7 @@ $(document).ready(function () {
         new Chart(ctx4, {type: 'doughnut', data: doughnutData, options: doughnutOptions});
 
         var doughnutData = {
-            labels: ["% de Ninos", " "],
+            labels: ["% Afectacion: "+parseInt(pltData2[0]).toString()],
             datasets: [{
                 data: [parseInt(pltData2[0]), parseInt(pltData2[1])],
                 backgroundColor: ["#1AB394", "#dedede"]
@@ -462,9 +462,9 @@ $(document).ready(function () {
 
 
         var doughnutOptions = {
-            responsive: false,
+            responsive: true,
             legend: {
-                display: false
+                display: true
             },
             tooltips: {
                 enabled: false
