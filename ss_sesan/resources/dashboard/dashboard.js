@@ -1,4 +1,88 @@
 $(document).ready(function () {
+    function getFiles() {
+
+        $.ajax({
+            type: "POST",
+            url: "uploadfiles",
+            data: {"getFiles": "1", "date": $("#cur_date").val()},
+            dataType: 'json',
+            statusCode: {
+                201: function (data, textStatus, jqXHR) {
+
+                    $("#fil").remove();
+
+                    var container = $('#container');
+                    var table = $('<table id="fil" class="table table-hover header-fixed">');
+                    table.append('<thead><th>Nombre</th><th class="text-center"></th></thead>');
+                    var tr = $('<tbody>');
+                    for (i = 0; i < data["ff"].length; i++) {
+                        row = data["ff"][i].split("/").slice(-1)[0];
+                        //durl=/downfiles/{parent}/{user}/{file}
+
+                        //durl=/downfiles/{parent}/{user}/{file}
+
+                        var origin = window.location.origin;
+
+
+                        dir = origin + /downfiles/ + $("#parent").val() + "/user/" + $("#uname").val() + "/attach/" + $("#cur_date").val() + "/" + row;
+                        del = origin + /downfiles/ + $("#parent").val() + "/user/" + $("#uname").val() + "/attach/" + $("#cur_date").val() + "/" + row + "_delfile";
+
+                        row = '<a href="' + dir + '">' + row + '</a>';
+
+                        tr.append('<tr><td>' + row + '</td><td class="text-center"><a class="btn btn-danger btn-circle" href="' + del + '" ><i class="fa fa-times"></i></a><td></tr>');
+
+
+                    }
+                    table.append(tr);
+                    container.append(table);
+                    $("#file_name").html("");
+
+
+                },
+
+            },
+
+        });
+
+    };
+
+    route = window.location.toString().split("/")[3];
+
+    if (route == "dashboard") {
+        getFiles();
+    }
+
+
+    $("#file_name").on('DOMSubtreeModified', function () {
+
+        if ($(this).html() != "") {
+
+
+            let photo = document.getElementById("filefull").files[0];
+
+            let formData = new FormData();
+            //formData.append("file", $(this).html());
+            formData.append("userfile", photo)
+            formData.append("date", $("#cur_date").val());
+
+            // formData.append("user", JSON.stringify(user));   // you can add also some json data to formData like e.g. user = {name:'john', age:34}
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", 'uploadfiles');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState > 3 && xhr.status == 201) {
+                    getFiles();
+                }
+                ;
+            };
+            xhr.send(formData);
+
+
+        }
+
+
+    });
+
 
     //---Wizard---------------------
 
@@ -382,13 +466,12 @@ $(document).ready(function () {
     });
 
 
-     $('#password2_').on('keyup', function () {
+    $('#password2_').on('keyup', function () {
         if ($('#password_').val() == $('#password2_').val()) {
             $('#message_').html('Correcto').css('color', 'green');
         } else
             $('#message_').html('Las contraseñas no coinciden').css('color', 'red');
     });
-
 
 
     $('#munic_list').on('change', function () {
@@ -400,8 +483,6 @@ $(document).ready(function () {
 
 
     $("#submit").submit(function (e) {
-
-        console.log(document.activeElement.id); // name of submit button
         if ($('#munic_list option:selected').val() == '') {
             $('#m_munic').html('Seleccione un municipio').css('color', 'red');
             e.preventDefault();
@@ -417,7 +498,7 @@ $(document).ready(function () {
 
     });
 
-     $("#submit_pass").submit(function (e) {
+    $("#submit_pass").submit(function (e) {
 
         if ($('#password_').val() != $('#password2_').val()) {
             $('#message_').html('Las contraseñas deben coincidir').css('color', 'red');
@@ -432,7 +513,7 @@ $(document).ready(function () {
         var pltData = $("#pltData1").val().split("-");
         var pltData2 = $("#pltData2").val().split("-");
         var doughnutData = {
-            labels: ["Lluvia", "No lluvia"],
+            labels: ["% Dias: " + (100 / parseInt(pltData[0])) * parseInt(pltData[1]).toString()],
             datasets: [{
                 data: [(100 / parseInt(pltData[0])) * parseInt(pltData[1]), 100 - (100 / parseInt(pltData[0]) ) * parseInt(pltData[1])],
                 backgroundColor: ["#1AB394", "#dedede"]
@@ -441,9 +522,9 @@ $(document).ready(function () {
 
 
         var doughnutOptions = {
-            responsive: false,
+            responsive: true,
             legend: {
-                display: false
+                display: true
             },
             tooltips: {
                 enabled: false
@@ -454,7 +535,7 @@ $(document).ready(function () {
         new Chart(ctx4, {type: 'doughnut', data: doughnutData, options: doughnutOptions});
 
         var doughnutData = {
-            labels: ["% de Ninos", " "],
+            labels: ["% Afectacion: " + parseInt(pltData2[0]).toString()],
             datasets: [{
                 data: [parseInt(pltData2[0]), parseInt(pltData2[1])],
                 backgroundColor: ["#1AB394", "#dedede"]
@@ -463,9 +544,9 @@ $(document).ready(function () {
 
 
         var doughnutOptions = {
-            responsive: false,
+            responsive: true,
             legend: {
-                display: false
+                display: true
             },
             tooltips: {
                 enabled: false
@@ -475,7 +556,7 @@ $(document).ready(function () {
 
         var ctx4 = document.getElementById("doughnutChart").getContext("2d");
         new Chart(ctx4, {type: 'doughnut', data: doughnutData, options: doughnutOptions});
-
+        //$("#doughnutChart").hide();
     }
     catch (err) {
 
@@ -549,7 +630,6 @@ function showPDF() {
 
      collapse();*/
 }
-
 
 function genMap() {
     var mapOptions1 = {
@@ -630,66 +710,77 @@ function genMap() {
     //map_points2 = map_points.split("], [");
     //map_points2 = JSON.parse("[" + map_points.replace(/'/g, '"') + "]");
 
+
+
+     var lat = [];
+     var lon = [];
+
+
+     for (i = 0; i < map_points2.length; i++) {
+     var row = map_points2[i].split(",");
+
+     var marker = new google.maps.Marker({
+
+     position: {
+     lat: parseFloat(row[2].toString().replace(" ", "")),
+     lng: parseFloat(row[3].toString().replace(" ", ""))
+     },
+
+     map: map1,
+     title: row[1].split("'").join(""),
+     //label: { text: map_points2[0][i].vals[0][1] },
+
+     icon: {
+     path: google.maps.SymbolPath.CIRCLE,
+     scale: 8.5,
+     fillColor: row[4].split("'").join(""),
+     fillOpacity: 0.4,
+     strokeWeight: 0.4
+     },
+     //icon: 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=0ahUKEwjN6OaB79rYAhWDyVMKHeehAwMQjBwIBA&url=https%3A%2F%2Fwww.pr7.it%2Fwp-content%2Fuploads%2F2013%2F04%2Fpr7-green-point.png&psig=AOvVaw26MJGpQogf07H2wF4a7xiV&ust=1516136566665061'
+     });
+
+     if (!lat.includes(parseFloat(row[2].toString().replace(" ", "")))) {
+     lat.push(parseFloat(row[2].toString().replace(" ", "")))
+     }
+
+     if (!lon.includes(parseFloat(row[3].toString().replace(" ", "")))) {
+     lon.push(parseFloat(row[3].toString().replace(" ", "")))
+     }
+     }
+     ;
+
+
+     var total = 0;
+     for (var i in lat) {
+     total += lat[i];
+     }
+     ;
+     lat = total / lat.length;
+     total = 0;
+     for (var i in lon) {
+     total += lon[i];
+     }
+     ;
+     lon = total / lon.length;
+     map1.setCenter({lat: lat, lng: lon});
+
+     var legend = document.getElementById('legend');
+     map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+
+
     var map_name = $('#map_name').val();
+    console.log("http://190.111.0.168/kml/" + map_name + ".kml");
     var kmlLayer = new google.maps.KmlLayer({
-        url: "http://192.155.81.175/kml/" + map_name + ".kml",
+        url: "http://190.111.0.168/kml/" + map_name + ".kml",
         map: map1,
-        preserveViewport: true
+        preserveViewport: false
     });
+
     //kmlLayer.setMap(map1);
 
 
-    var lat = [];
-    var lon = [];
 
-
-    for (i = 0; i < map_points2.length; i++) {
-        var row = map_points2[i].split(",");
-
-        var marker = new google.maps.Marker({
-
-            position: {
-                lat: parseFloat(row[2].toString().replace(" ", "")),
-                lng: parseFloat(row[3].toString().replace(" ", ""))
-            },
-
-            map: map1,
-            title: row[1].split("'").join(""),
-            //label: { text: map_points2[0][i].vals[0][1] },
-
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                scale: 8.5,
-                fillColor: row[4].split("'").join(""),
-                fillOpacity: 0.4,
-                strokeWeight: 0.4
-            },
-            //icon: 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=0ahUKEwjN6OaB79rYAhWDyVMKHeehAwMQjBwIBA&url=https%3A%2F%2Fwww.pr7.it%2Fwp-content%2Fuploads%2F2013%2F04%2Fpr7-green-point.png&psig=AOvVaw26MJGpQogf07H2wF4a7xiV&ust=1516136566665061'
-        });
-
-        if (!lat.includes(parseFloat(row[2].toString().replace(" ", "")))) {
-            lat.push(parseFloat(row[2].toString().replace(" ", "")))
-        }
-
-        if (!lon.includes(parseFloat(row[3].toString().replace(" ", "")))) {
-            lon.push(parseFloat(row[3].toString().replace(" ", "")))
-        }
-    }
-
-    var total = 0;
-    for (var i in lat) {
-        total += lat[i];
-    }
-    ;
-    lat = total / lat.length;
-    total = 0;
-    for (var i in lon) {
-        total += lon[i];
-    }
-    ;
-    lon = total / lon.length;
-    map1.setCenter({lat: lat, lng: lon});
-
-    var legend = document.getElementById('legend');
-    map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend)
 }
+
+

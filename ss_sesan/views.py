@@ -9,7 +9,9 @@ from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
     valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser, getForm_By_User, \
     getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail, getRangeList, \
-    sendGroup, updateUser, UpdateOrInsertRange, getDeptName, getUserDeptoID, getMunics, getUserByMunic
+    sendGroup, updateUser, UpdateOrInsertRange, getDeptName, getUserDeptoID, getMunics, getUserByMunic,getFilesList
+
+from processes.get_pptx import genPPTX
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
     getXMLForm, storeSubmission
 from datetime import datetime
@@ -18,7 +20,8 @@ import os, ast
 from .processes.setFormVals import newPilar, getPilarData, delPilar, updateVar, getListPU, newForm, getForms, delForm, \
     forms_id, updateFU
 
-from processes.logs import log
+from processes.logs import log,getLoglist
+
 
 
 @view_config(route_name='profile', renderer='templates/profile.jinja2')
@@ -175,8 +178,8 @@ class ranges_view(privateView):
         range = []
         varsR_id = []
         msg = []
-
         if "saveRange" in self.request.POST:
+
             msg = UpdateOrInsertRange(self.request.POST);
 
             fill_regN["sel"] = int(self.request.POST.get("mun_id", ""))
@@ -280,7 +283,6 @@ class pilares_view(privateView):
         pilarCSS_JS.need()
 
         msg = []
-        # print self.request.POST
         if "jsondata" in self.request.POST:
             msg = newPilar(self.request.POST.get("jsondata", ""), self.user.login)
             data = ast.literal_eval(self.request.POST.get("jsondata", ""))
@@ -352,21 +354,39 @@ class report_view(privateView):
 
         msg = []
 
+
+
         date = self.request.url.split("/")[-1].split("_")
-        # print self.request.POST
+        resp=""
+
         # date = date.split("_")
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
 
         log(self.user.login, "report generated for " + "_".join(date), "normal", "4")
 
+        if "linkRep" in self.request.POST:
+            if self.user.user_role == 2:
+                user_d = getUserData(getUserByMunic(getMunicId(self.request.POST.get("rep_mun"))))
+
+                if user_d == "ND":
+                    msg = ["Info", "No hay ningun monitor asignado a este municipio", "info"]
+                    data_rep = {}
+                else:
+                    user_d.user = user_d
+                    user_d.request = self.request
+                    return genPPTX(user_d, date)
+            else:
+                return genPPTX(self, date)
+
         if self.user.user_role == 2:
+            #if "linkRep" in self.request.POST:
+            #    return genPPTX(self, date)
             user_d = getUserData(getUserByMunic(self.request.POST.get("munic_sel")))
             if user_d == "ND":
                 msg = ["Info", "No hay ningun monitor asignado a este municipio", "info"]
                 data_rep = {}
             else:
-
                 user_d.user = user_d
                 user_d.request = self.request
 
@@ -377,6 +397,9 @@ class report_view(privateView):
                 , "munics": getMunics(getUserDeptoID(self.user.login)), "msg": msg,
                     "sel_m": self.request.POST.get("munic_sel")}
         else:
+            if "linkRep" in self.request.POST:
+                return genPPTX(self, date)
+
             return {'activeUser': self.user, "date": int(meses.index(date[0])) + 1,
                     "dataReport": dataReport(self, str(int(meses.index(date[0])) + 1), str(date[1])), "dates": date,
                     "msg": msg}
@@ -388,6 +411,81 @@ def logout_view(request):
     loc = request.route_url('home')
     return HTTPFound(location=loc, headers=headers)
 
+
+import shutil,json
+
+@view_config(route_name='uploadfiles', renderer=None)
+class uploadfiles_view(privateView):
+    def processView(self):
+
+        if "getFiles" in self.request.POST:
+            response = Response(status=201)
+            response.body = json.dumps({"ff":getFilesList(self,self.request.POST.get("date"))})
+            response.content_type = 'application/json'
+            return response
+            #return response
+
+
+        else:
+            if "userfile" in self.request.POST:
+
+                fname= self.request.params['userfile'].filename
+                ff= self.request.POST['userfile'].file
+
+
+                file_path = os.path.join(self.request.registry.settings['user.repository'], self.user.parent, "user",
+                                    self.user.login, "attach", self.request.POST.get("date"))
+
+                if not os.path.exists(file_path):
+                    os.makedirs(file_path)
+                file_path=file_path+"/"+fname
+
+                ff.seek(0)
+                with open(file_path, 'wb') as output_file:
+                    shutil.copyfileobj(ff, output_file)
+
+
+                return Response(status=201)
+
+@view_config(route_name='downfiles', renderer=None)
+class downfiles(publicView):
+    def processView(self):
+        try:
+            url=self.request.url.split("downfiles")
+            path = self.request.registry.settings['user.repository'] + url[1].replace("%20", " ")
+
+
+
+            if url[1][-8:] == "_delfile":
+                os.remove(path.replace("_delfile", ""))
+                #response = Response(status=201)
+                #response.body = json.dumps({"ff": getFilesList(self, url[1].split("/")[-2])})
+                #response.content_type = 'application/json'
+                #return response
+                loc = self.request.route_url('dashboard')
+                return HTTPFound(location=loc)
+
+            else:
+
+
+
+                response = FileResponse(
+                    path,
+                    request=self.request,
+                    content_type="application/download"
+                )
+                response.content_disposition = 'attachment; filename="' + self.request.url.split("/")[-1] + '"'
+
+                return response
+        except:
+            return Response(status=404)
+
+
+@view_config(route_name='logs', renderer='templates/logs.jinja2')
+class logs_view(privateView):
+    def processView(self):
+
+        return {'activeUser': self.user, "plogs":getLoglist(self.user.login)}
 
 @view_config(route_name='gtool', renderer='templates/gtool.jinja2')
 class gtool_view(privateView):
@@ -406,7 +504,7 @@ class gtool_view(privateView):
                     user_d = getUserData(getUserByMunic(self.request.POST.get("if_munic")))
 
                     #user_d = getUserData(getUserByMunic(self.request.POST.get("munic_sel")))
-                    print user_d
+
                     if user_d == "ND":
                         msg = ["Info", "No hay ningun monitor asignado a este municipio", "info"]
                         data4plot = []
@@ -438,10 +536,10 @@ class gtool_view(privateView):
             return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
                     "dates": self.request.cookies["cur_date"].split("_"),
                     "depto": getDeptName(getUserDeptoID(self.user.login)),
-                    "munics": getMunics(getUserDeptoID(self.user.login)), "sel_m":self.request.POST.get("if_munic")}
+                    "munics": getMunics(getUserDeptoID(self.user.login)), "sel_m":self.request.POST.get("if_munic"),  "title":"Departamento: "+getDeptName(getUserDeptoID(self.user.login))}
         else:
             return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
-                    "dates": self.request.cookies["cur_date"].split("_")}
+                    "dates": self.request.cookies["cur_date"].split("_"), "title":"Municipio: "+self.user.munic}
 
 
 @view_config(route_name='dashboard', renderer='templates/dashboard.jinja2')
@@ -516,7 +614,7 @@ class dashboard_view(privateView):
             return {'activeUser': self.user, "dashData": dashData, "report": True,
                     "depto": getDeptName(getUserDeptoID(self.user.login)),
                     "munics": getMunics(getUserDeptoID(self.user.login)), "msg": msg,
-                    "sel_m": self.request.POST.get("munic_sel")}
+                    "sel_m": self.request.POST.get("munic_sel"), "munid":self.request.POST.get("munic_sel")}
         else:
             return {'activeUser': self.user, "dashData": dashData, "report": True, "munid": getMunicId(self.user.munic),
                     "msg": msg}
@@ -529,6 +627,7 @@ class download_xls(privateView):
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
 
+
         if "genXLS" in self.request.POST:
             if self.user.user_role == 2:
 
@@ -537,7 +636,6 @@ class download_xls(privateView):
                 user_d = getUserData(getUserByMunic(date[2]))
                 user_d.user = user_d
                 user_d.request = self.request
-                print date
                 response = genXLS(user_d, getDashReportData(user_d, date[0], date[1]), date[0])
                 log(self.user.login, "download xls for %s-%s" % (str(date[0]), str(date[1])),
                     "normal",
@@ -582,7 +680,7 @@ class login_view(publicView):
                     response = HTTPFound(location=self.request.route_url('pilares'), headers=headers)
                 else:
                     response = HTTPFound(location=next, headers=headers)
-                response.set_cookie('_LOCALE_', value='es', max_age=31536000)
+                response.set_cookie('_LOCALE_', value='es', max_age=1080000)
 
                 return response
             did_fail = True
@@ -642,10 +740,12 @@ class register_view(privateView):
 
 class formList_view(odkView):
     def processView(self):
+
         try:
             if isUserActive(self.user):
 
                 if self.authorize(getUserPassword(self.user, self.request)):
+
                     log(self.user, "formlist", "normal", "4")
 
                     return self.createXMLResponse(getFormList(self.user, self.request))
@@ -718,9 +818,10 @@ class push_view(odkView):
 class submission_view(odkView):
     def processView(self):
         # userid = self.request.matchdict['userid']
+        #print self.request.method
         if self.request.method == 'HEAD':
             if isUserActive(self.user):
-                headers = [('location',
+                headers = [('Location',
                             self.request.route_url('odkpush', parent=getParent(self.user), user=self.user))]
                 response = Response(headerlist=headers, status=204)
                 return response

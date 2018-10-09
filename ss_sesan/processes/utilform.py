@@ -82,7 +82,6 @@ def getFormList(user,request):
             prjList.append(data)
         else:
             raise HTTPNotFound()
-
     return generateFormList(prjList)
 
 

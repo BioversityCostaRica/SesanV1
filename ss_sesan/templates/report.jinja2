@@ -186,7 +186,7 @@
                     <div class="col-sm-2 text-right" style="padding-top: 0.5%">
 
 
-                        <button class="btn btn-primary btn-circle btn-lg btn-outline" class="fa fa-check" type="button"
+                        {#<button class="btn btn-primary btn-circle btn-lg btn-outline" class="fa fa-check" type="button"
                                 title="Guardar reporte"
                                 onclick="javascript:printReport();"
                                 name="linkRep"
@@ -199,7 +199,34 @@
                             <input type="hidden" id="rep_mun" value="{{ dataReport.date[2].title().decode("latin1") }}">
                             <input type="hidden" id="rep_date"
                                    value="{{ dataReport.date[0] }},{{ dataReport.date[1] }}">
-                        {% endif %}
+                        {% endif %}#}
+
+                        <form method="POST" role="form" class="form-horizontal m-t sub_f"
+                              action="{{ request.path }}">
+
+
+                            <button class="btn btn-primary btn-circle btn-lg btn-outline" class="fa fa-check"
+                                    type="submit"
+                                    title="Guardar reporte"
+                                    name="linkRep"
+                                    id="linkRep"><i
+                                    class="fa fa-save"></i>
+
+
+                            </button>
+
+                            <input type="hidden" id="pptx_img" name="pptx_img" value="">
+                            <input type="hidden" id="pptx_img2" name="pptx_img2" value="">
+                            <input type="hidden" id="pptx_img3" name="pptx_img3" value="">
+                            {% if dataReport != {} %}
+                                <input type="hidden" id="rep_mun" name="rep_mun"
+                                       value="{{ dataReport.date[2].title().decode("latin1") }}">
+                                <input type="hidden" id="rep_date" name="rep_date"
+                                       value="{{ dataReport.date[0] }},{{ dataReport.date[1] }}">
+                            {% endif %}
+
+
+                        </form>
 
 
                     </div>
@@ -238,27 +265,30 @@
 
 
                             <div id="sit_san2">
-                                <div class="col-md-3" id="sit_san" style="padding-left: 2%">
-                                    <h2><strong>Situacion SAN</strong></h2>
-                                    <strong>Fecha de
-                                        emision: {{ dataReport.date[0] }},{{ dataReport.date[1] }} </strong>
-                                    <br>
-                                    <strong>Comisión Municipal de Seguridad Alimentaria y Nutricional
-                                        de {{ dataReport.date[2].title().decode("latin1") }}</strong>
-                                    <div class="widget yellow-bg p-lg text-center"
-                                         style="background-color:{{ dataReport.san[1] }} !important; " id="alert_img">
-                                        <div class="m-b-md">
-                                            <i class="fa fa-warning fa-4x"></i>
-                                            <h1 class="m-xs">{{ dataReport.san[0] }}</h1>
-                                            <h3 class="font-bold no-margins">
-                                                {{ dataReport.san[2] }}
-                                            </h3>
+                                <div class="col-md-3" id="sit_san" >
+                                    <div id="sit_min" style="text-align: center">
+                                        <h2><strong>Situacion SAN</strong></h2>
+                                        <strong>Fecha de
+                                            emision: {{ dataReport.date[0] }},{{ dataReport.date[1] }} </strong>
+                                        <br>
+                                        <strong>Comisión Municipal de Seguridad Alimentaria y Nutricional
+                                            de {{ dataReport.date[2].title().decode("latin1") }}</strong>
+                                        <div class="widget yellow-bg p-lg text-center"
+                                             style="background-color:{{ dataReport.san[1] }} !important; "
+                                             id="alert_img">
+                                            <div class="m-b-md">
+                                                <i class="fa fa-warning fa-4x"></i>
+                                                <h1 class="m-xs">{{ dataReport.san[0] }}</h1>
+                                                <h3 class="font-bold no-margins">
+                                                    {{ dataReport.san[2] }}
+                                                </h3>
+                                            </div>
                                         </div>
                                     </div>
 
                                     <br>
 
-                                    <div class="row text-center" style="font-size:150%">
+                                    {#<div class="row text-center" style="font-size:150%">
                                         <div class="col-lg-6">
                                             <p>
                                                 <i style="color: #1AB394" class="fa fa-circle"></i><span
@@ -280,7 +310,7 @@
                                                    value="{{ dataReport.plt_values.nin_des }}">
 
                                         </div>
-                                    </div>
+                                    </div>#}
 
                                     <br>
                                     <div class="ibox">
@@ -288,12 +318,13 @@
                                         <div class="">
 
 
-                                            <div class="ibox">
+                                            <div class="ibox" id="table_pilar">
 
                                                 <table class="table table-hover" style="font-size: 125%">
                                                     <tbody>
                                                     {% for row in dataReport |reverse %}
                                                         {% if row not in ["plt_values", "date", "san", "points"] %}
+
                                                             <tr>
                                                                 <td class="project-status" style="text-align: center;">
                                                                     <button class="btn btn-warning" type="button"
@@ -302,7 +333,7 @@
                                                                                 class="fa fa-warning"></i></button>
                                                                 </td>
                                                                 <td class="project-title">
-                                                                    <a href="project_detail.html">{{ row.replace("_alert", "").decode("latin1") }}</a>
+                                                                    <a href="">{{ row.replace("_alert", "").decode("latin1") }}</a>
                                                                     <br/>
                                                                     <small>{{ dataReport[row][1].decode('latin-1') }}</small>
                                                                 </td>
