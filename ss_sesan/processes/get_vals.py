@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from ..models import DBSession, Institucione, Munic, User, VariablesInd, Pilare, Indicadore, Grupo, RangosPilare, \
-    LineasBase, CentrosUrbano, CoefPond, FormsByUser, Form, RangosGrupo, MailList, Departamento
+    LineasBase, CentrosUrbano, CoefPond, FormsByUser, Form, RangosGrupo, MailList, Departamento, Log
 from send_mail import mail2
 from sqlalchemy import func
 from datetime import datetime as t
@@ -31,7 +31,7 @@ sys.setdefaultencoding('utf8')
 
 def getPob4Map(id_cu, alert):
     mySession = DBSession()
-    print alert
+
 
     result = mySession.query(CentrosUrbano).filter(CentrosUrbano.id_cu == id_cu).first()
     data = []
@@ -157,12 +157,13 @@ def dataReport(self, month, year):
                          "Noviembre", "Diciembre"]
 
                 # *-*-*-*-*-
-                # des = int(float(getVarValue("MSPAS", "dec_mi_nutri_edas_8", month, year, des_uname)))
+                #des = int(float(getVarValue("MSPAS", "dec_mi_nutri_edas_8", month, year, des_uname)))
                 des = 10
                 data["date"] = [meses[int(month) - 1], year, self.user.munic]
                 data["plt_values"] = {"lluvia": "%s-%s" % (str(monthrange(int(year), int(month))[1]),
                                                            str(int(12))),
                                       "nin_des": "%s-%s" % (str(des), str(100 - des))}
+
 
     mySession.close()
 
@@ -315,7 +316,7 @@ def make_qr(repo, login, passw, uname):
         config_data = {u'admin': {u"admin_pw": "", "change_server": False, "change_form_metadata": False,
                                   "delete_after_send": False},
                        u'general': {u"change_server": False, u"navigation": "buttons", u'username': uname,
-                                    u'password': passw, u'server_url': u'http://%s:5900/%s/%s' % (ip, login, uname),
+                                    u'password': passw, u'server_url': u'http://%s/%s/%s' % (ip, login, uname),
                                     u'metadata_username': uname,
                                     u'hide_old_form_versions': True
                                     }}
@@ -652,7 +653,6 @@ def getLB(id_var, munic):
 
 def getUserByMunic(munic):
     mySession = DBSession()
-    print munic
     result = mySession.query(User.user_name).filter(User.user_munic == munic).first()
     if result:
         user = result.user_name
@@ -985,7 +985,7 @@ def genXLS(self, data, month):
     path = os.path.join(self.request.registry.settings['user.repository'], "TMP")
     binary_data = a2b_base64(self.request.POST.get("map_bytes").replace("data:image/png;base64,", ""))
     fd = open(path + '/imageM.png', 'wb')
-    print binary_data
+
     fd.write(binary_data)
     fd.close()
 
@@ -1543,3 +1543,20 @@ def UpdateOrInsertRange(post):
         return ["Error", "Sucedio un error al guardar este rango", "error"]
 
 
+def getFilesList(self, date):#list of available attached files for users
+
+    path=os.path.join(self.request.registry.settings['user.repository'], self.user.parent,"user",self.user.login, "attach", date)
+    if not os.path.exists(path):
+        return []
+    else:
+        files= glob(path+"/*")
+        return files
+
+
+def getFullName(uname):
+    mySession = DBSession()
+
+    result=mySession.query(User.user_fullname).filter(User.user_name==uname).first()
+
+    mySession.close()
+    return result[0]

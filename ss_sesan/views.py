@@ -9,7 +9,7 @@ from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
     valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser, getForm_By_User, \
     getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail, getRangeList, \
-    sendGroup, updateUser, UpdateOrInsertRange, getDeptName, getUserDeptoID, getMunics, getUserByMunic
+    sendGroup, updateUser, UpdateOrInsertRange, getDeptName, getUserDeptoID, getMunics, getUserByMunic,getFilesList
 
 from processes.get_pptx import genPPTX
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
@@ -20,7 +20,7 @@ import os, ast
 from .processes.setFormVals import newPilar, getPilarData, delPilar, updateVar, getListPU, newForm, getForms, delForm, \
     forms_id, updateFU
 
-from processes.logs import log
+from processes.logs import log,getLoglist
 
 
 
@@ -179,7 +179,6 @@ class ranges_view(privateView):
         varsR_id = []
         msg = []
         if "saveRange" in self.request.POST:
-
 
             msg = UpdateOrInsertRange(self.request.POST);
 
@@ -365,7 +364,7 @@ class report_view(privateView):
                  "Noviembre", "Diciembre"]
 
         log(self.user.login, "report generated for " + "_".join(date), "normal", "4")
-        print self.request.POST
+
         if "linkRep" in self.request.POST:
             if self.user.user_role == 2:
                 user_d = getUserData(getUserByMunic(getMunicId(self.request.POST.get("rep_mun"))))
@@ -412,6 +411,81 @@ def logout_view(request):
     loc = request.route_url('home')
     return HTTPFound(location=loc, headers=headers)
 
+
+import shutil,json
+
+@view_config(route_name='uploadfiles', renderer=None)
+class uploadfiles_view(privateView):
+    def processView(self):
+
+        if "getFiles" in self.request.POST:
+            response = Response(status=201)
+            response.body = json.dumps({"ff":getFilesList(self,self.request.POST.get("date"))})
+            response.content_type = 'application/json'
+            return response
+            #return response
+
+
+        else:
+            if "userfile" in self.request.POST:
+
+                fname= self.request.params['userfile'].filename
+                ff= self.request.POST['userfile'].file
+
+
+                file_path = os.path.join(self.request.registry.settings['user.repository'], self.user.parent, "user",
+                                    self.user.login, "attach", self.request.POST.get("date"))
+
+                if not os.path.exists(file_path):
+                    os.makedirs(file_path)
+                file_path=file_path+"/"+fname
+
+                ff.seek(0)
+                with open(file_path, 'wb') as output_file:
+                    shutil.copyfileobj(ff, output_file)
+
+
+                return Response(status=201)
+
+@view_config(route_name='downfiles', renderer=None)
+class downfiles(publicView):
+    def processView(self):
+        try:
+            url=self.request.url.split("downfiles")
+            path = self.request.registry.settings['user.repository'] + url[1].replace("%20", " ")
+
+
+
+            if url[1][-8:] == "_delfile":
+                os.remove(path.replace("_delfile", ""))
+                #response = Response(status=201)
+                #response.body = json.dumps({"ff": getFilesList(self, url[1].split("/")[-2])})
+                #response.content_type = 'application/json'
+                #return response
+                loc = self.request.route_url('dashboard')
+                return HTTPFound(location=loc)
+
+            else:
+
+
+
+                response = FileResponse(
+                    path,
+                    request=self.request,
+                    content_type="application/download"
+                )
+                response.content_disposition = 'attachment; filename="' + self.request.url.split("/")[-1] + '"'
+
+                return response
+        except:
+            return Response(status=404)
+
+
+@view_config(route_name='logs', renderer='templates/logs.jinja2')
+class logs_view(privateView):
+    def processView(self):
+
+        return {'activeUser': self.user, "plogs":getLoglist(self.user.login)}
 
 @view_config(route_name='gtool', renderer='templates/gtool.jinja2')
 class gtool_view(privateView):
@@ -666,10 +740,12 @@ class register_view(privateView):
 
 class formList_view(odkView):
     def processView(self):
+
         try:
             if isUserActive(self.user):
 
                 if self.authorize(getUserPassword(self.user, self.request)):
+
                     log(self.user, "formlist", "normal", "4")
 
                     return self.createXMLResponse(getFormList(self.user, self.request))
@@ -742,10 +818,10 @@ class push_view(odkView):
 class submission_view(odkView):
     def processView(self):
         # userid = self.request.matchdict['userid']
-        print self.request.method
+        #print self.request.method
         if self.request.method == 'HEAD':
             if isUserActive(self.user):
-                headers = [('LOCATION',
+                headers = [('Location',
                             self.request.route_url('odkpush', parent=getParent(self.user), user=self.user))]
                 response = Response(headerlist=headers, status=204)
                 return response

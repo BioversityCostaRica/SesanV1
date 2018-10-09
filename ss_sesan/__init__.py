@@ -64,6 +64,10 @@ def main(global_config, **settings):
     config.add_route('gtool', '/gtool')
     config.add_route('mails', '/mails')
     config.add_route('ranges', '/ranges')
+    config.add_route('uploadfiles', '/uploadfiles')
+    config.add_route('downfiles', '/downfiles/{parent}/user/{user}/attach/{date}/{file}')
+    config.add_route('logs', '/logs')
+
     # odk routes
     config.add_route('odkformlist', '{parent}/{user}/formList')
     config.add_route('odksubmission', '/{parent}/{user}/submission')

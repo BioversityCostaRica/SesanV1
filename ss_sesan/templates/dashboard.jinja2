@@ -25,6 +25,11 @@
     <div id="wrapper">
         {% block mainavbar %}
             <input type="hidden" value="{{ msg }}" id="msj">
+
+            <input type="hidden" value="{{ activeUser.parent }}" id="parent">
+            <input type="hidden" value="{{ activeUser.login }}" id="uname">
+
+
             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
@@ -186,15 +191,15 @@
 
                                                             {% if activeUser.user_role==2 %}
                                                                 <input type="hidden" id="genXLS"
-                                                                   value="{{ dashData.date[0] }} {{ dashData.date[1] }} {{ sel_m }}"
-                                                                   name="genXLS">
-                                                                {% else %}
-                                                            <input type="hidden" id="genXLS"
-                                                                   value="{{ dashData.date[0] }} {{ dashData.date[1] }}"
-                                                                   name="genXLS">
-                                                                {% endif %}
+                                                                       value="{{ dashData.date[0] }} {{ dashData.date[1] }} {{ sel_m }}"
+                                                                       name="genXLS">
+                                                            {% else %}
+                                                                <input type="hidden" id="genXLS"
+                                                                       value="{{ dashData.date[0] }} {{ dashData.date[1] }}"
+                                                                       name="genXLS">
+                                                            {% endif %}
 
-                                                        <input type="hidden" id="map_bytes"
+                                                            <input type="hidden" id="map_bytes"
                                                                    value=""
                                                                    name="map_bytes">
                                                         </form>
@@ -369,7 +374,7 @@
                     </div>
 
 
-                    {% if activeUser.user_role!=1  %}
+                    {% if activeUser.user_role!=1 %}
                         <div class="col-md-3 row">
                             <div class="ibox-content form-group" id="data_4">
                                 <form role="form" method="POST" action="{{ request.path }}" id="newMonth"
@@ -391,7 +396,8 @@
 
                                             <select id="munic_list" name="munic_sel"
                                                     data-placeholder="Seleccione un municipio..."
-                                                    class="chosen-select form-control m-b" tabindex="2"  onchange="this.form.submit();">
+                                                    class="chosen-select form-control m-b" tabindex="2"
+                                                    onchange="this.form.submit();">
                                                 <option value=""></option>
 
 
@@ -399,7 +405,8 @@
 
 
                                                     <option value="{{ row[0] }}"
-                                                            id="{{ row[0] }}" {% if sel_m ==row[0] |string %} selected {% endif %}>{{ row[1].decode("latin1") }}</option>
+                                                            id="{{ row[0] }}" {% if sel_m ==row[0] |string %}
+                                                            selected {% endif %}>{{ row[1].decode("latin1") }}</option>
 
                                                 {% endfor %}
                                             </select>
@@ -412,17 +419,33 @@
                                 {% if dashData.signatures %}
                                     <br>
                                     <p>
-                                    {% for s in dashData.signatures %}
-                                        <a class="btn btn-primary btn-facebook btn-outline" style="display: block;white-space: normal;"
-                                           data-toggle="modal" data-target="#myModal{{ loop.index0 }}">
-                                            <i class="fa fa-check"> </i> Firma: {{ s[2].replace("_", " ") }}
+                                        {% for s in dashData.signatures %}
+                                            <a class="btn btn-primary btn-facebook btn-outline"
+                                               style="display: block;white-space: normal;"
+                                               data-toggle="modal" data-target="#myModal{{ loop.index0 }}">
+                                                <i class="fa fa-check"> </i> Firma: {{ s[2].replace("_", " ") }}
+                                            </a>
+
+
+
+                                            <br>
+                                        {% endfor %}
+                                        <a class="btn btn-primary btn-facebook btn-outline"
+                                           style="display: block;white-space: normal;"
+                                           data-toggle="modal" data-target="#myModalAttach">
+                                            <i class="fa fa-clipboard"> </i> Archivos adjuntos
                                         </a>
 
 
-
                                         <br>
-                                    {% endfor %}
                                     </p>
+
+
+
+
+
+
+
                                     <h3>Cobertura en comunidades {{ dashData.coverage }} %</h3>
 
 
@@ -1008,6 +1031,65 @@
 
 
 {% endblock modalinfo %}
+
+
+<!----attached files---->
+
+<div class="modal inmodal" id="myModalAttach" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span
+                        aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <i class="fa fa-clipboard modal-icon"></i>
+                <h4 class="modal-title">Archivos adjuntos</h4>
+                <small class="font-bold">Aqui se pueden adjuntar documentos importantes relacionados al proceso de Salas
+                    Situacionales en este mes
+                </small>
+            </div>
+            <div class="modal-body">
+                <p>
+
+
+                    {#<form action="#" class="dropzone" id="dropzoneForm">
+                    <div class="fallback">
+                        <input name="file" type="file" multiple/>
+                    </div>
+                </form>#}
+
+                <div class="fileinput fileinput-new" data-provides="fileinput">
+
+                    <span class="btn btn-default btn-file center-block" >
+                        <span class="fileinput-new">Seleccionar archivo</span>
+                        <span class="fileinput-exists">Seleccionar archivo</span>
+
+                        <input type="file" name="..." id="filefull"/>
+                    </span>
+                    <span class="fileinput-filename" id="file_name"></span>
+                    <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none"></a>
+
+                </div>
+
+
+                </p>
+                <div id="container"></div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">
+                    Close
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!------------>
+
 </body>
 
 

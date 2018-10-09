@@ -35,6 +35,11 @@ DashJSArray.append(Resource(library, 'inspinia/js/plugins/flot/jquery.flot.splin
 DashJSArray.append(Resource(library, 'inspinia/js/plugins/chosen/chosen.jquery.js', depends=[JQuery], bottom=True))
 DashJSArray.append(Resource(library, 'inspinia/js/plugins/footable/footable.all.min.js', depends=[JQuery], bottom=True))
 DashJSArray.append(Resource(library, 'inspinia/js/plugins/peity/jquery.peity.min.js', depends=[JQuery], bottom=True))
+#DashJSArray.append(Resource(library, 'inspinia/js/plugins/dropzone/dropzone.js', depends=[JQuery], bottom=True))
+DashJSArray.append(Resource(library, 'inspinia/js/plugins/jasny/jasny-bootstrap.min.js', depends=[JQuery], bottom=True))
+
+
+
 # DashJSArray.append(Resource(library, 'inspinia/js/plugins/datapicker/bootstrap-datepicker.es.min.js',depends=[JQuery],bottom=True))
 DashJSArray.append(
     Resource(library, 'inspinia/js/plugins/datapicker/bootstrap-datepicker.js', depends=[JQuery], bottom=True))
@@ -65,6 +70,12 @@ DashCSSArray.append(Resource(library, 'inspinia/css/plugins/steps/jquery.steps.c
 DashCSSArray.append(
     Resource(library, 'inspinia/css/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css', depends=[JQuery],
              bottom=True))
+#DashCSSArray.append(Resource(library, 'inspinia/css/plugins/dropzone/basic.css', depends=[JQuery], bottom=True))
+#DashCSSArray.append(Resource(library, 'inspinia/css/plugins/dropzone/dropzone.css', depends=[JQuery], bottom=True))
+DashCSSArray.append(Resource(library, 'inspinia/css/plugins/jasny/jasny-bootstrap.min.css', depends=[JQuery], bottom=True))
+
+
+
 # DashCSSArray.append(Resource(library, 'inspinia/js/plugins/jquery-ui/jquery-ui.min.css', depends=[JQuery], bottom=True))
 # DashCSSArray.append(Resource(library, 'dashboard/range_slider/jquery-ui-range-slider.css', depends=[JQuery], bottom=True))
 

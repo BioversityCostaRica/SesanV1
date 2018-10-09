@@ -1,0 +1,325 @@
+{% extends 'dashboard.jinja2' %}
+{% block title %}
+    <title>SESAN | Logs</title>
+{% endblock title %}
+
+
+{% block pageheading %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-8 text-center">
+            <h2>Logs</h2>
+        </div>
+    </div>
+{% endblock pageheading %}
+
+{% block dashmenu %}
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="logs" %}
+{% endblock dashmenu %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% block pagecontent %}
+
+        <input type="hidden" value="{{ msg }}" id="msj">
+
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                <div class="ibox">
+                    <div class="ibox-title">
+                        <h5>Seleccione un municipio para ver su lista de correo</h5>
+
+                    </div>
+                    <div class="ibox-content">
+                        <!---->
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="tabs-container">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a data-toggle="tab" href="#tab-1"> Platform Logs</a></li>
+                                        <li class=""><a data-toggle="tab" href="#tab-2">ODK Log</a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div id="tab-1" class="tab-pane active">
+
+                                            <div class="panel-body" style="overflow-y:scroll;height:600px;">
+
+                                                <div class="ibox-title">
+
+                                                    <h5>
+                                                        <button class="btn btn-primary btn-circle" type="button"><i class="fa fa-plus"></i> </button>
+                                                        <button class="btn btn-warning btn-circle" type="button"><i class="fa fa-edit"></i> </button>
+                                                        <button class="btn btn-danger btn-circle" type="button"><i class="fa fa-times"></i> </button>
+                                                        <button class="btn btn-info btn-circle" type="button"><i class="fa fa-spinner"></i> </button>
+                                                        <button class="btn btn-default btn-circle" type="button"><i class="fa fa-th-large"></i> </button>
+
+                                                    </h5>
+                                                    <div class="ibox-tools">
+
+                                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                                            <i class="fa fa-wrench"></i>
+                                                        </a>
+
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="ibox-content">
+
+
+                                                    <div class="activity-stream">
+
+
+                                                        {% for row in plogs[::-1] %}
+                                                            <div class="stream">
+                                                                <div class="stream-badge">
+                                                                    {% if row[3]=="1" %} {# new #}
+                                                                        <i class="fa fa-plus bg-primary"></i>
+                                                                    {% elif row[3]=="2" %} {# update #}
+                                                                        <i class="fa fa-edit bg-warning"></i>
+                                                                    {% elif row[3]=="3" %} {# delete #}
+                                                                        <i class="fa fa-times bg-danger"></i>
+                                                                    {% elif row[3]=="4" %} {# get #}
+                                                                        <i class="fa fa-spinner bg-info"></i>
+                                                                    {% else %} {# other #}
+                                                                        <i class="fa fa-th-large bg-default"></i>
+                                                                    {% endif %}
+
+                                                                </div>
+                                                                <div class="stream-panel">
+                                                                    <div class="stream-info">
+                                                                        <a href="">
+
+                                                                            <span>{{ row[1].decode("latin1") }}</span>
+                                                                            <span class="date">{{ row[0] }}</span>
+                                                                        </a>
+                                                                    </div>
+                                                                    {{ row[2].decode("latin1") }}
+                                                                </div>
+                                                            </div>
+                                                        {% endfor %}
+
+                                                    </div>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="tab-2" class="tab-pane">
+                                            <div class="panel-body">
+                                                <div class="ibox-content">
+
+                                                    <div class="stream-small">
+                                                        <span class="label label-primary"> Add</span>
+                                                        <span class="text-muted"> Today at 10:30:50 pm </span> / <a
+                                                            href="#">Mike Smith</a> Added new contact to the user group
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-success"> Comment</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">Michael Miggel</a> Commented on Ariana profile.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-success"> Comment</span>
+                                                        <span class="text-muted"> Today at 04:30:33 am </span> / <a
+                                                            href="#">Monica Jackson</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-success"> Comment</span>
+                                                        <span class="text-muted"> Today at 11:43:59 am </span> / <a
+                                                            href="#">Jessica Smith</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-primary"> Add</span>
+                                                        <span class="text-muted"> Yesterday at 10:02:33 pm </span> / <a
+                                                            href="#">Camila Farter</a> Added new file to project.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-warning"> Activity</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">John Dernex</a> Add new item to stage zero.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-warning"> Activity</span>
+                                                        <span class="text-muted"> Yesterday at 10:32:12 am </span> / <a
+                                                            href="#">Andrew Williams</a> Joined to the new group.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-warning"> Activity</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">Michael Miggel</a> Commented on Ariana profile.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-warning"> Activity</span>
+                                                        <span class="text-muted"> Today at 04:30:33 am </span> / <a
+                                                            href="#">Monica Jackson</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">Michael Miggel</a> Commented on Ariana profile.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 04:30:33 am </span> / <a
+                                                            href="#">Monica Jackson</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 11:43:59 am </span> / <a
+                                                            href="#">Jessica Smith</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">John Dernex</a> Add new item to stage zero.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Yesterday at 10:32:12 am </span> / <a
+                                                            href="#">Andrew Williams</a> Joined to the new group.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">Michael Miggel</a> Commented on Ariana profile.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 04:30:33 am </span> / <a
+                                                            href="#">Monica Jackson</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">John Dernex</a> Add new item to stage zero.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Yesterday at 10:32:12 am </span> / <a
+                                                            href="#">Andrew Williams</a> Joined to the new group.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">Michael Miggel</a> Commented on Ariana profile.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 04:30:33 am </span> / <a
+                                                            href="#">Monica Jackson</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-success"> Comment</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">Michael Miggel</a> Commented on Ariana profile.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-success"> Comment</span>
+                                                        <span class="text-muted"> Today at 04:30:33 am </span> / <a
+                                                            href="#">Monica Jackson</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-success"> Comment</span>
+                                                        <span class="text-muted"> Today at 11:43:59 am </span> / <a
+                                                            href="#">Jessica Smith</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-warning"> Activity</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">John Dernex</a> Add new item to stage zero.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-warning"> Activity</span>
+                                                        <span class="text-muted"> Yesterday at 10:32:12 am </span> / <a
+                                                            href="#">Andrew Williams</a> Joined to the new group.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-warning"> Activity</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">Michael Miggel</a> Commented on Ariana profile.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-warning"> Activity</span>
+                                                        <span class="text-muted"> Today at 04:30:33 am </span> / <a
+                                                            href="#">Monica Jackson</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">Michael Miggel</a> Commented on Ariana profile.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 04:30:33 am </span> / <a
+                                                            href="#">Monica Jackson</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 11:43:59 am </span> / <a
+                                                            href="#">Jessica Smith</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">John Dernex</a> Add new item to stage zero.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Yesterday at 10:32:12 am </span> / <a
+                                                            href="#">Andrew Williams</a> Joined to the new group.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">Michael Miggel</a> Commented on Ariana profile.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 04:30:33 am </span> / <a
+                                                            href="#">Monica Jackson</a> Commented on public board.
+                                                    </div>
+                                                    <div class="stream-small">
+                                                        <span class="label label-default"> Note</span>
+                                                        <span class="text-muted"> Today at 08:10:50 am </span> / <a
+                                                            href="#">Michael Miggel</a> Commented on Ariana profile.
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!---->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    {% endblock pagecontent %}
+
+
+</div>
+
+{% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $('.chosen-select').chosen({width: "100%"});
+
+
+        });
+    </script>
+{% endblock javascript %}s
