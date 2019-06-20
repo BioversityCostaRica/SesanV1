@@ -1,0 +1,72 @@
+{% extends 'dashboard.jinja2' %}
+{% block title %}
+    <title>SESAN | Referencia</title>
+{% endblock title %}
+
+
+{% block pageheading %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-8 text-center">
+            <h2>Referencia</h2>
+        </div>
+    </div>
+{% endblock pageheading %}
+
+{% block dashmenu %}
+
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="about",dates=dates[0] +"_"+ dates[1] %}
+
+{% endblock dashmenu %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% block pagecontent %}
+        <input type="hidden" value="{{ msg }}" id="msj">
+
+
+        <div class="col-lg-12 animated fadeInRight">
+            <div class="row">
+
+                <div class="col-lg-12">
+                    {% for doc in file_list %}
+
+                    <div class="file-box">
+                        <div class="file">
+                            <a href="{{ request.route_url("about")+"/"+doc[2] }}">
+                                <span class="corner"></span>
+
+                                <div class="icon">
+                                    <i class="fa {{ doc[1] }}"></i>
+                                </div>
+                                <div class="file-name">
+                                    {{ doc[2] }}
+                                    <br/>
+                                    <small>Por: SESAN</small>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
+
+
+                    {% endfor %}
+
+
+                </div>
+            </div>
+
+
+        </div>
+
+
+    {% endblock pagecontent %}
+
+
+</div>
+
+
+
+
+

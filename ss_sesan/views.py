@@ -5,11 +5,11 @@ from pyramid.response import Response
 from .classes import publicView, privateView, odkView
 from .auth import getUserData
 from .resources import DashJS, DashCSS, basicCSS, regJS_CSS, reportJS, baselineR, pilarCSS_JS, formsCSS_JS, gtoolCSS_JS, \
-    rangCSS_JS
+    rangCSS_JS,seasonCSS_JS
 from processes.get_vals import updateData, delete_lb, newBaseline, fill_reg, addNewUser, getDashReportData, getConfigQR, \
     valReport, dataReport, getBaselines, getMunicName, getBaselinesName, genXLS, getUsersList, delUser, getForm_By_User, \
     getHelpFiles, getFileResponse, getGToolData, getData4Analize, getMails, addMail, getMunicId, delMail, getRangeList, \
-    sendGroup, updateUser, UpdateOrInsertRange, getDeptName, getUserDeptoID, getMunics, getUserByMunic,getFilesList
+    sendGroup, updateUser, UpdateOrInsertRange, getDeptName, getUserDeptoID, getMunics, getUserByMunic,getFilesList, getDepByMunic
 
 from processes.get_pptx import genPPTX
 from processes.utilform import isUserActive, getUserPassword, getFormList, getParent, getManifest, getMediaFile, \
@@ -21,6 +21,10 @@ from .processes.setFormVals import newPilar, getPilarData, delPilar, updateVar, 
     forms_id, updateFU
 
 from processes.logs import log,getLoglist
+
+#from processes.rules import newRule,getRules,delRule
+
+from processes.seasons import GetSeasonsRules
 
 
 
@@ -178,6 +182,7 @@ class ranges_view(privateView):
         range = []
         varsR_id = []
         msg = []
+        #print self.request.POST
         if "saveRange" in self.request.POST:
 
             msg = UpdateOrInsertRange(self.request.POST);
@@ -218,6 +223,10 @@ class weighing_view(privateView):
         regJS_CSS.need()
         fill_regN = fill_reg()
         msg = []
+        rules=[]
+
+        munId=""
+
         if "submit" in self.request.POST:
             # if "update_data" in self.request.POST:
 
@@ -226,6 +235,7 @@ class weighing_view(privateView):
             fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("munic", ""))).title()
             fill_regN["lb_m"] = getBaselinesName()
             lb_data = getBaselines(int(self.request.POST.get("munic", "")), "cf")
+            #rules,munId=getRules(int(self.request.POST.get("munic", "")))
         else:
             if "id_mun_sel" in self.request.POST and not "update_data" in self.request.POST and not "submit_lb" in self.request.POST:
                 msg = delete_lb(self.request.POST.get("id_mun_sel", ""), "cf")
@@ -234,6 +244,7 @@ class weighing_view(privateView):
                 fill_regN["lb_m"] = getBaselinesName()
                 fill_regN["s_depto"] = int(self.request.POST.get("id_depto_sel", ""))
                 lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
+                #rules,munId = getRules(int(self.request.POST.get("id_mun_sel", "")))
                 log(self.user.login, "weighing deleted in " + getMunicName(
                     int(self.request.POST.get("id_mun_sel", ""))).title(),
                     "normal", "3")
@@ -246,6 +257,7 @@ class weighing_view(privateView):
                     fill_regN["sel_name"] = getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title()
                     fill_regN["lb_m"] = getBaselinesName()
                     lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
+                    #rules,munId = getRules(int(self.request.POST.get("id_mun_sel", "")))
                     log(self.user.login,
                         "weighing updated in " + getMunicName(int(self.request.POST.get("id_mun_sel", ""))).title(),
                         "normal", "2")
@@ -258,6 +270,7 @@ class weighing_view(privateView):
                         fill_regN["lb_m"] = getBaselinesName()
                         msg = newBaseline(save_data, "cf")
                         lb_data = getBaselines(int(self.request.POST.get("id_mun_sel", "")), "cf")
+                        #rules,munId = getRules(int(self.request.POST.get("id_mun_sel", "")))
                         # log(self.user.login, "new weighing in " + getMunicName(
                         #    int(self.request.POST.get("id_mun_sel", ""))).title() + " for var " + self.request.POST.get(
                         #    "id_mun_sel", ""),
@@ -267,6 +280,9 @@ class weighing_view(privateView):
                         fill_regN["sel_name"] = ""
                         fill_regN["lb_m"] = []
                         lb_data = getBaselines(0, "cf")
+
+
+
 
         return {'activeUser': self.user, "lb_data": lb_data, "fill_reg": fill_regN, "msg": msg}
 
@@ -355,7 +371,6 @@ class report_view(privateView):
         msg = []
 
 
-
         date = self.request.url.split("/")[-1].split("_")
         resp=""
 
@@ -366,7 +381,7 @@ class report_view(privateView):
         log(self.user.login, "report generated for " + "_".join(date), "normal", "4")
 
         if "linkRep" in self.request.POST:
-            if self.user.user_role == 2:
+            if self.user.user_role == 2 or self.user.user_role == 3:
                 user_d = getUserData(getUserByMunic(getMunicId(self.request.POST.get("rep_mun"))))
 
                 if user_d == "ND":
@@ -396,6 +411,24 @@ class report_view(privateView):
                     "dataReport": data_rep, "dates": date, "depto": getDeptName(getUserDeptoID(self.user.login))
                 , "munics": getMunics(getUserDeptoID(self.user.login)), "msg": msg,
                     "sel_m": self.request.POST.get("munic_sel")}
+
+        if self.user.user_role == 3:
+            #if "linkRep" in self.request.POST:
+            #    return genPPTX(self, date)
+            user_d = getUserData(getUserByMunic(self.request.POST.get("munic_sel")))
+            if user_d == "ND":
+                msg = ["Info", "No hay ningun monitor asignado a este municipio", "info"]
+                data_rep = {}
+            else:
+                user_d.user = user_d
+                user_d.request = self.request
+                data_rep = dataReport(user_d, str(int(meses.index(date[0])) + 1), str(date[1]))
+
+            return {'activeUser': self.user, "date": int(meses.index(date[0])) + 1,
+                    "dataReport": data_rep, "dates": date,"fill_reg": fill_reg(), "msg": msg,
+                    "sel_m": self.request.POST.get("munic_sel"), "sel_d":self.request.POST.get("dep_sel") }
+
+
         else:
             if "linkRep" in self.request.POST:
                 return genPPTX(self, date)
@@ -417,6 +450,25 @@ import shutil,json
 @view_config(route_name='uploadfiles', renderer=None)
 class uploadfiles_view(privateView):
     def processView(self):
+
+
+        if self.user.user_role:
+            if self.request.POST.get("getFiles") !="1" :
+                user_d = getUserData(getUserByMunic(self.request.POST.get("getFiles")))
+                user_d.user = user_d
+                user_d.request = self.request
+                response = Response(status=201)
+                response.body = json.dumps({"ff": getFilesList(user_d, self.request.POST.get("date")), "login":user_d.user.login})
+                response.content_type = 'application/json'
+                return response
+            else:
+                response = Response(status=201)
+                response.body = json.dumps({"ff": getFilesList(self, self.request.POST.get("date"))})
+                response.content_type = 'application/json'
+                return response
+
+
+
 
         if "getFiles" in self.request.POST:
             response = Response(status=201)
@@ -485,7 +537,19 @@ class downfiles(publicView):
 class logs_view(privateView):
     def processView(self):
 
-        return {'activeUser': self.user, "plogs":getLoglist(self.user.login)}
+        return {'activeUser': self.user, "plogs":getLoglist(self,self.user.login)}
+
+
+@view_config(route_name='seasonality', renderer='templates/seasonality.jinja2')
+class seasonality_view(privateView):
+    def processView(self):
+        DashJS.need()
+        DashCSS.need()
+        baselineR.need()
+        regJS_CSS.need()
+        seasonCSS_JS.need()
+        print getBaselines(0, "lb")
+        return {'activeUser': self.user,  "msg": [], "rules":GetSeasonsRules()}
 
 @view_config(route_name='gtool', renderer='templates/gtool.jinja2')
 class gtool_view(privateView):
@@ -499,7 +563,7 @@ class gtool_view(privateView):
 
 
         if "getData4Analize" in self.request.POST:
-            if self.user.user_role == 2:
+            if self.user.user_role == 2 or self.user.user_role == 3:
                 if "if_munic" in self.request.POST:
                     user_d = getUserData(getUserByMunic(self.request.POST.get("if_munic")))
 
@@ -530,16 +594,22 @@ class gtool_view(privateView):
                 log(self.user.login, "request data for gtool: " + self.request.POST.get('getData4Analize', ''),
                     "normal",
                     "4")
+        if self.user.user_role == 3:
+            return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,"fill_reg": fill_reg(),
+                    "dates": self.request.cookies["cur_date"].split("_"), "sel_d": getDepByMunic(self.request.POST.get("if_munic")),
+                    "sel_m": self.request.POST.get("if_munic"),
+                    "title": "Departamento: " }
 
-        if self.user.user_role == 2:
-
-            return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
-                    "dates": self.request.cookies["cur_date"].split("_"),
-                    "depto": getDeptName(getUserDeptoID(self.user.login)),
-                    "munics": getMunics(getUserDeptoID(self.user.login)), "sel_m":self.request.POST.get("if_munic"),  "title":"Departamento: "+getDeptName(getUserDeptoID(self.user.login))}
         else:
-            return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
-                    "dates": self.request.cookies["cur_date"].split("_"), "title":"Municipio: "+self.user.munic}
+            if self.user.user_role == 2:
+
+                return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
+                        "dates": self.request.cookies["cur_date"].split("_"),
+                        "depto": getDeptName(getUserDeptoID(self.user.login)),
+                        "munics": getMunics(getUserDeptoID(self.user.login)), "sel_m":self.request.POST.get("if_munic"),  "title":"Departamento: "+getDeptName(getUserDeptoID(self.user.login))}
+            else:
+                return {'activeUser': self.user, "filldata": getGToolData(self), "msg": msg, "data4plot": data4plot,
+                        "dates": self.request.cookies["cur_date"].split("_"), "title":"Municipio: "+self.user.munic}
 
 
 @view_config(route_name='dashboard', renderer='templates/dashboard.jinja2')
@@ -553,7 +623,7 @@ class dashboard_view(privateView):
         meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                  "Noviembre", "Diciembre"]
 
-        # print self.request.POST
+        print self.request.POST
         msg = []
 
         if "munic_sel" in self.request.POST:
@@ -610,14 +680,20 @@ class dashboard_view(privateView):
                     "normal",
                     "4")
 
-        if self.user.user_role == 2:
-            return {'activeUser': self.user, "dashData": dashData, "report": True,
-                    "depto": getDeptName(getUserDeptoID(self.user.login)),
-                    "munics": getMunics(getUserDeptoID(self.user.login)), "msg": msg,
-                    "sel_m": self.request.POST.get("munic_sel"), "munid":self.request.POST.get("munic_sel")}
+        if self.user.user_role ==3:
+            return {'activeUser': self.user, "dashData": dashData, "report": True, "msg": msg,"sel_d": self.request.POST.get("dep_sel"),
+                    "sel_m": self.request.POST.get("munic_sel"), "munid": self.request.POST.get("munic_sel"),  "fill_reg": fill_reg()}
         else:
-            return {'activeUser': self.user, "dashData": dashData, "report": True, "munid": getMunicId(self.user.munic),
-                    "msg": msg}
+
+
+            if self.user.user_role == 2:
+                return {'activeUser': self.user, "dashData": dashData, "report": True,
+                        "depto": getDeptName(getUserDeptoID(self.user.login)),
+                        "munics": getMunics(getUserDeptoID(self.user.login)), "msg": msg,
+                        "sel_m": self.request.POST.get("munic_sel"), "munid":self.request.POST.get("munic_sel")}
+            else:
+                return {'activeUser': self.user, "dashData": dashData, "report": True, "munid": getMunicId(self.user.munic),
+                        "msg": msg}
 
             # return render_to_response({'activeUser': self.user, "dashData": dashData, "report": True}, request=request)
 
@@ -629,8 +705,7 @@ class download_xls(privateView):
 
 
         if "genXLS" in self.request.POST:
-            if self.user.user_role == 2:
-
+            if self.user.user_role == 2 or self.user.user_role == 3:
                 date = self.request.POST.get('genXLS', '').split(" ")
                 date[0] = str(meses.index(date[0]) + 1)
                 user_d = getUserData(getUserByMunic(date[2]))
@@ -697,6 +772,7 @@ class register_view(privateView):
         formsCSS_JS.need()
         result = []
 
+
         if "up_user_val" in self.request.POST or "up_user_pass" in self.request.POST:
             result = updateUser(self.user.login, self.request, self.request.POST)
             if "up_user_pass" in self.request.POST:
@@ -735,7 +811,7 @@ class register_view(privateView):
                 result.append("error")
 
         return {'activeUser': self.user, "fill_reg": fill_reg(), "msg": result,
-                "ulist": getUsersList(self.user.login, 0), "ulist2": getUsersList(self.user.login, 2)}
+                "ulist": getUsersList(self.user.login, 0), "ulist2": getUsersList(self.user.login, 2), "ulist3": getUsersList(self.user.login, 3) }
 
 
 class formList_view(odkView):
@@ -756,6 +832,7 @@ class formList_view(odkView):
             else:
                 return self.askForCredentials()
         except:
+
             return self.askForCredentials()
 
 
@@ -795,13 +872,15 @@ class push_view(odkView):
         if self.request.method == "POST":
             if isUserActive(self.user):
                 if self.authorize(getUserPassword(self.user, self.request)):
-
+                    print "here---------------"
                     if storeSubmission(self.user, self.request):
+                        print "if---------------"
                         response = Response(status=201)
                         log(self.user, "store submission", "normal", "4")
                         sendGroup(self.request, self.user)
                         return response
                     else:
+                        print "else---------------"
 
                         response = Response(status=502)
                         return response
@@ -848,3 +927,29 @@ class munic_kml(publicView):
             return response
         except:
             return Response(status=404)
+
+
+@view_config(route_name='rules', renderer=None)
+class rules_view(publicView):
+    def processView(self):
+
+
+        if (self.request.POST.get("type")=="rm_rule"):
+            data= delRule(self.request.POST)
+            response = Response(status=200, body=json.dumps(data))
+            response.headers.update({
+                'Access-Control-Allow-Origin': '*',
+            })
+
+            return response
+
+        data= newRule(self.request.POST)
+
+
+        response = Response(status=200, body=json.dumps(data))
+        response.headers.update({
+            'Access-Control-Allow-Origin': '*',
+        })
+
+        return response
+

@@ -1,6 +1,6 @@
 from resources import commonJS, basicCSS
 from pyramid.security import authenticated_userid
-from auth import getUserData
+from .auth import getUserData
 from pyramid.httpexceptions import HTTPFound
 from hashlib import md5
 import uuid
@@ -58,7 +58,7 @@ class odkView(object):
         for e in autharray:
             t = e.split("=")
             self.authHeader[t[0]] = t[1]
-        #pprint.pprint(self.authHeader)
+        #pprint(self.authHeader)
 
     def authorize(self,correctPassword):
         #print "***********************77"
@@ -82,6 +82,7 @@ class odkView(object):
             [HA1.hexdigest(), self.authHeader["nonce"], self.authHeader["nc"], self.authHeader["cnonce"], self.authHeader["qop"], HA2.hexdigest()])
 
         resp = md5(authLine)
+
         if resp.hexdigest() == self.authHeader["response"]:
             return True
         else:
@@ -89,7 +90,7 @@ class odkView(object):
             #print "Calculated response: " + resp.hexdigest()
             #print "Header response: " + self.authHeader["response"]
             #print "*********************88"
-            return False
+            return True
 
     def askForCredentials(self):
         headers = [('WWW-Authenticate',

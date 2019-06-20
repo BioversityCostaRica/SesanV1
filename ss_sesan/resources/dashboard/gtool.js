@@ -20,9 +20,13 @@ $(document).ready(function () {
 
 
     $("#if_munic").val( $('#dset3').val());
-    console.log($('#dset3').val());
     $("#dset3").on('change', function (e) {
         $("#if_munic").val( $('#dset3').val());
+    });
+
+
+    $("#munic_list").on('change', function (e) {
+        $("#if_munic").val( $('#munic_list').val());
     });
 
 

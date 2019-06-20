@@ -59,6 +59,7 @@ def main(global_config, **settings):
     config.add_route('baseline', '/baseline')
     config.add_route('pilares', '/pilares')
     config.add_route('forms', '/forms')
+    config.add_route('seasonality', '/seasonality')
     config.add_route('weighing', '/weighing')
     config.add_route('about', '/about')
     config.add_route('gtool', '/gtool')
@@ -92,6 +93,10 @@ def main(global_config, **settings):
 
     config.add_route('helpfiles', '/about/{filename}')
     config.add_view(download_helpfiles, route_name="helpfiles", renderer=None)
+
+    #rules for seasonality
+    config.add_route('rules', '/rules')
+
 
 
 

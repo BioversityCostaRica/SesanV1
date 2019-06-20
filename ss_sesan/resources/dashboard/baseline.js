@@ -158,4 +158,27 @@ $(document).ready(function () {
     }
 
 
+
+
 });
+
+
+
+
+$(document).on('click', 'button.removebutton', function () {
+
+
+        var $row = jQuery(this).closest('tr');
+        var $columns = $row.find('td');
+
+
+
+
+        var o = new Option($columns[1].innerText, $columns[0].innerText);
+        $(o).html($columns[1].innerText);
+        $("#season_var2").append(o);
+        $('#season_var2').trigger("chosen:updated");
+
+        $(this).closest('tr').remove();
+        return false;
+ });

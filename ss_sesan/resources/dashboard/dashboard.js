@@ -1,10 +1,20 @@
 $(document).ready(function () {
     function getFiles() {
+        var pdata ={"getFiles": "1", "date": $("#cur_date").val()};
+        if ($("#munic_list").val()!= undefined){
+            if ($("#munic_list").val()== "") {
+                pdata = {"getFiles": "1", "date": $("#cur_date").val()}
+            }
+            else{
+                pdata = {"getFiles": $("#munic_list").val(), "date": $("#cur_date").val()}
+            }
+        };
+
 
         $.ajax({
             type: "POST",
             url: "uploadfiles",
-            data: {"getFiles": "1", "date": $("#cur_date").val()},
+            data: pdata,
             dataType: 'json',
             statusCode: {
                 201: function (data, textStatus, jqXHR) {
@@ -23,9 +33,18 @@ $(document).ready(function () {
 
                         var origin = window.location.origin;
 
+                        if (pdata["getFiles"] != "1"){
+                            dir = origin + /downfiles/ + $("#parent").val() + "/user/" + data["login"] + "/attach/" + $("#cur_date").val() + "/" + row;
+                            del = origin + /downfiles/ + $("#parent").val() + "/user/" + data["login"] + "/attach/" + $("#cur_date").val() + "/" + row + "_delfile";
 
-                        dir = origin + /downfiles/ + $("#parent").val() + "/user/" + $("#uname").val() + "/attach/" + $("#cur_date").val() + "/" + row;
+                        }
+                        else{
+                            dir = origin + /downfiles/ + $("#parent").val() + "/user/" + $("#uname").val() + "/attach/" + $("#cur_date").val() + "/" + row;
                         del = origin + /downfiles/ + $("#parent").val() + "/user/" + $("#uname").val() + "/attach/" + $("#cur_date").val() + "/" + row + "_delfile";
+
+                        }
+
+
 
                         row = '<a href="' + dir + '">' + row + '</a>';
 
@@ -772,13 +791,13 @@ function genMap() {
     var map_name = $('#map_name').val();
     console.log("http://190.111.0.168/kml/" + map_name + ".kml");
     var kmlLayer = new google.maps.KmlLayer({
+        //url: "http://"+window.location.host+"/kml/" + map_name + ".kml",
         url: "http://190.111.0.168/kml/" + map_name + ".kml",
         map: map1,
         preserveViewport: false
     });
 
     //kmlLayer.setMap(map1);
-
 
 
 }

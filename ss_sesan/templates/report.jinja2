@@ -35,14 +35,19 @@
                                             id="insti">{{ activeUser.fullName.decode("latin1") }}
 
 
-                                        {% if activeUser.user_role!=1 and activeUser.user_role!=2 %}
+                                        {% if activeUser.user_role!=1 and activeUser.user_role!=2 and activeUser.user_role!=3 %}
                                             | {{ activeUser.munic.decode("latin1").title() }}
                                         {% else %}
                                             {% if activeUser.user_role==2 %}
 
                                                 | {{ depto.decode("latin1").title() }}
+
+                                            {% else %}
+                                                | Supervisor
                                             {% endif %}
-                                        {% endif %}</strong>
+                                        {% endif %}
+
+                                    </strong>
 
                                 </span>
                                     <span>
@@ -84,49 +89,6 @@
                             <span class="m-r-sm text-muted welcome-message">Bienvenidos al sistema de monitoreo<a
                                     href="http://www.sesan.gob.gt/" style="color: #1ab492">SESAN</a></span></h2>
                         </li>
-
-                        {#                        <li class="dropdown">#}
-                        {#                            <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">#}
-                        {#                                <i class="fa fa-bell"></i> <span class="label label-primary">3</span>#}
-                        {#                            </a>#}
-                        {#                            <ul class="dropdown-menu dropdown-alerts">#}
-                        {#                                <li>#}
-                        {#                                    <a href="#" data-toggle="modal" data-target="#myModal4">#}
-                        {#                                        <div>#}
-                        {#                                            <i class="fa fa-check-square-o fa-fw"></i> Aprobar: MAGA#}
-                        {#                                            <span class="pull-right text-muted small">4 minutes ago</span>#}
-                        {#                                        </div>#}
-                        {#                                    </a>#}
-                        {#                                </li>#}
-                        {#                                <li class="divider"></li>#}
-                        {#                                <li>#}
-                        {#                                    <a href="#" data-toggle="modal" data-target="#myModal4">#}
-                        {#                                        <div>#}
-                        {#                                            <i class="fa fa-check-square-o fa-fw"></i> Aprobar: CONALFA#}
-                        {#                                            <span class="pull-right text-muted small">12 minutes ago</span>#}
-                        {#                                        </div>#}
-                        {#                                    </a>#}
-                        {#                                </li>#}
-                        {#                                <li class="divider"></li>#}
-                        {#                                <li>#}
-                        {#                                    <a href="#" data-toggle="modal" data-target="#myModal4">#}
-                        {#                                        <div>#}
-                        {#                                            <i class="fa fa-check-square-o fa-fw"></i> Aprobar: MSPAS#}
-                        {#                                            <span class="pull-right text-muted small">4 minutes ago</span>#}
-                        {#                                        </div>#}
-                        {#                                    </a>#}
-                        {#                                </li>#}
-                        {#                                <li class="divider"></li>#}
-                        {#                                <li>#}
-                        {#                                    <div class="text-center link-block">#}
-                        {#                                        <a href="#">#}
-                        {#                                            <strong>Aprobar todos</strong>#}
-                        {#                                            <i class="fa fa-check"></i>#}
-                        {#                                        </a>#}
-                        {#                                    </div>#}
-                        {#                                </li>#}
-                        {#                            </ul>#}
-                        {#                        </li>#}
 
 
                         <li>
@@ -183,6 +145,61 @@
                         </div>
 
                     {% endif %}
+
+
+
+                    {% if activeUser.user_role==3 %}
+                        <div class="col-sm-2" style="padding-top: 1.5%;">
+
+
+                            <form role="form" method="POST" action="{{ request.path }}" id="newMonth"
+                                  enctype='multipart/form-data'>
+                                    <select id="depto_list" name="dep_sel"
+                                            data-placeholder="Seleccione un departamento..."
+                                            class="chosen-select form-control m-b" tabindex="2">
+                                        <option value=""></option>
+
+
+                                        {% for row in fill_reg.depto %}
+
+                                            <option value="{{ row[0] }}"
+                                                    id="{{ row[0] }}" {% if sel_d ==  row[0]|string %}
+                                                    selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+
+                                    <select id="munic_list" name="munic_sel"
+                                            data-placeholder="Seleccione un municipio..."
+                                            class="chosen-select form-control m-b" tabindex="2"
+                                            onchange="this.form.submit();">
+                                        <option value=""></option>
+
+                                        {% for row in fill_reg.munic %}
+                                            <input type="hidden" {% if row[0]|string == sel_m %} sel="selected"
+                                                   {% else %}sel="" {% endif %} codeM="{{ row[0] }}"
+                                                   value="{{ row[1].decode("latin1") }}"
+                                                   codeD="{{ row[2] }}" class="mlist">
+
+                                        {% endfor %}
+
+
+                                    </select>
+
+
+                            </form>
+
+
+                        </div>
+
+                    {% endif %}
+
+
+
+
+
                     <div class="col-sm-2 text-right" style="padding-top: 0.5%">
 
 
@@ -265,7 +282,7 @@
 
 
                             <div id="sit_san2">
-                                <div class="col-md-3" id="sit_san" >
+                                <div class="col-md-3" id="sit_san">
                                     <div id="sit_min" style="text-align: center">
                                         <h2><strong>Situacion SAN</strong></h2>
                                         <strong>Fecha de

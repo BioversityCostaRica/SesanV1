@@ -52,7 +52,7 @@ def genPPTX(self, date):
     txBox = slide.shapes.add_textbox(Cm(4.9), Cm(2), Cm(15), Cm(1))
     tf = txBox.text_frame
     p = tf.add_paragraph()
-    p.text = u"Situación de Seguridad Alimentaria y Nutricional\n COMUSAN San José Del Golfo, Febrero,2018"
+    p.text = u"Situación de Seguridad Alimentaria y Nutricional\n COMUSAN %s, %s, %s" % (str(self.user.munic).decode("latin1"),date[0], date[1])
     p.font.size = Pt(20)
     p.font.bold = True
     p.font.color.rgb = RGBColor(114, 159, 207)
@@ -68,21 +68,21 @@ def genPPTX(self, date):
     table.cell(2, 0).text = u"Responsable del informe"
     table.cell(3, 0).text = u"Monitor"
     table.cell(0, 1).text = u"%s, %s" % (date[0], date[1])
-    table.cell(1, 1).text = u"COMUSAN de %s" % self.user.munic
+    table.cell(1, 1).text = u"COMUSAN de %s" % str(self.user.munic).decode("latin1")
     table.cell(2, 1).text = u"Oficina Municipal de SAN / SESAN"
-    table.cell(3, 1).text = u"%s" % self.user.fullName
+    table.cell(3, 1).text = u"%s" % str(self.user.fullName).decode("latin1")
 
     # slide 2
     title_slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(title_slide_layout)
-    pic = slide.shapes.add_picture("/home/acoto/sesan_repo/TMP/image1.png", Cm(1), Cm(2), Cm(10))
+    pic = slide.shapes.add_picture(self.request.registry.settings['user.repository']+"/TMP/image1.png", Cm(1), Cm(2), Cm(10))
 
-    pic = slide.shapes.add_picture("/home/acoto/sesan_repo/TMP/image3.png", Cm(14), Cm(2), Cm(8))
+    pic = slide.shapes.add_picture(self.request.registry.settings['user.repository']+"/TMP/image3.png", Cm(14), Cm(2), Cm(8))
 
     # slide 3
     title_slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(title_slide_layout)
-    pic = slide.shapes.add_picture("/home/acoto/sesan_repo/TMP/image2.png", Cm(2.6), Cm(0.5), Cm(20))
+    pic = slide.shapes.add_picture(self.request.registry.settings['user.repository']+"/TMP/image2.png", Cm(2.6), Cm(0.5), Cm(20))
 
     # slide 4
 
@@ -139,9 +139,18 @@ def genPPTX(self, date):
                     idr = rowcount + 2
 
                 tab.cell(idr, 4).text = d.decode("latin1").replace("_", " ")  # x[p][d]["val"][0]
-                tab.cell(idr, 5).text = str(float(data[p][d]["val"][0]))
+                try:
+
+                    tab.cell(idr, 5).text = str(float(data[p][d]["val"][0]))
+                except:
+                    tab.cell(idr, 5).text = data[p][d]["val"][0]
+
                 tab.cell(idr, 5).fill.solid()
-                c = tuple(int(data[p][d]["val"][1][0][0].lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))
+                try:
+                    c = tuple(int(data[p][d]["val"][1][0][0].lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))
+                except:
+                    c=[128,128,128]
+
                 tab.cell(idr, 5).fill.fore_color.rgb = RGBColor(c[0], c[1], c[2])
 
 
@@ -151,7 +160,11 @@ def genPPTX(self, date):
                     rowcount += 1
 
                     tab.cell(rowcount + 1, 6).text = v[0].decode("latin1").replace("_", " ")
-                    tab.cell(rowcount + 1, 7).text = str(float(v[3]))# color
+                    if v[3] !="Estacional":
+                        tab.cell(rowcount + 1, 7).text = str(float(v[3]))# color
+                    else:
+                        tab.cell(rowcount + 1, 7).text="Estacional"
+
                     tab.cell(rowcount + 1, 7).fill.solid()
                     c= tuple(int(v[5][0].lstrip('#')[i:i + 2], 16) for i in (0, 2, 4))
                     tab.cell(rowcount + 1, 7).fill.fore_color.rgb = RGBColor(c[0],c[1],c[2])
@@ -170,7 +183,7 @@ def genPPTX(self, date):
             mergeCellsVertically(tab, init, rowcount + 1, 3)
 
     san = dataReport(self, str(meses.index(date[0]) + 1), data["date"][1])
-    print san
+
     data["san"] = san["san"]
     tab.cell(2, 0).text = data["san"][2]
     tab.cell(2, 1).text = str(float(data["san"][0]))

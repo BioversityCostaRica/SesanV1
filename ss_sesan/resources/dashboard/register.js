@@ -91,6 +91,7 @@ $(document).ready(function () {
 
         var mun = $("#depto_list").val();
         $('#munic_list').empty();
+        $('#munic_list').append(new Option("", ""));
 
 
         $.each($(".mlist"), function (key, value) {
@@ -152,12 +153,39 @@ $(document).ready(function () {
         }
     });
 
-    $('#chb_del_mon').change(function() {
-        if($(this).is(":checked")) {
+    $('.chb_del_mon').change(function() {
+        /*if($(this).is(":checked")) {
             $("#m_l").show();
         }
         else{
             $("#m_l").hide();
+        }*/
+
+
+        if ($(this).attr("name") == "o1") {
+            $("#m_l").show();
+            $("#d_l").show();
+
+        }
+        else{
+            if ($(this).attr("name") == "o2") {
+                $("#m_l").hide();
+                $("#d_l").show();
+                var option = new Option("NA", "NA");
+                $('#munic_list').empty();
+                $('#munic_list').append($(option));
+                $("#munic_list").trigger("chosen:updated");
+            }
+            else{
+                if ($(this).attr("name") == "o3") {
+                    $("#m_l").hide();
+                    $("#d_l").hide();
+                    var option = new Option("NA", "NA");
+                    $('#munic_list').empty();
+                    $('#munic_list').append($(option));
+                    $("#munic_list").trigger("chosen:updated");
+                }
+            }
         }
     });
 
@@ -169,7 +197,7 @@ $(document).ready(function () {
         $(".toggle").css({"min-width": "20% !important","width": "20% !important"});
         $("#chb_del_mon").css({"min-width": "20% !important","width": "20% !important"});
 
-        console.log("ccsa");
+
 
     });
 

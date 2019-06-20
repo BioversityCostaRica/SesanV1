@@ -30,6 +30,7 @@
             <input type="hidden" value="{{ activeUser.login }}" id="uname">
 
 
+
             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
@@ -48,14 +49,19 @@
                                             id="insti">{{ activeUser.fullName.decode("latin1") }}
 
 
-                                        {% if activeUser.user_role!=1 and activeUser.user_role!=2 %}
+                                        {% if activeUser.user_role!=1 and activeUser.user_role!=2 and activeUser.user_role!=3 %}
                                             | {{ activeUser.munic.decode("latin1").title() }}
                                         {% else %}
                                             {% if activeUser.user_role==2 %}
 
                                                 | {{ depto.decode("latin1").title() }}
+
+                                            {% else %}
+                                                | Supervisor
                                             {% endif %}
-                                        {% endif %}</strong>
+                                        {% endif %}
+
+                                    </strong>
 
                                 </span>
                                     <span>
@@ -189,7 +195,7 @@
                                                               id="formXLS"
                                                               enctype='multipart/form-data'>
 
-                                                            {% if activeUser.user_role==2 %}
+                                                            {% if activeUser.user_role==2 or activeUser.user_role==3 %}
                                                                 <input type="hidden" id="genXLS"
                                                                        value="{{ dashData.date[0] }} {{ dashData.date[1] }} {{ sel_m }}"
                                                                        name="genXLS">
@@ -409,6 +415,51 @@
                                                             selected {% endif %}>{{ row[1].decode("latin1") }}</option>
 
                                                 {% endfor %}
+                                            </select>
+
+                                        </div>
+                                    {% endif %}
+
+
+
+                                    {% if activeUser.user_role==3 %}
+                                        <br>
+
+                                        <div class="input-group col-lg-12">
+
+
+
+
+                                            <select id="depto_list" name="dep_sel"
+                                                    data-placeholder="Seleccione un departamento..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+
+                                                {% for row in fill_reg.depto %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="{{ row[0] }}" {% if sel_d ==  row[0] | string %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        <select id="munic_list" name="munic_sel"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2" onchange="this.form.submit();">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.munic %}
+
+                                                    <input type="hidden"  {% if row[0]|string == sel_m %} sel="selected" {% else %}sel="" {% endif %}  codeM="{{ row[0] }}"
+                                                           value="{{ row[1].decode("latin1") }}"
+                                                           codeD="{{ row[2] }}" class="mlist">
+
+                                                {% endfor %}
+
+
                                             </select>
 
                                         </div>

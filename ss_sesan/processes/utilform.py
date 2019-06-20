@@ -70,6 +70,8 @@ def getFormList(user,request):
     for row in result:
         forms=mySession.query(Form.form_db).filter(Form.form_id==row.idforms).first()
         fname="_".join(forms.form_db.split("_")[2:])
+
+
         path = os.path.join(request.registry.settings['user.repository'], *[getParent(user), "user", user,fname, '*.json'])
         files=glob.glob(path)[0]
 
@@ -209,6 +211,8 @@ def convertXMLToJSON(uname,XMLFile,iniqueID,request):
 # ~/odktools/odktools/JSONToMySQL/./jsontomysql -u root -p inspinia4 -m CONALFA/manifest.xml -j sesan_data/CONALFA/56d9b4de-e8bd-495b-b8c8-2c7341434519.json -s DATA_CONALFA -J custom.js;
 def makeJSONToMySQL(uname,iniqueID,request,xformid):
 
+
+
     JSONToMySQL = os.path.join(request.registry.settings['odktools.path'], *["JSONToMySQL", "jsontomysql"])
 
     JSONFile = os.path.join(request.registry.settings['user.repository'],*[getParent(uname), "user", uname, "data", 'json', iniqueID, "*.json"])
@@ -226,6 +230,7 @@ def makeJSONToMySQL(uname,iniqueID,request,xformid):
         args.append("-m " + os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",xformid, "manifest.xml"]))
         args.append("-j " + JSONFile[0])
         args.append("-s " + "DATA_"+getParent(uname)+"_"+xformid)
+        args.append("-i " + os.path.join(request.registry.settings['user.repository'],"imported.log" ))
         #modify custom.js
 
         try:
@@ -235,7 +240,7 @@ def makeJSONToMySQL(uname,iniqueID,request,xformid):
 
             file2.close()
         except:
-            print ""
+            print "error: permiso denegado "+os.path.join(request.registry.settings['user.repository'], *[getParent(uname), "forms",xformid, "custom2.js"])
 
         if not os.path.exists(mapDir):
             os.makedirs(mapDir)
@@ -244,11 +249,11 @@ def makeJSONToMySQL(uname,iniqueID,request,xformid):
         try:
             check_call(args)
 
-            #print args
-            #print "insert"
+
         except CalledProcessError as e:
+
             msg = "Error exporting files to database \n"
-            msg = msg + "Commang: " + " ".join(args) + "\n"
+            msg = msg + "CommanJ: " + " ".join(args) + "\n"
             msg = msg + "Error: \n"
             msg = msg + e.message
             print msg
@@ -268,12 +273,13 @@ def storeSubmission(uname,request):
         os.makedirs(path)
         XMLFile = ""
         for key in request.POST.keys():
-            #print key
             filename = request.POST[key].filename
+
 
             input_file = request.POST[key].file
             file_path = os.path.join(path, filename)
             if file_path.upper().find('.XML') >=0:
+                file_path =file_path.replace(" ","_")
                 XMLFile = file_path
             temp_file_path = file_path + '~'
 
@@ -287,7 +293,9 @@ def storeSubmission(uname,request):
             flag, xformid=convertXMLToJSON(uname, XMLFile, str(iniqueID), request)
 
             if flag:
-                makeJSONToMySQL(uname,str(iniqueID),request,xformid)
+
+                if not makeJSONToMySQL(uname,str(iniqueID),request,xformid):
+                    return False
             else:
                 return False
         #Send the message to process the xml

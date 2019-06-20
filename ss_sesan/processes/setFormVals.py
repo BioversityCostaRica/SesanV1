@@ -291,6 +291,17 @@ def getUserMunic(user):
         return ""
 
 
+def genCurbanos(mun_id, csv_path):
+    mySession = DBSession()
+    result = mySession.query(CentrosUrbano.id_cu, CentrosUrbano.cu_name).filter_by(
+        munic_id=mun_id).all()
+    if result:
+        csv_curb = open(csv_path, "w")
+        csv_curb.write("urban_id,urban_name\n")
+        for row in result:
+            csv_curb.write(str(row.id_cu) + "," + str(row.cu_name) + "\n")
+        csv_curb.close()
+
 def form_to_user(request, login, fname, users,if_sel):
     users = users.split(",")
     for user in users:
@@ -320,6 +331,11 @@ def form_to_user(request, login, fname, users,if_sel):
             outfile.write(jsonString)
         if if_sel in [2,3]:
             cu1 = outdir.replace(fname.title().replace(" ", "_"), "curbanos.csv")
+            if not os.path.isfile(cu1):
+                mySession = DBSession()
+                result = mySession.query(User.user_munic).filter(User.user_name == user).first()
+                genCurbanos(result[0], cu1)
+                mySession.close()
             cu2 = f2.replace(login + "_" + fname.title().replace(" ", "_") + "_" + user + ".xml", "curbanos.csv")
             os.system("cp %s %s" % (cu1, cu2))
 
@@ -470,7 +486,7 @@ def genForm_Files(login, pilarId, request, fname, if_sel):
              "month-year"],
             ["select_one lista_curb" , "sem_comunidad_totales",
              "3-Seleccione la comunidad que esta reportando",
-             "", "", "", "", "", "search('curbanos')"],
+             "", "", "", "", "", "search search('curbanos')"],
             ["end group", "grpx", "", "", "", "", "", "", ""],
 
         ]
@@ -737,39 +753,44 @@ def genForm_Files(login, pilarId, request, fname, if_sel):
 def newForm(request, vals, login, if_sel):
     if_sel=int(if_sel.split("_")[1])
     vals = vals.split("++")
-    #try:
-    mySession = DBSession()
+    try:
+        mySession = DBSession()
 
-    newF = Form(form_user=login, form_name=vals[0], pilar_id=vals[1],
-                form_db="DATA_" + login + "_" + vals[0].title().replace(" ", "_"))
-    transaction.begin()
-
-    mySession.add(newF)
-
-    if vals[2] != "" and vals[2] != "undefined":
-        mySession.flush()
-        id_F = newF.form_id
-        mySession.refresh(newF)
-        uList = vals[2].split(",")
-        for u in uList:
-            newF_U = FormsByUser(idforms=id_F, id_user=u)
-            mySession.add(newF_U)
-    transaction.commit()
-    mySession.close()
-    if not genForm_Files(login, vals[1], request, vals[0],if_sel):
-        delForm(request, id_F, login)
+        print "DATA_" + login + "_" + vals[0].title().replace(" ", "_")
+        print vals[0]
         #raise
-    else:
-        if vals[2] != "":
-            form_to_user(request, login, vals[0], vals[2],if_sel)
-            add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login, vals[2])
 
 
-    return ["Correcto", "Formulario creado con exito", "success"]
+        newF = Form(form_user=login, form_name=vals[0], pilar_id=vals[1],
+                    form_db="DATA_" + login + "_" + vals[0].title().replace(" ", "_"))
+        transaction.begin()
+
+        mySession.add(newF)
+        id_F = newF.form_id
+        if vals[2] != "" and vals[2] != "undefined":
+            mySession.flush()
+            id_F = newF.form_id
+            mySession.refresh(newF)
+            uList = vals[2].split(",")
+            for u in uList:
+                newF_U = FormsByUser(idforms=id_F, id_user=u)
+                mySession.add(newF_U)
+        transaction.commit()
+        mySession.close()
+        if not genForm_Files(login, vals[1], request, vals[0],if_sel):
+            delForm(request, id_F, login)
+            #raise
+        else:
+            if vals[2] != "":
+                form_to_user(request, login, vals[0], vals[2],if_sel)
+                add_CU('DATA_' + login + '_' + vals[0].title().replace(' ', '_'), request, login, vals[2])
 
 
-    #except:
-    #    mySession.close()
+        return ["Correcto", "Formulario creado con exito", "success"]
+
+
+    except:
+       mySession.close()
     #    return ["Error", "Sucedio un error al generar el formulario", "error"]
 
 
@@ -788,7 +809,10 @@ def getUname(id_user):
     mySession = DBSession()
 
     result = mySession.query(User.user_fullname).filter(User.user_name == id_user).first()
-    return result[0]
+    try:
+        return result[0]
+    except:
+        return "Full name: no disponible"
 
 
 def getUsersF(fid):

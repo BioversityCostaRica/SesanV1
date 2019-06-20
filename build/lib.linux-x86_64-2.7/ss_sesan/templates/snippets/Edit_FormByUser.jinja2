@@ -1,0 +1,71 @@
+<div class="modal inmodal " id="modalE_{{ FID }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <i class="fa fa-retweet modal-icon"></i>
+                <h4 class="modal-title">Usuarios de este formulario </h4>
+
+            </div>
+
+
+            <div class="modal-body">
+
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="ibox">
+                            <div class="ibox-title">
+                                <h5>Seleccione los usuarios que utilizan este formulario</h5>
+
+                            </div>
+                            <div class="ibox-content">
+
+
+                                <p>
+                                    Selecciones los usuarios que utilizaran este formulario
+
+                                </p>
+
+
+                                {% if us|length == 0 and us_a|length ==0 %}
+                                    <p style="color: red">No hay usuarios disponibles</p>
+                                {% else %}
+
+                                    <select class="form-control dual_select" multiple id="fu_l_{{ FID }}">
+                                        {% for row in us %}
+                                            <option selected value="{{ row[0] }}">{{ row[1].decode("latin1") }}</option>
+                                        {% endfor %}
+                                        {% for row in us_a %}
+                                            {% if [row[1],row[0]] not in us %}
+                                            <option value="{{ row[1] }}">{{ row[0].decode("latin1") }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+            <form method="POST" role="form" class="form_fu" action="{{ request.path }}" id="{{ FID }}">
+                <div class="modal-footer">
+
+                    <input name="fu_{{ FID }}" id="fu_{{ FID }}" type="hidden" value="">
+
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" name="btn_save_fu" id="btn_save_fu">Guardar
+                        cambios
+                    </button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>

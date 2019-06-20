@@ -29,27 +29,27 @@
         <div class="col-lg-12 animated fadeInRight">
             <div class="row">
 
-                <div class="col-lg-12">
+                <div class="col-lg-12"  >
                     {% for doc in file_list %}
 
-                    <div class="file-box">
-                        <div class="file">
-                            <a href="{{ request.route_url("about")+"/"+doc[2] }}">
-                                <span class="corner"></span>
+                        <div class="file-box" style="min-height: 220px;">
+                            <div class="file">
+                                <a href="{{ request.route_url("about")+"/"+doc[2] }}">
+                                    <span class="corner"></span>
 
-                                <div class="icon">
-                                    <i class="fa {{ doc[1] }}"></i>
-                                </div>
-                                <div class="file-name">
-                                    {{ doc[2] }}
-                                    <br/>
-                                    <small>Por: SESAN</small>
-                                </div>
-                            </a>
+                                    <div class="icon">
+                                        <i class="fa {{ doc[1] }}"></i>
+                                    </div>
+                                    <div class="file-name">
+                                        {{ doc[2] }}
+                                        <br>
+                                        <small>Por: SESAN</small>
+                                    </div>
+                                </a>
+                            </div>
+
                         </div>
-
-                    </div>
-
+                        
 
                     {% endfor %}
 
