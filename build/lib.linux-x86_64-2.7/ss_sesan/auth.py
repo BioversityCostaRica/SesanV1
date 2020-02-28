@@ -1,12 +1,12 @@
-from models import DBSession,User as userModel, Institucione,Munic
-from encdecdata import decodeData
+from .models import DBSession,User as userModel, Institucione,Munic
+from .encdecdata import decodeData
 
 import urllib, hashlib,arrow
 
 
 #User class Used to store information about the user
 class User(object):
-    def __init__(self, login, password, fullName, organization, email, munic, joindate, user_role):
+    def __init__(self, login, password, fullName, parent, email, munic, joindate, user_role):
 
 
         default = "identicon"
@@ -18,7 +18,7 @@ class User(object):
         self.password = password
 
         self.fullName = fullName
-        self.organization = organization
+        self.parent = parent
         self.email = email
         self.munic = munic
         self.joindate = joindate
@@ -69,25 +69,17 @@ class User(object):
 #         return ['g:%s' % g for g in user.groups]
 
 def getUserData(user):
+    if user =="ND":
+        return "ND"
     res = None
     mySession = DBSession()
     result = mySession.query(userModel).filter_by(user_name = user).filter_by(user_active = 1).first()
 
     if not result is None:
-        res = User(result.user_name,"",result.user_fullname,getOrgName(result.user_organization),result.user_email, getMunicName(result.user_munic),result.user_joindate,result.user_role)
+        res = User(result.user_name,"",result.user_fullname,result.user_parent,result.user_email, getMunicName(result.user_munic),result.user_joindate,result.user_role)
     mySession.close()
     return res
 
-
-def getOrgName(org):
-    res = None
-    mySession = DBSession()
-    result = mySession.query(Institucione).filter_by(insti_id = org).first()
-
-    if not result is None:
-        res = result.insti_nombre
-    mySession.close()
-    return res
 
 def getMunicName(id):
     res = None

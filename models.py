@@ -103,7 +103,7 @@ class Log(Base):
     id = Column(Integer, primary_key=True)
     log_date = Column(DateTime)
     user = Column(String(45))
-    action = Column(String(450))
+    action = Column(String(10000))
     comment = Column(String(45))
     status = Column(String(45))
 

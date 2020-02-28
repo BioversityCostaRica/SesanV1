@@ -1,7 +1,7 @@
 #Authorization framework
 from pyramid.authentication import AuthTktAuthenticationPolicy
 from pyramid.authorization import ACLAuthorizationPolicy
-from .views import formList_view,manifest_view,mediaFile_view, XMLForm_view, push_view, submission_view,munic_kml,download_xls,download_helpfiles
+from .views import formList_view,manifest_view,mediaFile_view, XMLForm_view, push_view, submission_view,munic_kml,download_xls,download_helpfiles,general_report_view
 from pyramid.config import Configurator
 from sqlalchemy import create_engine
 from .models import (
@@ -65,6 +65,7 @@ def main(global_config, **settings):
     config.add_route('mails', '/mails')
     config.add_route('ranges', '/ranges')
     config.add_route('uploadfiles', '/uploadfiles')
+    config.add_route('seasonality', '/seasonality')
     config.add_route('downfiles', '/downfiles/{parent}/user/{user}/attach/{date}/{file}')
     config.add_route('logs', '/logs')
 
@@ -92,6 +93,9 @@ def main(global_config, **settings):
 
     config.add_route('helpfiles', '/about/{filename}')
     config.add_view(download_helpfiles, route_name="helpfiles", renderer=None)
+
+    config.add_route('generalreport', '/generalreport/{type}/{code}.pdf')
+    config.add_view(general_report_view, route_name="generalreport", renderer=None)
 
 
 

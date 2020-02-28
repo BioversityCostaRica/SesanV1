@@ -1,0 +1,454 @@
+{% extends 'dashboard.jinja2' %}
+{% block title %}
+    <title>SESAN | Pilares</title>
+{% endblock title %}
+
+
+{% block pageheading %}
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-8 text-center">
+            <h2>Mantenimiento de pilares</h2>
+        </div>
+    </div>
+{% endblock pageheading %}
+
+{% block dashmenu %}
+
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="pilares" %}
+
+{% endblock dashmenu %}
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    {% block pagecontent %}
+        <input type="hidden" value="{{ msg }}" id="msj">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Pilares</h5>
+                        <div class="ibox-tools">
+                            <div class="row">
+                                <div class="col-md-9">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-10">
+
+                                <button class="btn btn-primary " type="button" style="text-align: center; width: 80%"
+                                        data-toggle="modal" data-target="#modalPilar"><i
+                                        class="fa fa-plus"></i>&nbsp;Nuevo Pilar
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <p style="margin-top: 8px; text-align: center"><span
+                                        class="label label-default">Total: {{ pilar_data|length }}</span></p>
+                            </div>
+
+                            <!--->
+
+                            <!--->
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                        </div>
+                        <div class="row">
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+        <!------------------->
+        <div id="summary" style="font-size: 125% ">
+
+            {% for p in pilar_data %}
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <div class="col-sm-11">
+                            <h5>Pilar : {{ p.decode("latin1") }}</h5>
+                            <h5 style="color: #3f9aff">&nbsp;
+                                (CP : {{ pilar_data[p].coef }})</h5>
+                        </div>
+                        <form method="POST" role="form" action="{{ request.path }}" id="Form_Pilar" class="Form_Pilar">
+                            <div style="text-align: right">
+                                <input type="hidden" value="{{ pilar_data[p].p_id }}" name="p_id">
+                                {% if pilar_data[p].state %}
+                                    <button class="btn btn-success btn-circle btn-xs" type="button"
+                                            title="Pilar Completo"><i class="fa fa-check"></i>
+                                    </button>
+                                {% endif %}
+
+                                <button type="submit" class="btn btn-danger btn-circle btn-xs" type="button"><i
+                                        class="fa fa-times"></i>
+                                </button>
+                                <button type="button" class=" pop btn btn-info btn-circle btn-xs"
+                                        data-toggle="popover" data-placement="auto right"
+                                        data-content="{{ pilar_data[p].desc.decode("latin1") }}">
+                                    <i class="fa fa-info"></i>
+                                </button>
+
+
+                                {#                            <button class="btn btn-warning btn-circle btn-xs" type="button" data-toggle="modal"#}
+                                {#                                    data-target="#mo{{ pilar_data[p].p_id|string }}"><i class="fa fa-edit"></i>#}
+                                {#                            </button>#}
+
+
+                        </form>
+                    </div>
+
+                </div>
+                <div class="ibox-content">
+
+                    <table class="footable table table-stripped toggle-arrow-tiny">
+                        <thead>
+                        <tr>
+
+                            <th data-toggle="true" data-sortable="false"
+                                class="footable-visible footable-first-column footable-sortable">Indicador<span
+                                    class="footable-sort-indicator"></span></th>
+
+
+                            <th data-hide="all" style="display: none;" class="footable-sortable"><span
+                                    class="footable-sort-indicator"></span></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+
+                        {% for i in pilar_data[p].ind %}
+                            <tr style="" class="footable-even">
+
+                                <td class="footable-visible footable-first-column"><span
+                                        class="footable-toggle"></span>{{ i.name.decode("latin1") }}
+                                </td>
+
+
+                                <td style="display: none;">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>Variable</th>
+                                            <th>Unidad de medida</th>
+                                            <th>Pregunta</th>
+                                            <th>Acciones</th>
+
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for v in i.vars %}
+                                            <tr>
+                                                <td>{{ v.name_variable_ind.decode("latin1") }}</td>
+                                                <td class="text-center">{{ v.unidad_variable_ind.decode("latin1") }}</td>
+                                                <td class="text-center">{{ v.v_pregunta.decode("latin1") }}</td>
+                                                <td class="text-center">
+
+
+                                                    <button class="btn btn-warning btn-circle btn-xs"
+                                                            type="button"
+                                                            data-toggle="modal"
+                                                            data-target="#modal_v_{{ v.id_variables_ind }}"><i
+                                                            class="fa fa-edit"></i>
+                                                    </button>
+
+                                                    {% snippet "snippets/edit_variables.jinja2", request=request, id_variables_ind=v.id_variables_ind, name_variable_ind=v.name_variable_ind.decode("latin1"), v_pregunta=v.v_pregunta.decode("latin1"),unidad_variable_ind=v.unidad_variable_ind.decode("latin1"), min=v.var_min, max=v.var_max, range=v.range %}
+
+
+                                                </td>
+
+
+                                            </tr>
+                                        {% endfor %}
+
+
+                                        </tbody>
+                                    </table>
+                                </td>
+
+
+                            </tr>
+
+                        {% endfor %}
+
+
+                        </tbody>
+                        <tfoot>
+                        <tr>
+
+                        </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+                </div>
+                {#                {% snippet "snippets/update_pilar_modal.jinja2", request=request, pp=p, mId="mo"+ pilar_data[p].p_id|string,data=pilar_data[p], indL=pilar_data[p].indL  %}#}
+
+            {% endfor %}
+        <input type="hidden" value="{{ vars_id }}" id="vars_id">
+
+        </div>
+        <!---------------->
+        {#        <div class="col-lg-4">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <h3>To-do</h3>
+                    <p class="small"><i class="fa fa-hand-o-up"></i> Drag task between list</p>
+
+                    <div class="input-group">
+                        <input type="text" placeholder="Add new task. " class="input input-sm form-control" id="newT">
+                        <span class="input-group-btn">
+                                        <button type="button" class="btn btn-sm btn-white"> <i class="fa fa-plus"></i> Add task</button>
+                                </span>
+                    </div>
+
+                    <ul class="sortable-list connectList agile-list" id="todo">
+
+                        <li class="info-element" id="task3">
+                            Sometimes by accident, sometimes on purpose (injected humour and the like).
+                            <div class="agile-detail">
+                                <div class="col-sm-3"><input type="text" placeholder="Unidad de medida"
+                                                             title="Unidad de medida"
+                                                             class="input input-sm form-control"></div>
+                                <div class="col-sm-3"><input type="text" placeholder="Add new task. "
+                                                             class="input input-sm form-control"></div>
+                                <div class="col-sm-3"><input type="text" placeholder="Add new task. "
+                                                             class="input input-sm form-control"></div>
+
+                                <div class="col-sm-3"><input type="text" placeholder="Add new task. "
+                                                             class="input input-sm form-control"></div>
+                                <br><br><br>
+                                <div class="col-sm-8 form-control input-sm" id="slider0"></div>
+                                <br><br><br>
+                                <a href="#" class="pull-right btn btn-xs btn-white">Mark</a>
+                                <i class="fa fa-clock-o"></i> 16.11.2015
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>#}
+
+
+
+
+
+        <!--Modal-->
+        <div class="modal inmodal modal_nf" id="modalPilar" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                                class="sr-only">Close</span></button>
+                        <i class="fa fa-location-arrow modal-icon"></i>
+                        <h4 class="modal-title">Pilar nuevo</h4>
+
+                    </div>
+                    <div class="modal-body" style="overflow-y: auto; padding: 1px 0px 0px 0px ">
+
+                        <div class="col-lg-12" style="width: 100%;">
+                            <div class="ibox">
+                                <div class="ibox-title">
+                                    <h5>Informacion del pilar nuevo</h5>
+
+                                </div>
+                                <div class="ibox-content">
+
+                                    <p>
+                                        Este asistente lo guiara en lo pasos necesarios para crear un pilar nuevo
+                                    </p>
+
+                                    <form method="POST" role="form" class="wizard-big formwiz"
+                                          action="{{ request.path }}" id="form">
+                                        <h1>Pilar</h1>
+                                        <fieldset>
+                                            <h2>Detalles del pilar</h2>
+                                            <div class="row">
+                                                <div class="col-lg-8">
+                                                    <div class="form-group">
+                                                        <label>Nombre *</label>
+                                                        <input id="pilarName" name="pilarName" type="text"
+                                                               class="form-control required" value="">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Coeficiente de ponderacion *</label>
+                                                        <button class="btn btn-warning btn-circle btn-outline btn-lg"
+                                                                type="button" style="border: none;"
+                                                                data-toggle="popover"
+                                                                data-placement="auto right"
+                                                                data-content="<div style='font-size: small;width: 250px;'><label>Coeficiente de ponderación.Proporciona orden de importancia a cada variable</label><table class='table table-bordered'><tbody><tr><td>Muy Alto Impacto</td><td>10</td><td>9</td></tr><tr><td>Alto impacto</td><td>8</td><td>7</td></tr><tr><td>Medio impacto</td><td>6</td><td>5</td></tr><tr><td>Bajo impacto</td><td>4</td><td>3</td></tr><tr><td>Muy bajo impacto</td><td>2</td><td>1</td></tr></tbody></table><div>"
+                                                                data-html="true"><i
+                                                                class="fa fa-info-circle"></i></button>
+                                                        <input id="coef_pond" name="coef_pond" type="number" min="1"
+                                                               max="10"
+                                                               class="form-control required" value="">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label>Descripcion</label>
+                                                        <input id="desc" name="desc" type="text"
+                                                               class="form-control required" value="">
+
+
+                                                    </div>
+
+
+                                                </div>
+                                                <div class="col-lg-4">
+
+                                                    <div class="text-center">
+                                                        <div>
+
+                                                            <div class="ibox float-e-margins">
+                                                                <i class="fa fa-tasks"
+                                                                   style="font-size: 180px;color: #e5e5e5 "></i>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </fieldset>
+                                        <h1>Indicadores</h1>
+                                        <fieldset>
+                                            <h2>Ingrese los indicadores necesarios para completar el pilar</h2>
+                                            <div class="row">
+                                                <div class="col-lg-8">
+                                                    <div class="form-group">
+                                                        <label>Nombre de los indicadores *</label>
+                                                        <div id="tags" style="border: 0px solid #ffffff !important;">
+                                                            <input class="tagsinput form-control" id="ind_tags"
+                                                                   name="ind_tags"
+                                                                   type="text"
+                                                                   value=""/>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="text-center">
+                                                        <div>
+
+                                                            <div class="ibox float-e-margins">
+                                                                <i class="fa fa-tags"
+                                                                   style="font-size: 180px;color: #e5e5e5 "></i>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+
+
+                                        <h1>Variables</h1>
+                                        <fieldset>
+                                            <!---->
+                                            <h2>Ingrese las variables para cada uno de los indicadores</h2>
+
+                                            <div class="col-lg-12">
+                                                <div class="tabs-container">
+                                                    <div class="tabs-left">
+                                                        <ul class="nav nav-tabs vertical" id="tab_list">
+
+                                                        </ul>
+                                                        <div class="tab-content" id="tab_cont">
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                            <!---->
+
+
+                                        </fieldset>
+
+                                        <h1>Finalizar</h1>
+                                        <fieldset>
+                                            <h2>Seleccione los rangos criticos para este pilar</h2>
+                                            <!----->
+
+                                            <div id="rangos_div">
+
+                                                <ul class="sortable-list connectList agile-list" id="todo">
+
+
+                                                    <div class="agile-detail">
+
+                                                        <br><br><br>
+                                                        <div class="col-sm-12 form-control input-sm slider0"
+                                                             id="slider_nf"></div>
+                                                        <br><br>
+                                                        <div class="row">
+                                                            <small class="col-lg-3 " id="rang1_nf">rang1</small>
+                                                            <small class="col-lg-3 " id="rang2_nf">rang1</small>
+                                                            <small class="col-lg-3 " id="rang3_nf">rang1</small>
+                                                            <small class="col-lg-3 " id="rang4_nf">rang1</small>
+                                                        </div>
+                                                        <br><br>
+
+                                                        <br><br>
+                                                    </div>
+                                                    <input name="vdR_nf" id="vdR_nf" type="hidden" value="">
+
+                                                </ul>
+
+                                            </div>
+
+
+                                            <!----->
+
+
+                                        </fieldset>
+                                        <input name="jsondata" id="jsondata" type="hidden" value="">
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        {#                        <button type="button" class="btn btn-primary">Save changes</button>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal-->
+
+
+
+    {% endblock pagecontent %}
+
+
+</div>
+
+
+
+
+

@@ -15,7 +15,7 @@
     </div>
 {% endblock pageheading %}
 {% block dashmenu %}
-    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="profile", dates=dates[0] +"_"+ dates[1]%}
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="profile", dates=dates[0] +"_"+ dates[1] %}
 
 {% endblock dashmenu %}
 
@@ -45,14 +45,19 @@
                                     <dd><a href="#" class="text-navy"> {{ activeUser.parent }}</a></dd>
 
                                     {% if activeUser.user_role==2 %}
-                                    <dt>Departamento:</dt>
-                                    <dd> {{ depto.decode("latin1") }} </dd>
+                                        <dt>Departamento:</dt>
+                                        <dd> {{ depto.decode("latin1") }} </dd>
                                     {% else %}
+                                        {% if activeUser.user_role==0 %}
 
-                                    <dt>Municipio:</dt>
-                                    <dd> {{ activeUser.munic.decode("latin1") }} </dd>
-                                    <dt>Formularios :</dt>
-                                    <dd> {{ forms }} </dd>
+                                            <dt>Municipio:</dt>
+                                            <dd> {{ activeUser.munic.decode("latin1") }} </dd>
+                                            <dt>Formularios :</dt>
+                                            <dd> {{ forms }} </dd>
+                                        {% else %}
+                                            <dt>Rol:</dt>
+                                            <dd> Supervisor</dd>
+                                        {% endif %}
                                     {% endif %}
                                 </dl>
                             </div>
@@ -69,14 +74,14 @@
 
                             </div>
                             {% if activeUser.user_role!=2 %}
-                            <div class="row col-lg-12" id="cluster_info" align="center">
+                                <div class="row col-lg-12" id="cluster_info" align="center">
 
-                                <dt>Configuracion</dt>
-                                <img src="{{ config }}" alt="person" style="width: 22%;"/>
+                                    <dt>Configuracion</dt>
+                                    <img src="{{ config }}" alt="person" style="width: 22%;"/>
 
 
-                            </div>
-                        {% endif %}
+                                </div>
+                            {% endif %}
 
                         </div>
 

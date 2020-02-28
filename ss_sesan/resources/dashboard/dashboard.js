@@ -1,10 +1,22 @@
 $(document).ready(function () {
+
+
     function getFiles() {
+        var pdata = {"getFiles": "1", "date": $("#cur_date").val()};
+        if ($("#munic_list").val() != undefined) {
+            if ($("#munic_list").val() == "") {
+                pdata = {"getFiles": "1", "date": $("#cur_date").val()}
+            } else {
+                pdata = {"getFiles": $("#munic_list").val(), "date": $("#cur_date").val()}
+            }
+        }
+        ;
+
 
         $.ajax({
             type: "POST",
             url: "uploadfiles",
-            data: {"getFiles": "1", "date": $("#cur_date").val()},
+            data: pdata,
             dataType: 'json',
             statusCode: {
                 201: function (data, textStatus, jqXHR) {
@@ -23,9 +35,16 @@ $(document).ready(function () {
 
                         var origin = window.location.origin;
 
+                        if (pdata["getFiles"] != "1") {
+                            dir = origin + /downfiles/ + $("#parent").val() + "/user/" + data["login"] + "/attach/" + $("#cur_date").val() + "/" + row;
+                            del = origin + /downfiles/ + $("#parent").val() + "/user/" + data["login"] + "/attach/" + $("#cur_date").val() + "/" + row + "_delfile";
 
-                        dir = origin + /downfiles/ + $("#parent").val() + "/user/" + $("#uname").val() + "/attach/" + $("#cur_date").val() + "/" + row;
-                        del = origin + /downfiles/ + $("#parent").val() + "/user/" + $("#uname").val() + "/attach/" + $("#cur_date").val() + "/" + row + "_delfile";
+                        } else {
+                            dir = origin + /downfiles/ + $("#parent").val() + "/user/" + $("#uname").val() + "/attach/" + $("#cur_date").val() + "/" + row;
+                            del = origin + /downfiles/ + $("#parent").val() + "/user/" + $("#uname").val() + "/attach/" + $("#cur_date").val() + "/" + row + "_delfile";
+
+                        }
+
 
                         row = '<a href="' + dir + '">' + row + '</a>';
 
@@ -117,12 +136,10 @@ $(document).ready(function () {
     $("#newV_0").click(function () {
         if (!$("#newT_0").val()) {
             alert("texto en blanco")
-        }
-        else {
+        } else {
             if (vars.indexOf($("#newT_0").val()) >= 0) {
                 alert("ya existe esa variable")
-            }
-            else {
+            } else {
                 vars.push($("#newT_0").val());
                 console.log("agregar var");
 
@@ -317,8 +334,7 @@ $(document).ready(function () {
 
                 if (vals.length >= 1 && vals[0] != "") {
                     set_white_tag();
-                }
-                else {
+                } else {
                     set_red_tag();
                     return false;
                 }
@@ -333,8 +349,7 @@ $(document).ready(function () {
                         vals = vals.split(",");
                         if (vals.length >= 1 && vals[0] != "") {
                             set_white_tag();
-                        }
-                        else {
+                        } else {
                             set_red_message(final_vals_class[i]);
                             return false;
                         }
@@ -405,8 +420,7 @@ $(document).ready(function () {
 //-------------------------
     try {
         genMap();
-    }
-    catch (err) {
+    } catch (err) {
     }
 
 
@@ -428,10 +442,18 @@ $(document).ready(function () {
             clear: "Borrar",
             weekStart: 1,
             format: "dd/mm/yyyy"
-        }
+        };
+
+
+        var datesToDisable = $('#dateP').data("datesDisabled").split(',');
+
+
+        var dateStart = new Date();
+        dateStart.setDate(dateStart.getDate() - 1);
 
         $('#dateP').datepicker({
-            minViewMode: 1,
+            startView: "months",
+            minViewMode: "months",
             keyboardNavigation: false,
             forceParse: false,
             forceParse: false,
@@ -439,19 +461,34 @@ $(document).ready(function () {
             todayHighlight: true,
             format: 'MM yyyy',
             //monthsShort:["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"],
-            language: "es"
+            language: "es",
+            //datesDisabled: dp.dataset.datesDisabled.split(","),
+        }).on("show", function (event) {
 
+            var year = $("th.datepicker-switch").eq(1).text();  // there are 3 matches
+
+            $(".month").each(function (index, element) {
+                var el = $(element);
+
+                var hideMonth = $.grep(datesToDisable, function (n, i) {
+                    return n.substr(4, 4) == year && n.substr(0, 3) == el.text();
+                });
+
+                if (!hideMonth.length)
+                    el.addClass('disabled');
+
+
+            });
         });
+
 
         $('#dateP').datepicker().on("changeDate", function (e) {
 
-            //$('#dateP').datepicker('update')
-            //alert($("#dateP").val())
             $('#newMonth').submit();
-            // `e` here contains the extra attributes
         });
-    }
-    catch (err) {
+
+
+    } catch (err) {
 
     }
 
@@ -515,7 +552,7 @@ $(document).ready(function () {
         var doughnutData = {
             labels: ["% Dias: " + (100 / parseInt(pltData[0])) * parseInt(pltData[1]).toString()],
             datasets: [{
-                data: [(100 / parseInt(pltData[0])) * parseInt(pltData[1]), 100 - (100 / parseInt(pltData[0]) ) * parseInt(pltData[1])],
+                data: [(100 / parseInt(pltData[0])) * parseInt(pltData[1]), 100 - (100 / parseInt(pltData[0])) * parseInt(pltData[1])],
                 backgroundColor: ["#1AB394", "#dedede"]
             }]
         };
@@ -557,8 +594,7 @@ $(document).ready(function () {
         var ctx4 = document.getElementById("doughnutChart").getContext("2d");
         new Chart(ctx4, {type: 'doughnut', data: doughnutData, options: doughnutOptions});
         //$("#doughnutChart").hide();
-    }
-    catch (err) {
+    } catch (err) {
 
     }
 
@@ -592,9 +628,7 @@ function expandFoo() {
         expand();
         $("#collapse").html("Ocultar todo");
 
-    }
-
-    else if ($("#collapse").html().indexOf("Ocultar") >= 0) {
+    } else if ($("#collapse").html().indexOf("Ocultar") >= 0) {
         collapse();
 
         $("#collapse").html("Mostrar todo");
@@ -608,177 +642,101 @@ function showPDF() {
 
     $("#formXLS").submit();
 
-    /*expand();
-
-     var doc = new jsPDF();
-     doc.setProperties({
-     title: "Reporte SESAN",
-     subject: "Bioversity International",
-     author: 'Bioversity International',
-     creator: 'Copyright Bioversity International © 2017'
-     });
-     doc.text($("#title").html(), 10, 20);
-     doc.text(" ", 10, 25);
-
-     doc.addHTML($('#summary'), -30, 44, {
-     'background': '#fff',
-     pagesplit: true,
-     'width': 1000,
-     }, function () {
-     doc.save('report.pdf');
-     });
-
-     collapse();*/
 }
 
 function genMap() {
-    var mapOptions1 = {
-        zoomControl: true,
-        mapTypeControl: false,
-        scaleControl: false,
-        streetViewControl: false,
-        rotateControl: false,
-        fullscreenControl: false,
-        draggable: true,
-        zoom: 11,
-        center: new google.maps.LatLng(15.1554019, -90.3945255),
-        // Style for Google Maps
-        styles: [{
-            "featureType": "administrative",
-            "elementType": "all",
-            "stylers": [{"saturation": "-100"}]
-        }, {
-            "featureType": "administrative.country",
-            "elementType": "labels",
-            "stylers": [{"visibility": "on"}]
-        }, {
-            "featureType": "administrative.province",
-            "elementType": "all",
-            "stylers": [{"visibility": "off"}]
-        }, {
-            "featureType": "administrative.province",
-            "elementType": "labels",
-            "stylers": [{"visibility": "on"}]
-        }, {
-            "featureType": "administrative.locality",
-            "elementType": "labels",
-            "stylers": [{"visibility": "on"}, {"hue": "#ff0000"}]
-        }, {
-            "featureType": "landscape",
-            "elementType": "all",
-            "stylers": [{"saturation": -100}, {"lightness": 65}, {"visibility": "on"}]
-        }, {
-            "featureType": "poi",
-            "elementType": "all",
-            "stylers": [{"saturation": -100}, {"lightness": "50"}, {"visibility": "simplified"}]
-        }, {
-            "featureType": "road",
-            "elementType": "all",
-            "stylers": [{"saturation": "-100"}]
-        }, {
-            "featureType": "road.highway",
-            "elementType": "all",
-            "stylers": [{"visibility": "simplified"}]
-        }, {
-            "featureType": "road.arterial",
-            "elementType": "all",
-            "stylers": [{"lightness": "30"}]
-        }, {
-            "featureType": "road.local",
-            "elementType": "all",
-            "stylers": [{"lightness": "40"}]
-        }, {
-            "featureType": "transit",
-            "elementType": "all",
-            "stylers": [{"saturation": -100}, {"visibility": "simplified"}]
-        }, {
-            "featureType": "water",
-            "elementType": "geometry",
-            "stylers": [{"hue": "#ffff00"}, {"lightness": -25}, {"saturation": -97}]
-        }, {"featureType": "water", "elementType": "labels", "stylers": [{"lightness": -25}, {"saturation": -100}]}]
-    };
 
-    var mapElement1 = document.getElementById('map1');
 
-    var map1 = new google.maps.Map(mapElement1, mapOptions1);
+    //kmlLayer.setMap(map1);
+    var map = L.map('map1').setView([15.1554019, -90.3945255], 6);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.pn', {
+        attribution: 'SESAN'
+    }).addTo(map);
 
-    var legend = document.getElementById('legend');
-    //map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+    L.easyPrint({
+        sizeModes: ['Current'],
+        filename: 'myMap',
+        exportOnly: true,
+        position: 'topleft',
+        hideClasses: ['leaflet-control-easyPrint'],
+        hideControlContainer: false
+    }).addTo(map);
+
 
     var map_points = $('#map_points').val();
     map_points2 = map_points.replace("[[", "").replace("]]", "").split("], [");
-    //map_points2 = map_points.split("], [");
-    //map_points2 = JSON.parse("[" + map_points.replace(/'/g, '"') + "]");
+
+    var lat = [];
+    var lon = [];
+    var markers = []
+
+    for (i = 0; i < map_points2.length; i++) {
+        var row = map_points2[i].split(",");
+
+        /*L.marker([parseFloat(row[2].toString().replace(" ", "")), parseFloat(row[3].toString().replace(" ", ""))]).addTo(map)
+            .bindPopup(row[1].split("'").join(""));*/
+
+        var lat = parseFloat(row[2].toString().replace(" ", ""));
+        var lon = parseFloat(row[3].toString().replace(" ", ""));
+        var color = row[4].split("'").join("")
+        var latlng = L.latLng({lat: lat, lng: lon});
+        var geojsonMarkerOptions = {
+            fillColor: color,
+            opacity: 1,
+            weight: 8,
+            fillOpacity: 1,
+            stroke: false
+
+        };
 
 
-
-     var lat = [];
-     var lon = [];
-
-
-     for (i = 0; i < map_points2.length; i++) {
-     var row = map_points2[i].split(",");
-
-     var marker = new google.maps.Marker({
-
-     position: {
-     lat: parseFloat(row[2].toString().replace(" ", "")),
-     lng: parseFloat(row[3].toString().replace(" ", ""))
-     },
-
-     map: map1,
-     title: row[1].split("'").join(""),
-     //label: { text: map_points2[0][i].vals[0][1] },
-
-     icon: {
-     path: google.maps.SymbolPath.CIRCLE,
-     scale: 8.5,
-     fillColor: row[4].split("'").join(""),
-     fillOpacity: 0.4,
-     strokeWeight: 0.4
-     },
-     //icon: 'https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&ved=0ahUKEwjN6OaB79rYAhWDyVMKHeehAwMQjBwIBA&url=https%3A%2F%2Fwww.pr7.it%2Fwp-content%2Fuploads%2F2013%2F04%2Fpr7-green-point.png&psig=AOvVaw26MJGpQogf07H2wF4a7xiV&ust=1516136566665061'
-     });
-
-     if (!lat.includes(parseFloat(row[2].toString().replace(" ", "")))) {
-     lat.push(parseFloat(row[2].toString().replace(" ", "")))
-     }
-
-     if (!lon.includes(parseFloat(row[3].toString().replace(" ", "")))) {
-     lon.push(parseFloat(row[3].toString().replace(" ", "")))
-     }
-     }
-     ;
+        var marker = L.circleMarker(latlng, geojsonMarkerOptions).addTo(map);
+        //marker.bindPopup("<b>" + entry.key + "</b>");
+        marker.setRadius(8);
+        markers.push(marker);
 
 
-     var total = 0;
-     for (var i in lat) {
-     total += lat[i];
-     }
-     ;
-     lat = total / lat.length;
-     total = 0;
-     for (var i in lon) {
-     total += lon[i];
-     }
-     ;
-     lon = total / lon.length;
-     map1.setCenter({lat: lat, lng: lon});
+        /*if (!lat.includes(parseFloat(row[2].toString().replace(" ", "")))) {
+            lat.push(parseFloat(row[2].toString().replace(" ", "")))
+        }
 
-     var legend = document.getElementById('legend');
-     map1.controls[google.maps.ControlPosition.RIGHT_TOP].push(legend);
+        if (!lon.includes(parseFloat(row[3].toString().replace(" ", "")))) {
+            lon.push(parseFloat(row[3].toString().replace(" ", "")))
+        }*/
+    }
+    ;
 
+    //var ipaadd = "0.0.0.0:5900";
+    var ipaadd = "190.111.0.168";
+
+    var group = new L.featureGroup(markers);
 
     var map_name = $('#map_name').val();
-    console.log("http://190.111.0.168/kml/" + map_name + ".kml");
-    var kmlLayer = new google.maps.KmlLayer({
-        url: "http://190.111.0.168/kml/" + map_name + ".kml",
-        map: map1,
-        preserveViewport: false
-    });
+    var san_color = $('#san_color').val();
+    var url = "http://" + ipaadd + "/kml/" + map_name + ".kml";
 
-    //kmlLayer.setMap(map1);
 
+    var runLayer = omnivore.kml(url)
+        .on('ready', function () {
+            map.fitBounds(runLayer.getBounds());
+            this.setStyle({color: san_color});
+        })
+        .addTo(map);
+
+
+    /* $('#general_report').on('click', function () {
+         console.log(map_name);
+         $.post("http://" + ipaadd + "/generalreport/report.pdf", {'code': map_name, 'type': 1}, function (result) {
+                var blob=new Blob([result]);
+                 var link=document.createElement('a');
+                 link.href=window.URL.createObjectURL(blob);
+                 link.download="report.pdf";
+                 link.click();
+         });
+
+
+
+     });*/
 
 
 }

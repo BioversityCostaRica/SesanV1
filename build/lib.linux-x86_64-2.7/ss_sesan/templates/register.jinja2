@@ -16,118 +16,499 @@
 {% endblock pageheading %}
 
 {% block dashmenu %}
-    <li>
-        <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-th-large"></i> <span
-                class="nav-label">Inicio</span> </a>
-    </li>
-    <li >
-        <a href="{{ request.route_url('profile') }}"><i class="fa fa-user-circle-o"></i> <span
-                class="nav-label">Perfil</span></a>
-    </li>
-    <li>
-        <a href="{{ request.route_url('dashboard') }}"><i class="fa fa-ellipsis-h"></i> <span
-                class="nav-label">Acerca de</span></a>
-
-    </li>
-    {% if activeUser.user_role==1  %}
-    <li class="active">
-        <a href="{{ request.route_url('register') }}"><i class="fa fa-vcard-o"></i> <span
-                class="nav-label">Agregar usuario</span></a>
-
-    </li>
-    {% endif %}
-    <li>
-        <a href="{{ request.route_url('report') }}"><i class="fa fa-ellipsis-h"></i> <span
-                class="nav-label">Reporte</span></a>
-
-    </li>
+    {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="register" %}
 {% endblock dashmenu %}
+
+
 
 <div class="wrapper wrapper-content animated fadeInRight">
     {% block pagecontent %}
+        <input type="hidden" value="{{ msg }}" id="msj">
+        <!--------------------->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Lista de usuarios </h5>
 
-    <div class="col-lg-10">
-        <div class="ibox float-e-margins">
-            <div class="ibox-title">
-                <h5>Complete el siguiente formulario para agregar usuarios nuevos</h5>
+                        <div class="row" style="text-align: right">
 
-            </div>
-            <div class="ibox-content">
-                <form method="POST" role="form" class="form-horizontal m-t" action="{{ request.path }}" id="submit">
 
-                    <div class="form-group"><label class="col-sm-2 control-label">Nombre completo</label>
-                        <div class="col-sm-10"><input required="" type="text" class="form-control" name="fullname"></div>
-                    </div>
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Nombre de usuario</label>
-                        <div class="col-sm-10"><input required="" type="text" class="form-control" name="user_name"> <span class="help-block m-b-none">Este es el nombre de usuario que se usara para ingresar al sistema</span>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary " type="button"
+                                                style="text-align: center; width: 20%; margin-right: 2%"
+                                                data-toggle="modal" data-target="#modalUsers"><i
+                                                class="fa fa-plus"></i>&nbspNuevo usuario
+                                </button>
+                                    </span>
+
                         </div>
+
                     </div>
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Contraseña</label>
+                    <div class="ibox-content">
 
-                        <div class="col-sm-10"><input required="" type="password" class="form-control" name="password" id="password"></div>
-                    </div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Verificar</label>
-                        <div class="col-sm-10"><input required type="password" class="form-control" name="password2" id="password2"><span id='message'></span></div>
-                    </div>
-                    <div class="hr-line-dashed"></div>
 
-                    <div class="form-group"><label class="col-sm-2 control-label">Correo electronico</label>
-                        <div class="col-sm-10"><input required type="email" class="form-control" name="email"></div>
-                    </div>
+                        <div class="table-responsive" style="display: block;">
 
-                    <div class="hr-line-dashed"></div>
+                            <h5>Monitores </h5>
 
-                    <div class="form-group"><label class="col-sm-2 control-label">Institucion</label>
 
-                        <div class="col-sm-10">
-                            <select id="inst_list" name="inst" data-placeholder="Seleccione una institucion..." class="chosen-select form-control m-b"  tabindex="2">
-                                <option value=""></option>
-                                {% for row in fill_reg["insti"] %}
-                                    <option value="{{ row[0] }}" id="i_{{ row[0] }}"> {{ row[1] }}</option>
+                            <table class="table table-bordered table-hover"
+                                   style="{% if ulist | length > 3 %} max-width: 99.25% {% else %}max-width: 100% {% endif %} ;margin-bottom: 0%;max-height: 30px">
+                                <thead style="display: contents;">
+                                <tr>
+
+
+                                    <th style="width: 20%">Monitores</th>
+                                    <th style="width: 20%">Usuario</th>
+                                    <th style="width: 20%">Correo electronico</th>
+                                    <th style="width: 20%">Municipio</th>
+                                    <th style="width: 20%">Actions</th>
+                                </tr>
+                                </thead>
+
+
+                            </table>
+                        </div>
+
+                        <div class="table-responsive"
+                             style="display: block;max-height: 250px;overflow-y: auto;-ms-overflow-style: -ms-autohiding-scrollbar;padding-top: -1px">
+                            <table class="table table-bordered table-hover">
+
+
+                                <tbody>
+
+                                {% for row in ulist |sort %}
+                                    <tr>
+                                        <td style="width: 20%">{{ row[0].decode("latin1") }}</td>
+                                        <td style="width: 20%">{{ row[1] }}</td>
+                                        <td style="width: 20%">{{ row[2] }}</td>
+                                        <td style="width: 20%">{{ row[3].decode("latin1") }}</td>
+                                        <td style="width: 20%" class="text-center">
+
+
+                                            <div class="" style="display: ruby">
+
+                                                <form method="POST" role="form"
+                                                      class="form-horizontal m-t submitU"
+                                                      action="{{ request.path }}" id="submit{{ "_"+row[1] }}">
+                                                    <input type="hidden" value="{{ row[1] }}" name="uname_u">
+                                                    <button type="submit"
+                                                            title="Eliminar usuario"
+                                                            class="btn btn-danger btn-circle btn-xs"
+                                                            name="delUser" id="delUser"><i
+                                                            class="fa fa-times"></i>
+                                                    </button>
+
+
+                                                </form>
+
+                                                <button class="btn btn-warning btn-circle btn-xs" type="submit"
+                                                        title="Editar usuario"
+                                                        data-toggle="modal" data-target="#up_{{ row[1] }}"><i
+                                                        class="fa fa-edit"></i>
+                                                </button>
+
+                                                {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], name=row[0],uname=row[1], mail=row[2],val=1 %}
+
+
+                                                <button class="btn btn-default btn-circle btn-xs" type="submit"
+                                                        title="Cambiar password"
+                                                        data-toggle="modal" data-target="#pass_{{ row[1] }}"><i
+                                                        class="fa fa-unlock-alt"></i>
+                                                </button>
+
+                                                {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], val=2 %}
+
+
+                                            </div>
+
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+
                                 {% endfor %}
-                            </select>
-                        <span id='m_inst'></span>
-                        </div>
-                    </div>
-                    <div class="hr-line-dashed"></div>
-                    <div class="form-group"><label class="col-sm-2 control-label">Municipio</label>
+                                </tbody>
 
-                        <div class="col-sm-10">
-                            <select id="munic_list" name="munic" data-placeholder="Seleccione un municipio..." class="chosen-select form-control m-b"  tabindex="2">
-                            <option value=""></option>
-                            {% for row in fill_reg["munic"] %}
-
-                                <option value="{{ row[0] }}" id="i_{{ row[0] }}"> {{ row[1].decode("utf").title() }}</option>
-                            {% endfor %}
-                            </select>
-                        <span id='m_munic'></span>
+                            </table>
                         </div>
-                    </div>
-                    <div class="hr-line-dashed"></div>
 
-                    <div class="form-group">
-                        <div class="col-sm-4 col-sm-offset-2">
-                            <button class="btn btn-white" type="button" onclick="window.location.href='{{ request.route_url('dashboard') }}'">Cancelar</button>
-                            <button class="btn btn-primary" type="submit" name="reg" id="reg">Registrar</button>
+
+                        <!----------------------------->
+
+
+                        <br>
+
+                        <div class="table-responsive" style="display: block">
+                            <h5>Delegados </h5>
+                            <table class="table table-bordered table-hover"
+                                   style="{% if ulist2 | length > 3 %} max-width: 99.25% {% else %}max-width: 100% {% endif %} ;margin-bottom: 0%;max-height: 30px">
+                                <thead>
+                                <tr>
+
+
+                                    <th style="width: 20%">Delegados</th>
+                                    <th style="width: 20%">Usuario</th>
+                                    <th style="width: 20%">Correo electronico</th>
+                                    <th style="width: 20%">Departamento</th>
+                                    <th style="width: 20%">Opciones</th>
+                                </tr>
+                                </thead>
+
+
+                            </table>
                         </div>
+                        <div class="table-responsive"
+                             style="display: block;max-height: 250px;overflow-y: auto;-ms-overflow-style: -ms-autohiding-scrollbar;padding-top: -1px">
+                            <table class="table table-bordered table-hover">
+
+                                <tbody>
+
+                                {% for row in ulist2 |sort %}
+                                    <tr>
+                                        <td style="width: 20%">{{ row[0].decode("latin1") }}</td>
+                                        <td style="width: 20%">{{ row[1] }}</td>
+                                        <td style="width: 20%">{{ row[2] }}</td>
+                                        <td style="width: 20%">{{ row[3].decode("latin1") }}</td>
+                                        <td style="width: 20%" class="text-center">
+
+
+                                            <div class="" style="display: ruby">
+
+                                                <form method="POST" role="form"
+                                                      class="form-horizontal m-t submitU"
+                                                      action="{{ request.path }}" id="submit{{ "_"+row[1] }}">
+                                                    <input type="hidden" value="{{ row[1] }}" name="uname_u">
+                                                    <button type="submit"
+                                                            title="Eliminar usuario"
+                                                            class="btn btn-danger btn-circle btn-xs"
+                                                            name="delUser" id="delUser"><i
+                                                            class="fa fa-times"></i>
+                                                    </button>
+
+
+                                                </form>
+
+                                                <button class="btn btn-warning btn-circle btn-xs" type="submit"
+                                                        title="Editar usuario"
+                                                        data-toggle="modal" data-target="#up_{{ row[1] }}"><i
+                                                        class="fa fa-edit"></i>
+                                                </button>
+
+                                                {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], name=row[0],uname=row[1], mail=row[2],val=1 %}
+
+
+                                                <button class="btn btn-default btn-circle btn-xs" type="submit"
+                                                        title="Cambiar password"
+                                                        data-toggle="modal" data-target="#pass_{{ row[1] }}"><i
+                                                        class="fa fa-unlock-alt"></i>
+                                                </button>
+
+                                                {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], val=2 %}
+
+
+                                            </div>
+
+
+                                        </td>
+                                    </tr>
+
+
+
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!------supervisores--------->
+                        <div class="table-responsive" style="display: block">
+                            <h5>Supervisores </h5>
+                            <table class="table table-bordered table-hover"
+                                   style="{% if ulist2 | length > 3 %} max-width: 99.25% {% else %}max-width: 100% {% endif %} ;margin-bottom: 0%;max-height: 30px">
+                                <thead>
+                                <tr>
+
+
+                                    <th style="width: 20%">Supervisor</th>
+                                    <th style="width: 20%">Usuario</th>
+                                    <th style="width: 20%">Correo electronico</th>
+                                    <th style="width: 20%">Opciones</th>
+                                    <th style="width: 20%">Rol</th>
+                                </tr>
+                                </thead>
+
+
+                            </table>
+                        </div>
+
+                    <div class="table-responsive"
+                             style="display: block;max-height: 250px;overflow-y: auto;-ms-overflow-style: -ms-autohiding-scrollbar;padding-top: -1px">
+                            <table class="table table-bordered table-hover">
+
+                                <tbody>
+
+                                {% for row in ulist3 |sort %}
+                                    <tr>
+                                        <td style="width: 20%">{{ row[0].decode("latin1") }}</td>
+                                        <td style="width: 20%">{{ row[1] }}</td>
+                                        <td style="width: 20%">{{ row[2] }}</td>
+                                        <td style="width: 20%">Supervisor</td>
+                                        <td style="width: 20%" class="text-center">
+
+
+                                            <div class="" style="display: ruby">
+
+                                                <form method="POST" role="form"
+                                                      class="form-horizontal m-t submitU"
+                                                      action="{{ request.path }}" id="submit{{ "_"+row[1] }}">
+                                                    <input type="hidden" value="{{ row[1] }}" name="uname_u">
+                                                    <button type="submit"
+                                                            title="Eliminar usuario"
+                                                            class="btn btn-danger btn-circle btn-xs"
+                                                            name="delUser" id="delUser"><i
+                                                            class="fa fa-times"></i>
+                                                    </button>
+
+
+                                                </form>
+
+                                                <button class="btn btn-warning btn-circle btn-xs" type="submit"
+                                                        title="Editar usuario"
+                                                        data-toggle="modal" data-target="#up_{{ row[1] }}"><i
+                                                        class="fa fa-edit"></i>
+                                                </button>
+
+                                                {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], name=row[0],uname=row[1], mail=row[2],val=1 %}
+
+
+                                                <button class="btn btn-default btn-circle btn-xs" type="submit"
+                                                        title="Cambiar password"
+                                                        data-toggle="modal" data-target="#pass_{{ row[1] }}"><i
+                                                        class="fa fa-unlock-alt"></i>
+                                                </button>
+
+                                                {% snippet "snippets/updateUsers.jinja2",request=request,uId=row[1], val=2 %}
+
+
+                                            </div>
+
+
+                                        </td>
+                                    </tr>
+
+
+
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <!----------------------------->
+
+
                     </div>
-                </form>
+                </div>
             </div>
+
         </div>
-    </div>
+
+        <!----------------------------->
+        <div class="modal inmodal " id="modalUsers" tabindex="-1" role="dialog" aria-hidden="true">
+
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                                class="sr-only">Close</span></button>
+                        <i class="fa fa-address-book-o modal-icon"></i>
+                        <h4 class="modal-title">Usuario nuevo</h4>
+
+                    </div>
+                    <div class="modal-body" style="overflow-y: auto; padding: 1px 0px 0px 0px ">
+
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                <h5>Complete el siguiente formulario para agregar usuarios nuevos</h5>
+
+                            </div>
+
+
+                            <input type="hidden" value="{{ msj }}" id="msj">
+
+
+                            <div class="ibox-content">
+                                <form method="POST" role="form" class="form-horizontal m-t" action="{{ request.path }}"
+                                      id="submit">
+
+                                    <div class="form-group"><label class="col-sm-2 control-label">Nombre
+                                        completo</label>
+                                        <div class="col-sm-10"><input required="" type="text" class="form-control"
+                                                                      name="fullname">
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Nombre de
+                                        usuario</label>
+                                        <div class="col-sm-10"><input required="" type="text" class="form-control"
+                                                                      name="user_name" id="user_name">
+                                            <span class="help-block m-b-none">Este es el nombre de usuario que se usara para ingresar al sistema</span>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Contraseña</label>
+
+                                        <div class="col-sm-10"><input required="" type="password" class="form-control"
+                                                                      name="password"
+                                                                      id="password"></div>
+                                    </div>
+                                    <div class="form-group"><label class="col-sm-2 control-label">Verificar</label>
+                                        <div class="col-sm-10"><input required type="password" class="form-control"
+                                                                      name="password2"
+                                                                      id="password2"><span id='message'></span></div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+
+                                    <div class="form-group"><label class="col-sm-2 control-label">Correo
+                                        electronico</label>
+                                        <div class="col-sm-10"><input required type="email" class="form-control"
+                                                                      name="email"></div>
+                                    </div>
+
+                                    <div class="hr-line-dashed"></div>
+
+
+                                    <div class="form-group"><label class="col-sm-2 control-label">Rol</label>
+                                        <div class="col-sm-10">{#<input type="checkbox" name="chb_del_mon"
+                                                                      class="js-switch" checked id="chb_del_mon"
+                                                                      data-toggle="toggle" data-on="Monitor"
+                                                                      data-off="Delegado"/>#}
+                                            <label class="radio-inline chb_del_mon" name="o1"><input type="radio"
+                                                                                                     name="optradio"
+                                                                                                     value="o1" checked>Monitor</label>
+                                            <label class="radio-inline chb_del_mon" name="o2"><input type="radio"
+                                                                                                     name="optradio"
+                                                                                                     value="o2">Delegado</label>
+                                            <label class="radio-inline chb_del_mon" name="o3"><input type="radio"
+                                                                                                     name="optradio"
+                                                                                                     value="o3">Supervisor</label>
+                                        </div>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+
+                                    {#<div class="form-group"><label class="col-sm-2 control-label">Municipio</label>
+
+                                        <div class="col-sm-10">
+                                            <select id="munic_list" name="munic"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+                                                {% for row in fill_reg["munic"] %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="i_{{ row[0] }}"> {{ row[1].decode("latin1").title() }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <span id='m_munic'></span>
+                                        </div>
+                                    </div>#}
+                                    <div class="form-group"><label class="col-sm-2 control-label">Ubicación</label>
+
+                                        <div class="col-sm-5" id="d_l">
+
+
+                                            <select id="depto_list" name="depto"
+                                                    data-placeholder="Seleccione un departamento..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.depto %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="{{ row[0] }}" {% if fill_reg.s_depto ==  row[0] %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}
+
+                                            </select>
+
+
+                                        </div>
+                                        <div class="col-sm-5" id="m_l">
+
+
+                                            <select id="munic_list" name="munic"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.munic %}
+                                                    <input type="hidden" sel="" codeM="{{ row[0] }}"
+                                                           value="{{ row[1].decode("latin1") }}"
+                                                           codeD="{{ row[2] }}" class="mlist">
+
+                                                {% endfor %}
+
+
+                                            </select>
+                                            <span id='m_munic'></span>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="hr-line-dashed"></div>
+
+                                    <div class="form-group">
+                                        <div class="col-sm-4 col-sm-offset-2">
+                                            <button class="btn btn-white" type="button"
+                                                    onclick="window.location.href='{{ request.route_url('register') }}'">
+                                                Cancelar
+                                            </button>
+                                            <button class="btn btn-primary" type="submit" name="reg" id="reg">
+                                                Registrar
+                                            </button>
+
+
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        {#                        <button type="button" class="btn btn-primary">Save changes</button>#}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
 
 
     {% endblock pagecontent %}
+
 
 </div>
 
 {% block javascript %}
     <script type="text/javascript">
         $(document).ready(function () {
-            alert("csscascsa");
+
+
             $('.chosen-select').chosen({width: "100%"});
+
+
         });
     </script>
 {% endblock javascript %}s

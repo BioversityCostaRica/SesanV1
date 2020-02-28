@@ -25,13 +25,24 @@ requires = [
     'webhelpers',
     'pillow',
     'lxml',
-    'MySQL-python',
+    'mysql-python',
     'xlsxwriter',
     'pyxform',
     'babel',
     'ruamel.ordereddict',
-    'python-pptx'
+    'python-pptx',
+    'gunicorn',
+    'gevent',
+    'ago'
 ]
+
+
+
+#sudo apt-get install zbar-tools
+#sudo apt-get install libzbar-dev
+#sudo apt-get install libmysqlclient-dev
+#sudo apt install qrencode
+#sudo apt-get install libqt5sql5-mysql
 
 tests_require = [
     'WebTest >= 1.3.1',  # py3 compat

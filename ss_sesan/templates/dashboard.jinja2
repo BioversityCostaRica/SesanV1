@@ -30,6 +30,7 @@
             <input type="hidden" value="{{ activeUser.login }}" id="uname">
 
 
+
             <nav class="navbar-default navbar-static-side" role="navigation">
                 <div class="sidebar-collapse">
                     <ul class="nav metismenu" id="side-menu">
@@ -48,14 +49,19 @@
                                             id="insti">{{ activeUser.fullName.decode("latin1") }}
 
 
-                                        {% if activeUser.user_role!=1 and activeUser.user_role!=2 %}
+                                        {% if activeUser.user_role!=1 and activeUser.user_role!=2 and activeUser.user_role!=3 %}
                                             | {{ activeUser.munic.decode("latin1").title() }}
                                         {% else %}
                                             {% if activeUser.user_role==2 %}
 
                                                 | {{ depto.decode("latin1").title() }}
+
+                                            {% else %}
+                                                | Supervisor
                                             {% endif %}
-                                        {% endif %}</strong>
+                                        {% endif %}
+
+                                    </strong>
 
                                 </span>
                                     <span>
@@ -159,7 +165,7 @@
                             <!--------------------------------->
                             <div id="summary" style="font-size: 125% ">
                                 {% for p in dashData|reverse %}
-                                    {% if "_alert" not in p and "date" not in p and "signatures" not in p and p not in ["comunidades", "acciones", "coverage","comunidades2"] %}
+                                    {% if "_alert" not in p and "date" not in p and "signatures" not in p and p not in ["comunidades", "acciones", "coverage","comunidades2", "san"] %}
                                         <div class="ibox float-e-margins">
 
                                             <div class="ibox-title" style="font-size: 125% ">
@@ -189,7 +195,7 @@
                                                               id="formXLS"
                                                               enctype='multipart/form-data'>
 
-                                                            {% if activeUser.user_role==2 %}
+                                                            {% if activeUser.user_role==2 or activeUser.user_role==3 %}
                                                                 <input type="hidden" id="genXLS"
                                                                        value="{{ dashData.date[0] }} {{ dashData.date[1] }} {{ sel_m }}"
                                                                        name="genXLS">
@@ -373,7 +379,11 @@
 
                     </div>
 
-
+                    <style>
+                        .hightlight {
+                            background: green;
+                        }
+                    </style>
                     {% if activeUser.user_role!=1 %}
                         <div class="col-md-3 row">
                             <div class="ibox-content form-group" id="data_4">
@@ -384,7 +394,8 @@
                                     <div class="input-group date">
                                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input
                                             type="text" id="dateP" name="dateP" readonly class="form-control"
-                                            value="{{ dashData.date[0] }} {{ dashData.date[1] }}">
+                                            value="{{ dashData.date[0] }} {{ dashData.date[1] }}"
+                                            data-dates-disabled="{{ AvailableDates }}">
                                     </div>
 
 
@@ -414,6 +425,51 @@
                                         </div>
                                     {% endif %}
 
+
+
+                                    {% if activeUser.user_role==3 %}
+                                        <br>
+
+                                        <div class="input-group col-lg-12">
+
+
+                                            <select id="depto_list" name="dep_sel"
+                                                    data-placeholder="Seleccione un departamento..."
+                                                    class="chosen-select form-control m-b" tabindex="2">
+                                                <option value=""></option>
+
+
+                                                {% for row in fill_reg.depto %}
+
+                                                    <option value="{{ row[0] }}"
+                                                            id="{{ row[0] }}" {% if sel_d ==  row[0] | string %}
+                                                            selected {% endif %}> {{ row[1].decode("latin1") }}
+
+
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                            <select id="munic_list" name="munic_sel"
+                                                    data-placeholder="Seleccione un municipio..."
+                                                    class="chosen-select form-control m-b" tabindex="2"
+                                                    onchange="this.form.submit();">
+                                                <option value=""></option>
+
+                                                {% for row in fill_reg.munic %}
+
+                                                    <input type="hidden"  {% if row[0]|string == sel_m %} sel="selected"
+                                                           {% else %}sel="" {% endif %}  codeM="{{ row[0] }}"
+                                                           value="{{ row[1].decode("latin1") }}"
+                                                           codeD="{{ row[2] }}" class="mlist">
+
+                                                {% endfor %}
+
+
+                                            </select>
+
+                                        </div>
+                                    {% endif %}
+
                                 </form>
 
                                 {% if dashData.signatures %}
@@ -435,6 +491,22 @@
                                            data-toggle="modal" data-target="#myModalAttach">
                                             <i class="fa fa-clipboard"> </i> Archivos adjuntos
                                         </a>
+                                     <br>
+
+                                    {% if activeUser.user_role == 2 or activeUser.user_role==3 %}
+                                    <a class="btn btn-primary btn-facebook btn-outline"
+                                           style="display: block;white-space: normal;" id="general_report" href="http://0.0.0.0:5900/generalreport/{{activeUser.user_role}}/{{ munid }}.pdf">
+                                            <i class="fa fa-cubes"> </i> Reporte General
+                                        </a>
+
+                                     {% else %}
+                                             <a class="btn btn-primary btn-facebook btn-outline"
+                                           style="display: block;white-space: normal;" id="general_report" href="http://0.0.0.0:5900/generalreport/1/{{ munid }}.pdf">
+                                            <i class="fa fa-cubes"> </i> Reporte General
+                                        </a>
+
+
+                                     {% endif %}
 
 
                                         <br>
@@ -442,21 +514,13 @@
 
 
 
-
-
-
-
-                                    <h3>Cobertura en comunidades {{ dashData.coverage }} %</h3>
-
-
                                     <!-------->
-                                    <script type="text/javascript"
-                                            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQd_Gg_73Nj3U9SYsZChZHFNuWBUeueEU&v=3.exp"></script>
 
                                     <div class="ibox" id="map_d">
 
 
                                         <div class="google-map" id="map1"></div>
+
                                         <div id="legend" style="font-family: Arial, sans-serif;
 
                                                             background: #fff;
@@ -465,7 +529,8 @@
                                                             border: 1px solid #afb2b4;
                                                             ">
 
-
+                                                         <h5>Indice SAN {{ dashData.san[0] }}, {{ dashData.san[2] }}</h5>
+                                        <h5>Cobertura en comunidades {{ dashData.coverage }} %</h5>
                                             <h3 style="margin-top: 0;font-size: x-small;"><i class="fa fa-circle"
                                                                                              style="color: #11c300"> </i>&nbsp;Sin
                                                 Afectación</h3>
@@ -482,10 +547,12 @@
                                                                                              style="color: #86D3C3"> </i>&nbsp;Limite
                                                 municipal</h3>
 
+
                                         </div>
 
                                         <input type="hidden" id="map_points" value="{{ dashData.comunidades2 }}">
                                         <input type="hidden" id="map_name" value="{{ munid }}">
+                                        <input type="hidden" id="san_color" value="{{ dashData.san[1] }}">
 
                                     </div>
 
@@ -1061,7 +1128,7 @@
 
                 <div class="fileinput fileinput-new" data-provides="fileinput">
 
-                    <span class="btn btn-default btn-file center-block" >
+                    <span class="btn btn-default btn-file center-block">
                         <span class="fileinput-new">Seleccionar archivo</span>
                         <span class="fileinput-exists">Seleccionar archivo</span>
 
@@ -1090,7 +1157,9 @@
 
 <!------------>
 
+
 </body>
+
 
 
 </html>

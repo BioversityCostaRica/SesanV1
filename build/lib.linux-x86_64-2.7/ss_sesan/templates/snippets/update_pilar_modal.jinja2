@@ -1,0 +1,158 @@
+<!--Modal-->
+<div class="modal inmodal " id="{{ snippetVars.mId }}" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content animated fadeIn">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <i class="fa fa-location-arrow modal-icon"></i>
+                <h4 class="modal-title">Pilar nuevo</h4>
+
+            </div>
+            <div class="modal-body" style="overflow-y: auto; padding: 1px 0px 0px 0px ">
+
+                <div class="col-lg-12" style="width: 100%;">
+                    <div class="ibox">
+                        <div class="ibox-title">
+                            <h5>Informacion del pilar nuevo</h5>
+
+                        </div>
+                        <div class="ibox-content">
+
+                            <p>
+                                Este asistente lo guiara en lo pasos necesarios para actualizar el perfil de {{ snippetVars.pp }}
+                            </p>
+
+                            <form method="POST" role="form" class="wizard-big formwiz"
+                                  action="{{ snippetVars.request.path }}" id="form">
+                                <h1>Pilar</h1>
+                                <fieldset>
+                                    <h2>Detalles del pilar</h2>
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <div class="form-group">
+                                                <label>Nombre *</label>
+                                                <input id="pilarName" name="pilarName" type="text"
+                                                       class="form-control required" value="{{ snippetVars.pp }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Coeficiente de ponderacion *</label>
+                                                <button class="btn btn-warning btn-circle btn-outline btn-lg"
+                                                        type="button" style="border: none;"
+                                                        data-toggle="popover"
+                                                        data-placement="auto right"
+                                                        data-content="<div style='font-size: small;width: 250px;'><label>Coeficiente de ponderación.Proporciona orden de importancia a cada variable</label><table class='table table-bordered'><tbody><tr><td>Muy Alto Impacto</td><td>10</td><td>9</td></tr><tr><td>Alto impacto</td><td>8</td><td>7</td></tr><tr><td>Medio impacto</td><td>6</td><td>5</td></tr><tr><td>Bajo impacto</td><td>4</td><td>3</td></tr><tr><td>Muy bajo impacto</td><td>2</td><td>1</td></tr></tbody></table><div>"
+                                                        data-html="true"><i
+                                                        class="fa fa-info-circle"></i></button>
+                                                <input id="coef_pond" name="coef_pond" type="number" min="1"
+                                                       max="10"
+                                                       class="form-control required" value="{{ snippetVars.data.coef }}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Descripcion</label>
+                                                <input id="desc" name="desc" type="text"
+                                                       class="form-control required" value="{{ snippetVars.data.desc }}">
+
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-lg-4">
+
+                                            <div class="text-center">
+                                                <div>
+
+                                                    <div class="ibox float-e-margins">
+                                                        <i class="fa fa-tasks"
+                                                           style="font-size: 180px;color: #e5e5e5 "></i>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </fieldset>
+                                <h1>Indicadores</h1>
+                                <fieldset>
+                                    <h2>Ingrese los indicadores necesarios para completar el pilar</h2>
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <div class="form-group">
+                                                <label>Nombre de los indicadores *</label>
+                                                <div id="tags" style="border: 0px solid #ffffff !important;">
+                                                    <input class="tagsinput2 form-control" id="ind_tags"
+                                                           name="ind_tags"
+                                                           type="text"
+                                                           value="{{ snippetVars.indL }}"/>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <div class="text-center">
+                                                <div>
+
+                                                    <div class="ibox float-e-margins">
+                                                        <i class="fa fa-tags"
+                                                           style="font-size: 180px;color: #e5e5e5 "></i>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </fieldset>
+
+
+                                <h1>Variables</h1>
+                                <fieldset>
+                                    <!---->
+
+
+                                    <div class="col-lg-12">
+                                        <div class="tabs-container">
+                                            <div class="tabs-left">
+                                                <ul class="nav nav-tabs vertical" id="tab_list">
+
+                                                </ul>
+                                                <div class="tab-content" id="tab_cont">
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <!---->
+
+
+                                </fieldset>
+
+                                <h1>Finalizar</h1>
+                                <fieldset>
+                                    <h2>Agregar este pilar</h2>
+                                    <input id="acceptTerms" name="acceptTerms" type="checkbox" class="required">
+                                    <label for="acceptTerms">Esta seguro que desea agregar este pilar.</label>
+                                </fieldset>
+                                <input name="jsondata" id="jsondata" type="hidden" value="">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                {#                        <button type="button" class="btn btn-primary">Save changes</button>#}
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal-->

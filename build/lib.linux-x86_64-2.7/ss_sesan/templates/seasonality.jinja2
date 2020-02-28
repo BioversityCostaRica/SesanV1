@@ -1,0 +1,120 @@
+{% extends 'dashboard.jinja2' %}
+        {% block title %}
+<title>SESAN | Estacionalidad</title>
+        {% endblock title %}
+
+
+        {% block pageheading %}
+<div class="row wrapper border-bottom white-bg page-heading">
+<div class="col-sm-2">
+
+</div>
+<div class="col-sm-8 text-center">
+    <h2>Estacionalidad</h2>
+</div>
+</div>
+        {% endblock pageheading %}
+
+        {% block dashmenu %}
+        {% snippet "snippets/dashopt.jinja2",request=request,user_role=activeUser.user_role,active="seasonality" %}
+        {% endblock dashmenu %}
+
+
+        {% block pagecontent %}
+<div class="wrapper wrapper-content animated fadeInRight">
+<input type="hidden" value="{{ msg }}" id="msj"/>
+
+
+<div class="col-lg-4">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>Reglas de estacionalidad</h5>
+            <div class="ibox-tools">
+                <div class="row">
+                    <div class="col-md-9">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+{% for p in rules %}
+
+
+<div class="col-lg-10">
+
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+
+            <h5>Estacionalidad para el pilar de {{ p }}</h5>
+            <div class="ibox-tools">
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <i class="fa fa-wrench"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a href="#">Config option 1</a>
+                    </li>
+                    <li><a href="#">Config option 2</a>
+                    </li>
+                </ul>
+                <a class="close-link">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+
+            <table class="table table-hover">
+
+
+
+                {% for opt in rules[p] | sort %}
+
+                <thead>
+                <tr>
+
+                    <th>{{ rules[p][opt]["name"] }}</th>
+
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for val in rules[p][opt]["vals"] %}
+
+                    <tr>
+                        <td>{{ val[0] }}</td>
+                        <td>{{ val[1] }}</td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+</div>
+
+        {% endblock pagecontent %}
+
+
+        {% block javascript %}
+<script type="text/javascript">
+
+</script>
+        {% endblock javascript %}s

@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body style="background-color: #fff">
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title text-center" style="padding: revert;border-color: #ffffff">
+                <h1><span class="text-navy">SESAN - Salas Situacionales Municipales</span></h1>
+
+                {% if data.typeR == "2" or data.typeR =="3" %}
+                    <h1>Resumen Departamental - {{ data.munic.decode("latin1" ) }}</h1>
+                    <h1>Fecha de creación - {{ data.date }}</h1>
+                {% else %}
+                    <h1>Resumen Municipal - {{ data.munic.decode("latin1" ) }}</h1>
+                {% endif %}
+
+
+            </div>
+            <div class="ibox-content" style="border-color: #ffffff">
+
+                {% if data.typeR == "2" or data.typeR =="3" %}
+
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Municipio</th>
+                            <th class="text-center">Total de registros</th>
+                            <th class="text-center">Meses reportados</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for m in data.municNames %}
+                            <tr class="text-center">
+                                <td style="vertical-align: center;">{{ data.municNames[m].decode("latin1") }}</td>
+                                <td style="vertical-align: center;">{{ data.reg_tot[m] }}</td>
+                                <td style="vertical-align: center;">{{ data.mes_repor[m] }}</td>
+
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                {% else %}
+
+
+
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Total de registros</th>
+                            <th class="text-center">Meses reportados</th>
+                            <th class="text-center">Fecha del reporte</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr class="text-center">
+                            <td style="vertical-align: center;">{{ data.reg_tot }}</td>
+                            <td style="vertical-align: center;">{{ data.mes_repor }}</td>
+                            <td style="vertical-align: center;">{{ data.date }}</td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title text-center" style="padding: revert;border-color: #ffffff">
+                <h1>Resumen anual SAN</h1>
+
+            </div>
+        </div>
+        <div class="ibox-content" style="border-color: #ffffff">
+
+            {% if data.typeR == "2" or data.typeR =="3" %}
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Municipio</th>
+                        <th class="text-center">Año</th>
+                        <th class="text-center">Enero</th>
+                        <th class="text-center">Febrero</th>
+                        <th class="text-center">Marzo</th>
+                        <th class="text-center">Abril</th>
+                        <th class="text-center">Mayo</th>
+                        <th class="text-center">Junio</th>
+                        <th class="text-center">Julio</th>
+                        <th class="text-center">Agosto</th>
+                        <th class="text-center">Septiembre</th>
+                        <th class="text-center">Octubre</th>
+                        <th class="text-center">Noviembre</th>
+                        <th class="text-center">Diciembre</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for m in data.municNames %}
+
+                        {% for y in data.years[m] %}
+                            <tr class="text-center">
+                                {% if loop.index == 1 %}
+                                    <td style="vertical-align: center;">{{ data.municNames[m].decode("latin1") }}</td>
+                                {% else %}
+                                    <td style="vertical-align: center;"></td>
+                                {% endif %}
+                                <td style="vertical-align: center;">{{ y }}</td>
+                                {% for dy in data.years[m][y] %}
+                                    {% if dy == "" %}
+                                        <td style="vertical-align: center;">{{ dy }}</td>
+                                    {% else %}
+                                        <td style="vertical-align: center;" bgcolor="{{ dy[1] }}">{{ dy[0] }}</td>
+                                    {% endif %}
+
+
+                                {% endfor %}
+
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            {% else %}
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center"> Año</th>
+                        <th class="text-center">Enero</th>
+                        <th class="text-center">Febrero</th>
+                        <th class="text-center">Marzo</th>
+                        <th class="text-center">Abril</th>
+                        <th class="text-center">Mayo</th>
+                        <th class="text-center">Junio</th>
+                        <th class="text-center">Julio</th>
+                        <th class="text-center">Agosto</th>
+                        <th class="text-center">Septiembre</th>
+                        <th class="text-center">Octubre</th>
+                        <th class="text-center">Noviembre</th>
+                        <th class="text-center">Diciembre</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for y in data.years %}
+                        <tr class="text-center">
+
+                            <td style="vertical-align: center;">{{ y }}</td>
+                            {% for dy in data.years[y] %}
+                                {% if dy == "" %}
+                                    <td style="vertical-align: center;">{{ dy }}</td>
+                                {% else %}
+                                    <td style="vertical-align: center;" bgcolor="{{ dy[1] }}">{{ dy[0] }}</td>
+                                {% endif %}
+
+
+                            {% endfor %}
+
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+<div class="row" style="page-break-before:always">
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title text-center" style="padding: revert;border-color: #ffffff">
+                <h1>Resumen mensual por Pilar</h1>
+            </div>
+        </div>
+        <div class="ibox-content" style="border-color: #ffffff">
+
+            {% if data.typeR == "2" or data.typeR =="3" %}
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Municipio</th>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Disponibilidad</th>
+                        <th class="text-center">Aprovechamiento Biologico</th>
+                        <th class="text-center">Acceso</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    {% for m in data.municNames %}
+
+                        {% for p in data.dates[m] %}
+
+                            <tr class="text-center">
+                                {% if loop.index == 1 %}
+                                    <td style="vertical-align: center;">{{ data.municNames[m].decode("latin1") }}</td>
+                                {% else %}
+                                    <td style="vertical-align: center;"></td>
+                                {% endif %}
+                                <td style="vertical-align: center;">{{ p }}</td>
+                                {% if data.per_p[m][p][1] %}
+                                    <td style="vertical-align: center;"
+                                        bgcolor="{{ data.per_p[m][p][1][2] }}">{{ data.per_p[m][p][1][0] }}</td>
+                                {% else %}
+                                    <td style="vertical-align: center;"></td>
+                                {% endif %}
+
+                                {% if data.per_p[m][p][2] %}
+                                    <td style="vertical-align: center;"
+                                        bgcolor="{{ data.per_p[m][p][2][2] }}">{{ data.per_p[m][p][2][0] }}</td>
+                                {% else %}
+                                    <td style="vertical-align: center;"></td>
+                                {% endif %}
+
+                                {% if data.per_p[m][p][3] %}
+                                    <td style="vertical-align: center;"
+                                        bgcolor="{{ data.per_p[m][p][3][2] }}">{{ data.per_p[m][p][3][0] }}</td>
+                                {% else %}
+                                    <td style="vertical-align: center;"></td>
+                                {% endif %}
+
+
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            {% else %}
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Fecha</th>
+                        <th class="text-center">Disponibilidad</th>
+                        <th class="text-center">Aprovechamiento Biologico</th>
+                        <th class="text-center">Acceso</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    {% for p in data.dates %}
+
+                        <tr class="text-center">
+                            <td style="vertical-align: center;">{{ p }}</td>
+                            {% if data.per_p[p][1] %}
+                                <td style="vertical-align: center;"
+                                    bgcolor="{{ data.per_p[p][1][2] }}">{{ data.per_p[p][1][0] }}</td>
+                            {% else %}
+                                <td style="vertical-align: center;"></td>
+                            {% endif %}
+
+                            {% if data.per_p[p][2] %}
+                                <td style="vertical-align: center;"
+                                    bgcolor="{{ data.per_p[p][2][2] }}">{{ data.per_p[p][2][0] }}</td>
+                            {% else %}
+                                <td style="vertical-align: center;"></td>
+                            {% endif %}
+
+                            {% if data.per_p[p][3] %}
+                                <td style="vertical-align: center;"
+                                    bgcolor="{{ data.per_p[p][3][2] }}">{{ data.per_p[p][3][0] }}</td>
+                            {% else %}
+                                <td style="vertical-align: center;"></td>
+                            {% endif %}
+
+
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+{% if data.typeR == "2" or data.typeR =="3" %}
+
+    <div class="row"  style="page-break-before:always">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title text-center" style="padding: revert;border-color: #ffffff">
+                    <h1>Mapas de afectación por municipio</h1>
+                </div>
+            </div>
+            <div class="ibox-content text-center" style="border-color: #ffffff">
+
+                {% for d in data.all_dates %}
+                    <img class="rounded" src="{{ data.maps[d] }}" alt="Italian Trulli" border="5">
+                    </br>
+                    </br>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endif %}
+
+{#{% if data.typeR == "2" or data.typeR =="3" %}
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title text-center" style="padding: revert;border-color: #ffffff">
+                    <h1>SAN Municipal</h1>
+                </div>
+            </div>
+            <div class="ibox-content" style="border-color: #ffffff">
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Municipio</th>
+                        <th class="text-center">Prioridad</th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr class="text-center">
+                        <td style="vertical-align: center;">Enero 2019</td>
+                        <td style="vertical-align: center;" bgcolor="#FF0000">%</td>
+
+
+                    </tr>
+                    <tr class="text-center">
+                        <td style="vertical-align: center;">Febrero 2019</td>
+                        <td style="vertical-align: center;" bgcolor="#FFFF01">%</td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title text-center" style="padding: revert;border-color: #ffffff">
+                    <h1>Registro mensual</h1>
+                </div>
+            </div>
+            <div class="ibox-content" style="border-color: #ffffff">
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Año</th>
+                        <th class="text-center">Enero</th>
+                        <th class="text-center">Febrero</th>
+                        <th class="text-center">Marzo</th>
+                        <th class="text-center">Abril</th>
+                        <th class="text-center">Mayo</th>
+                        <th class="text-center">Junio</th>
+                        <th class="text-center">Julio</th>
+                        <th class="text-center">Agosto</th>
+                        <th class="text-center">Septiembre</th>
+                        <th class="text-center">Octubre</th>
+                        <th class="text-center">Noviembre</th>
+                        <th class="text-center">Diciembre</th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+
+                    <tr class="text-center">
+                        <td style="vertical-align: center;">2019</td>
+                        <td style="vertical-align: center;" bgcolor="#FF0000">%</td>
+                        <td style="vertical-align: center;">2</td>
+                        <td style="vertical-align: center;"></td>
+                        <td style="vertical-align: center;"></td>
+                        <td style="vertical-align: center;">3</td>
+                        <td style="vertical-align: center;">2</td>
+                        <td style="vertical-align: center;"></td>
+                        <td style="vertical-align: center;">5</td>
+                        <td style="vertical-align: center;"></td>
+                        <td style="vertical-align: center;"></td>
+                        <td style="vertical-align: center;"></td>
+                        <td style="vertical-align: center;"></td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title text-center" style="padding: revert;border-color: #ffffff">
+                    <h1>Mapa situacional departamental</h1>
+                </div>
+            </div>
+            <div class="ibox-content text-center" style="border-color: #ffffff">
+
+                <img class="rounded" src="img/map.png" alt="Italian Trulli">
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-title text-center" style="padding: revert;border-color: #ffffff">
+                    <h1>Rangos criticos</h1>
+                </div>
+            </div>
+            <div class="ibox-content" style="border-color: #ffffff">
+
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th class="text-center">Pilar</th>
+                        <th class="text-center">Indicador</th>
+                        <th class="text-center">Variable</th>
+                        <th class="text-center">Unidad de medida</th>
+                        <th class="text-center">Sin afectacion</th>
+                        <th class="text-center">Afectacion moderada</th>
+                        <th class="text-center">Afectacion alta</th>
+                        <th class="text-center">Afectacion muy alta</th>
+
+
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr class="text-center">
+                        <td style="vertical-align: center;">2019</td>
+                        <td style="vertical-align: center;" bgcolor="#FF0000">%</td>
+                        <td style="vertical-align: center;">2</td>
+                        <td style="vertical-align: center;"></td>
+                        <td style="vertical-align: center;"></td>
+                        <td style="vertical-align: center;">3</td>
+                        <td style="vertical-align: center;">2</td>
+                        <td style="vertical-align: center;">2</td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+{% endif %}#}
+</body>
+
+</html>

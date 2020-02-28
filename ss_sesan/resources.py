@@ -40,6 +40,20 @@ DashJSArray.append(Resource(library, 'inspinia/js/plugins/jasny/jasny-bootstrap.
 
 
 
+leaflet=[]
+leaflet.append(Resource(library, 'dashboard/leaflet/leaflet.js', depends=[JQuery], bottom=True))
+leaflet.append(Resource(library, 'dashboard/leaflet/plugins/leaflet-beautify-marker-icon.js', depends=[JQuery], bottom=True))
+leaflet.append(Resource(library, 'dashboard/leaflet/leaflet.css', depends=[JQuery], bottom=True))
+leaflet.append(Resource(library, 'dashboard/leaflet/plugins/leaflet-beautify-marker-icon.css', depends=[JQuery], bottom=True))
+leaflet.append(Resource(library, 'dashboard/leaflet/leaflet-omnivore.min.js', depends=[JQuery], bottom=True))
+leaflet.append(Resource(library, 'dashboard/leaflet/plugins/bundle.js', depends=[JQuery], bottom=True))
+
+
+leafletCSS_JS = Group(leaflet)
+
+
+
+
 # DashJSArray.append(Resource(library, 'inspinia/js/plugins/datapicker/bootstrap-datepicker.es.min.js',depends=[JQuery],bottom=True))
 DashJSArray.append(
     Resource(library, 'inspinia/js/plugins/datapicker/bootstrap-datepicker.js', depends=[JQuery], bottom=True))
@@ -123,6 +137,11 @@ formsCSS_JS = Group([Resource(library, 'inspinia/js/plugins/dualListbox/jquery.b
                      ])
 
 gtoolCSS_JS = Group([Resource(library, 'dashboard/gtool.js', depends=[JQuery], bottom=True), ])
+
+seasonCSS_JS = Group([Resource(library, 'dashboard/season.js', depends=[JQuery], bottom=True), ])
+
+
+
 
 rangCSS_JS = Group(
     [Resource(library, 'dashboard/ranges_helps.js', depends=[JQuery], bottom=True), pilarArray[0], pilarArray[1],
